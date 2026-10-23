@@ -21,8 +21,7 @@
   <a href="#featured-enchantments">Featured</a> ·
   <a href="#enchantment-library">Library</a> ·
   <a href="#compatibility">Compatibility</a> ·
-  <a href="#building-from-source">Building</a> ·
-  <a href="CURSEFORGE.md">CurseForge Description</a>
+  <a href="#building-from-source">Building</a>
 </p>
 
 ---
@@ -271,16 +270,6 @@ build/libs/DivineEnchantments-1.12.2-1.0.0.jar
 See [docs/Development.md](docs/Development.md) for the project layout and development notes.
 
 </details>
-
----
-
-## CurseForge
-
-The ready-to-paste CurseForge description lives in **[CURSEFORGE.md](CURSEFORGE.md)**.
-
-For the CurseForge **Summary** field:
-
-> A 1.12.2 Forge/Cleanroom enchantment expansion adding 73 handcrafted, multiplayer-ready enchantments with stacking combat momentum, bullseye archery, summoned allies, and treasure-only rune and ancient blades.
 
 ---
 
