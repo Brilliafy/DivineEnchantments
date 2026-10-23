@@ -20,8 +20,10 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Random;
+import java.util.Set;
 
 @Mod.EventBusSubscriber(modid = "divineenchantments")
 public class GamblersGambitEventHandler {
@@ -45,35 +47,48 @@ public class GamblersGambitEventHandler {
         if (INITIALIZED) return;
         INITIALIZED = true;
 
-        // Vanilla negative effects
-        NEGATIVE_POTIONS.add(new PotionSupplier(MobEffects.SLOWNESS, 140, 1));
-        NEGATIVE_POTIONS.add(new PotionSupplier(MobEffects.WEAKNESS, 140, 1));
-        NEGATIVE_POTIONS.add(new PotionSupplier(MobEffects.POISON, 100, 0));
-        NEGATIVE_POTIONS.add(new PotionSupplier(MobEffects.WITHER, 80, 0));
-        NEGATIVE_POTIONS.add(new PotionSupplier(MobEffects.BLINDNESS, 100, 0));
-        NEGATIVE_POTIONS.add(new PotionSupplier(MobEffects.GLOWING, 160, 0));
-        NEGATIVE_POTIONS.add(new PotionSupplier(MobEffects.LEVITATION, 60, 0));
-        NEGATIVE_POTIONS.add(new PotionSupplier(MobEffects.HUNGER, 140, 1));
+        Set<Potion> added = new HashSet<>();
 
-        // Potion Core negative effects
+        // Vanilla negative effects with hand-tuned durations.
+        addUnique(added, MobEffects.SLOWNESS, 140, 1);
+        addUnique(added, MobEffects.WEAKNESS, 140, 1);
+        addUnique(added, MobEffects.POISON, 100, 0);
+        addUnique(added, MobEffects.WITHER, 80, 0);
+        addUnique(added, MobEffects.BLINDNESS, 100, 0);
+        addUnique(added, MobEffects.LEVITATION, 60, 0);
+        addUnique(added, MobEffects.HUNGER, 140, 1);
+
+        // Potion Core negative effects with hand-tuned durations.
         if (Loader.isModLoaded("potioncore")) {
-            addPotionCoreIfPresent("curse", 100, 0);
-            addPotionCoreIfPresent("broken_armor", 140, 0);
-            addPotionCoreIfPresent("broken_magic_shield", 140, 0);
-            addPotionCoreIfPresent("vulnerable", 120, 0);
-            addPotionCoreIfPresent("weight", 120, 1);
-            addPotionCoreIfPresent("perplexity", 100, 0);
-            addPotionCoreIfPresent("spin", 100, 0);
-            addPotionCoreIfPresent("rust", 80, 0);
-            addPotionCoreIfPresent("lightning", 40, 0);
+            addPotionCoreIfPresent(added, "curse", 100, 0);
+            addPotionCoreIfPresent(added, "broken_armor", 140, 0);
+            addPotionCoreIfPresent(added, "broken_magic_shield", 140, 0);
+            addPotionCoreIfPresent(added, "vulnerable", 120, 0);
+            addPotionCoreIfPresent(added, "weight", 120, 1);
+            addPotionCoreIfPresent(added, "perplexity", 100, 0);
+            addPotionCoreIfPresent(added, "spin", 100, 0);
+            addPotionCoreIfPresent(added, "rust", 80, 0);
+            addPotionCoreIfPresent(added, "lightning", 40, 0);
+            addPotionCoreIfPresent(added, "invert", 100, 0);
+        }
+
+        // Include every other negative potion registered by Potion Core or any other mod.
+        for (Potion potion : Potion.REGISTRY) {
+            if (potion != null && potion.isBadEffect() && !potion.isInstant() && added.add(potion)) {
+                NEGATIVE_POTIONS.add(new PotionSupplier(potion, 120, 0));
+            }
         }
     }
 
-    private static void addPotionCoreIfPresent(String name, int duration, int amplifier) {
-        Potion p = Potion.REGISTRY.getObject(new ResourceLocation("potioncore", name));
-        if (p != null) {
-            NEGATIVE_POTIONS.add(new PotionSupplier(p, duration, amplifier));
+    private static void addUnique(Set<Potion> added, Potion potion, int duration, int amplifier) {
+        if (potion != null && added.add(potion)) {
+            NEGATIVE_POTIONS.add(new PotionSupplier(potion, duration, amplifier));
         }
+    }
+
+    private static void addPotionCoreIfPresent(Set<Potion> added, String name, int duration, int amplifier) {
+        Potion p = Potion.REGISTRY.getObject(new ResourceLocation("potioncore", name));
+        addUnique(added, p, duration, amplifier);
     }
 
     @SubscribeEvent

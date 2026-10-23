@@ -58,7 +58,7 @@ public final class BetterSurvivalRangeCompat {
 
     @SubscribeEvent(priority = EventPriority.LOWEST)
     public static void onLivingHurt(LivingHurtEvent event) {
-        if (!DivineConfig.fixRangeEnchantmentDamage) {
+        if (event.getEntityLiving().world.isRemote || !DivineConfig.fixRangeEnchantmentDamage) {
             return;
         }
 

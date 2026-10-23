@@ -1,5 +1,6 @@
 package com.divineenchantments.event;
 
+import com.divineenchantments.config.DivineConfig;
 import com.divineenchantments.init.ModEnchantments;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.EntityLivingBase;
@@ -68,14 +69,18 @@ public class PerpetualCrucibleEventHandler {
 
     private static void triggerPerpetualCrucible(EntityPlayer player) {
         ItemStack chest = player.getItemStackFromSlot(EntityEquipmentSlot.CHEST);
-        if (chest.isEmpty() || ModEnchantments.getLevel(ModEnchantments.PERPETUAL_CRUCIBLE, chest) == 0) {
+        int level = chest.isEmpty() ? 0 : ModEnchantments.getLevel(ModEnchantments.PERPETUAL_CRUCIBLE, chest);
+        if (level <= 0) {
             return;
         }
 
+        int duration = DivineConfig.perpetualCrucibleBaseDurationTicks
+                + (level - 1) * DivineConfig.perpetualCrucibleDurationPerLevelTicks;
+        int amplifier = Math.max(0, level - 1);
+
         Potion extension = getExtensionPotion();
         if (extension != null) {
-            // Extension II (amplifier 1) for 60 ticks (3 seconds)
-            player.addPotionEffect(new PotionEffect(extension, 60, 1, false, true));
+            player.addPotionEffect(new PotionEffect(extension, duration, amplifier, false, true));
         } else {
             // Standalone fallback: Freeze active positive potion timers by adding 60 ticks
             List<PotionEffect> positiveEffects = new ArrayList<>();
@@ -86,7 +91,7 @@ public class PerpetualCrucibleEventHandler {
             }
 
             for (PotionEffect effect : positiveEffects) {
-                player.addPotionEffect(new PotionEffect(effect.getPotion(), effect.getDuration() + 60, effect.getAmplifier(), effect.getIsAmbient(), effect.doesShowParticles()));
+                player.addPotionEffect(new PotionEffect(effect.getPotion(), effect.getDuration() + duration, effect.getAmplifier(), effect.getIsAmbient(), effect.doesShowParticles()));
             }
         }
 

@@ -60,9 +60,12 @@ Complete list of all 73 Divine Enchantments, grouped by equipment type. For a qu
 - **Type**: Melee weapons (Swords, Axes, Spartan Weaponry)
 - **Max Level**: II
 - **Acquisition**: Available from Enchanting Table (Very Rare).
-- **Description**: Killing a mob has a chance to trigger a 10x XP and 10x loot drop explosion:
-  - Level I: 0.05% chance.
-  - Level II: 0.1% chance.
+- **Incompatible With**: Education (`mujmajnkraftsbettersurvival:education`).
+- **SoManyEnchantments Integration**: Adept increases the Riches proc chance and the XP payout.
+- **Description**: Killing a mob has a chance to trigger a loot and XP explosion:
+  - Level I: 0.05% base chance; Level II: 0.1% base chance.
+  - Adept adds +25% chance per level and adds +2 to the XP multiplier per level.
+  - The loot multiplier also increases by +1 per Adept level.
   - Stacks additively with vanilla Looting and SoManyEnchantments Advanced Looting.
 
 <a id="gambler-s-gambit"></a>
@@ -72,7 +75,7 @@ Complete list of all 73 Divine Enchantments, grouped by equipment type. For a qu
 - **Type**: Melee weapons (Swords, Axes, Spartan Weaponry)
 - **Max Level**: I
 - **Acquisition**: Enchanting Table (Super Rare and Costly, Level 30).
-- **Description**: Striking an enemy inflicts a random negative status effect selected from vanilla and Potion Core curses (Slowness, Weakness, Poison, Wither, Blindness, Levitation, Broken Armor, Vulnerable, Weight, Perplexity, Spin, Rust, Lightning).
+- **Description**: Striking an enemy inflicts a random negative potion effect selected from vanilla, Potion Core, and any other installed mod.
 
 <a id="breach"></a>
 
@@ -93,7 +96,7 @@ Complete list of all 73 Divine Enchantments, grouped by equipment type. For a qu
 - **Acquisition**: Enchanting Table.
 - **Incompatible With**: Sharpness, Smite, Bane of Arthropods.
 - **Lycanites Mobs Integration**: Targets Demon and Shadow tagged creatures.
-- **Description**: Deals `+2.5 * level` bonus damage against Nether mobs (Blazes, Ghasts, Magma Cubes, Wither Skeletons, Withers, Zombie Pigmen, Nether dimension fire-immune mobs) and Lycanites Mobs creatures with Demon type or Shadow element (Rahovart, Belph, Cacodemon, Behemoth, Amalgalich, etc.).
+- **Description**: Deals `+2.5 * level` bonus damage against any mob that naturally spawns in the Nether, including modded Nether biome spawns and structure mobs, plus Lycanites Mobs creatures with Demon type or Shadow element (Rahovart, Belph, Cacodemon, Behemoth, Amalgalich, etc.). The natural-spawn table is built once and cached for O(1) lookups.
 
 <a id="necrotic-stasis"></a>
 
@@ -244,6 +247,7 @@ Complete list of all 73 Divine Enchantments, grouped by equipment type. For a qu
 - **Type**: Bows
 - **Max Level**: II
 - **Acquisition**: Treasure only (not available from Enchanting Table).
+- **Incompatible With**: Rune: Arrow Piercing (SoManyEnchantments), Longdraw.
 - **Description**: Enables arrows to pass through targets without stopping:
   - Level I: Pierces through 1 entity before landing on the next entity or block.
   - Level II: Pierces through 2 entities before landing.
@@ -321,7 +325,7 @@ Complete list of all 73 Divine Enchantments, grouped by equipment type. For a qu
 - **Type**: Modded crossbows
 - **Max Level**: III
 - **Acquisition**: Enchanting Table.
-- **Description**: When a crossbow arrow or bolt strikes a solid block instead of an entity, it violently shatters into a radial burst of independent shrapnel arrows that fly outward in all directions and damage whatever they collide with. Shrapnel does **not** home in on targets.
+- **Description**: When a crossbow arrow or bolt strikes a solid block instead of an entity, it violently shatters into a radial burst of independent shrapnel arrows that fly outward in all directions and damage whatever they collide with.
   - Level I: 4 shrapnel arrows.
   - Level II: 9 shrapnel arrows.
   - Level III: 13 shrapnel arrows.
@@ -333,7 +337,7 @@ Complete list of all 73 Divine Enchantments, grouped by equipment type. For a qu
 - **Type**: Bows
 - **Max Level**: I
 - **Acquisition**: Treasure only (not available from Enchanting Table).
-- **Incompatible With**: Mending, Strafe, Multishot, Splitshot, Rapid Fire, Range.
+- **Incompatible With**: Mending, Strafe, Multishot, Splitshot, Rapid Fire, Range, Pierceful.
 - **Description**: Allows bows to be drawn past 100% up to 250% overdraw power (requiring 50 ticks of full hold). Releasing at 250% triggers a concussive muzzle blast that pierces up to 5 targets with scaled damage and recoils the archer backward 6 blocks.
 
 <a id="glimmer"></a>
@@ -350,9 +354,10 @@ Complete list of all 73 Divine Enchantments, grouped by equipment type. For a qu
 ### Feathered Draw
 
 - **Type**: Bows
-- **Max Level**: I
+- **Max Level**: IV
 - **Acquisition**: Enchanting Table.
-- **Description**: Reduces the movement speed penalty while drawing a bow from vanilla's -80% down to -50%, allowing agile repositioning and strafing while aiming without affecting draw speed, velocity, or arrow damage.
+- **Incompatible With**: Strafe (SoManyEnchantments).
+- **Description**: Reduces the movement speed penalty while drawing a bow from vanilla's -80% to -50% / -30% / -10% / 0% at levels I-IV, allowing repositioning while aiming without affecting draw speed, velocity, or arrow damage.
 
 <a id="scavenger-s-habit"></a>
 
@@ -447,7 +452,7 @@ Complete list of all 73 Divine Enchantments, grouped by equipment type. For a qu
 - **Max Level**: I
 - **Acquisition**: Treasure only (not available from Enchanting Table).
 - **Description**: Absolute spatial stability and momentum conversion:
-  - **Camera Stabilization**: Locks camera roll to 0.0° on the client, completely immunizing against screen spin, inversion, and forced camera tilt (Lycanites Instability, Nausea, Potion Core Spin & Perplexity).
+  - **Camera Stabilization**: Locks camera roll to 0.0° on the client, completely immunizing against screen spin, inversion, and forced camera tilt (Lycanites Instability, Nausea, Potion Core Spin, Perplexity & Inversion).
   - **Momentum Slingshot**: If you fall from a height $> 4$ blocks and tap Crouch right before landing, 100% of vertical fall momentum is converted into horizontal forward velocity ($v_{\text{horizontal}} = \sqrt{2 \cdot g \cdot h}$ along your look vector), zeroing out all fall damage and slingshotting you forward.
 
 <a id="perpetual-crucible"></a>
@@ -455,10 +460,10 @@ Complete list of all 73 Divine Enchantments, grouped by equipment type. For a qu
 ### Perpetual Crucible
 
 - **Type**: Chestplates
-- **Max Level**: I
+- **Max Level**: III
 - **Acquisition**: Treasure only (not available from Enchanting Table).
 - **Potion Core Integration**: Directly drives `potioncore:extension`.
-- **Description**: Landing critical hits or killing a mob grants the player Extension for 3 seconds (60 ticks). In Potion Core, Extension pauses other potion durations from ticking down, completely freezing active combat buffs (Wine buffs, Battle Burrito buffs, Diamond Skin, Golden Apple Absorption) as long as you stay aggressively engaged in combat.
+- **Description**: Landing critical hits or killing a mob grants the player Extension I/II/III for 3/5/7 seconds (60/100/140 ticks), scaling with enchantment level. In Potion Core, Extension pauses other potion durations from ticking down, completely freezing active combat buffs (Wine buffs, Battle Burrito buffs, Diamond Skin, Golden Apple Absorption) as long as you stay aggressively engaged in combat.
 
 <a id="grounded-vanguard"></a>
 
@@ -564,7 +569,7 @@ Complete list of all 73 Divine Enchantments, grouped by equipment type. For a qu
 - **Type**: Chestplates
 - **Max Level**: I
 - **Acquisition**: Enchanting Table.
-- **Description**: Dampens horizontal kinetic impact damage by 60% when colliding with terrain while flying (Elytra), grappling, or riding at high speed.
+- **Description**: Dampens horizontal kinetic impact damage by 60% when colliding with terrain while flying (Elytra), grappling, or riding at high speed. Directly supports CollisionDamage and similar kinetic damage sources.
 
 <a id="magnetic-clasp"></a>
 
@@ -627,8 +632,8 @@ Complete list of all 73 Divine Enchantments, grouped by equipment type. For a qu
 
 - **Type**: Fishing Rods
 - **Max Level**: I
-- **Acquisition**: Enchanting Table (Very Rare, Level 30).
-- **Description**: Hooking a mob does not pull them to you; it drops a spectral anchor stone at the mob's feet. For the next 8 seconds (160 ticks), the mob cannot move more than 5 blocks away from the anchor coordinate. If they attempt to lunge, charge, or fly away, the anchor line pulls taut, slingshotting them backward to the center point.
+- **Acquisition**: Treasure only (not available from Enchanting Table).
+- **Description**: Hooking a mob does not pull them to you; it drops a spectral anchor stone at the mob's feet. For the next 8 seconds (160 ticks), the mob cannot move more than 5 blocks away from the anchor coordinate. If they attempt to lunge, charge, or fly away, the anchor line pulls taut, slingshotting them backward to the center point. Treasure enchantment (cannot be obtained from the enchanting table).
 
 <a id="sober-chisel"></a>
 
@@ -664,7 +669,7 @@ Complete list of all 73 Divine Enchantments, grouped by equipment type. For a qu
 - **Type**: Pickaxes and Hammers
 - **Max Level**: I
 - **Acquisition**: Enchanting Table.
-- **Description**: Mining blocks produces 70% less vibration and acoustic sound radius, preventing subterranean predators from aggroing through cave walls.
+- **Description**: Mining blocks produces 70% less vibration and acoustic sound radius. Integrates with Dynamic Surroundings and sound-based mob targeting, preventing distant mobs from locking onto you through cave walls.
 
 <a id="quiet-chipping"></a>
 
@@ -673,7 +678,7 @@ Complete list of all 73 Divine Enchantments, grouped by equipment type. For a qu
 - **Type**: Pickaxes and Hammers
 - **Max Level**: I
 - **Acquisition**: Enchanting Table.
-- **Description**: Reduces the acoustic vibration range of mining blocks by 75%, significantly lowering the chance of alerting nearby sound-tracking subterranean predators through cave walls.
+- **Description**: Reduces the acoustic vibration range of mining blocks by 75%. Works with Dynamic Surroundings and sound-based mob targeting, significantly lowering the chance of alerting distant predators through cave walls.
 
 <a id="salvage-line"></a>
 

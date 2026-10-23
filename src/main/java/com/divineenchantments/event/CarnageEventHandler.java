@@ -154,7 +154,7 @@ public class CarnageEventHandler {
         long now = player.world.getTotalWorldTime();
         long lastHit = data.getLong(TAG_LAST_HIT);
 
-        if (stacks > 0 && lastHit > 0L) {
+        if (stacks > 0 && lastHit > 0L && DivineConfig.carnageDecayStacks > 0) {
             int safety = 0;
             while (stacks > 0 && now - lastHit >= DivineConfig.carnageDecayTicks && safety++ < 200) {
                 stacks = Math.max(0, stacks - DivineConfig.carnageDecayStacks);

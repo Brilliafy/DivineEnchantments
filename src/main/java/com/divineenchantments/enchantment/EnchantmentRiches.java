@@ -5,6 +5,7 @@ import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnumEnchantmentType;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.ResourceLocation;
 
 public class EnchantmentRiches extends DivineEnchantment {
 
@@ -44,5 +45,19 @@ public class EnchantmentRiches extends DivineEnchantment {
     public boolean canApplyAtEnchantingTable(ItemStack stack) {
         if (!com.divineenchantments.config.DivineConfig.isEnabled(this)) { return false; }
         return ItemCheckHelper.isMeleeWeapon(stack);
+    }
+
+    @Override
+    public boolean canApplyTogether(Enchantment other) {
+        if (!super.canApplyTogether(other)) {
+            return false;
+        }
+        if (other != null) {
+            ResourceLocation name = other.getRegistryName();
+            if (name != null && "education".equals(name.getPath())) {
+                return false;
+            }
+        }
+        return true;
     }
 }

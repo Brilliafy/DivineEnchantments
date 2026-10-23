@@ -30,7 +30,13 @@ enchantments {
 - Disabled enchantments cannot be applied at the enchanting table or anvil.
 - Their effects stop working on existing items.
 - Disabled enchantments are hidden from JEI.
-- When Lycanites Mobs is installed, `ally` receives a toggle as well.
+- The `ally` toggle is always present; it only has an effect when Lycanites Mobs is installed.
+
+## Compatibility
+
+| Key | Default | Description |
+| :-- | :-- | :-- |
+| `fixRangeEnchantmentDamage` | `true` | Removes the extra arrow damage Better Survival's Range enchantment gains from its velocity boost. Arrows still fly faster and further. |
 
 ## Balance settings
 
@@ -57,6 +63,15 @@ These live under the `balance` category.
 | `enlargementSizePerLevel` | `0.10` | Size increase per level. |
 | `enlargementDurationTicks` | `400` | Effect duration in ticks. |
 
+### Feathered Draw
+
+| Key | Default | Description |
+| :-- | :-- | :-- |
+| `featheredDrawSpeedLevel1` | `1.5` | Movement speed compensation at level I (-50% draw slowdown). |
+| `featheredDrawSpeedLevel2` | `2.5` | Movement speed compensation at level II (-30%). |
+| `featheredDrawSpeedLevel3` | `3.5` | Movement speed compensation at level III (-10%). |
+| `featheredDrawSpeedLevel4` | `4.0` | Movement speed compensation at level IV (no slowdown). |
+
 ### Bullseye
 
 | Key | Default | Description |
@@ -70,6 +85,20 @@ These live under the `balance` category.
 | Key | Default | Description |
 | :-- | :-- | :-- |
 | `hunterDurationPerLevelTicks` | `400` | Glowing duration per level at full draw. |
+
+### Perpetual Crucible
+
+| Key | Default | Description |
+| :-- | :-- | :-- |
+| `perpetualCrucibleBaseDurationTicks` | `60` | Extension duration at level I in ticks. |
+| `perpetualCrucibleDurationPerLevelTicks` | `40` | Extra Extension duration per level in ticks. |
+
+### Sound stealth
+
+| Key | Default | Description |
+| :-- | :-- | :-- |
+| `dampeningStrikeAggroRadius` | `4.8` | Maximum mob targeting distance while holding a Dampening Strike tool. |
+| `quietChippingAggroRadius` | `4.0` | Maximum mob targeting distance while holding a Quiet Chipping tool. |
 
 ### Voodoo
 

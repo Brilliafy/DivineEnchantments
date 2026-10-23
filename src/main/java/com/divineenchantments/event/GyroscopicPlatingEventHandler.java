@@ -113,7 +113,8 @@ public class GyroscopicPlatingEventHandler {
                 if (reg != null) {
                     String path = reg.getPath().toLowerCase();
                     if (path.contains("instability") || path.contains("spin") || path.contains("perplexity")
-                            || path.contains("tilt") || path.contains("confusion") || path.contains("disorient")) {
+                            || path.contains("invert") || path.contains("tilt") || path.contains("confusion")
+                            || path.contains("disorient")) {
                         toRemove.add(pot);
                     }
                 }

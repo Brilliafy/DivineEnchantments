@@ -65,7 +65,8 @@ public class EnchantmentLongdraw extends DivineEnchantment {
         if (reg != null) {
             String path = reg.getPath().toLowerCase();
             if (path.contains("mending") || path.contains("strafe") || path.contains("multishot")
-                    || path.contains("splitshot") || path.contains("rapid") || path.contains("range")) {
+                    || path.contains("splitshot") || path.contains("rapid") || path.contains("range")
+                    || path.contains("pierceful")) {
                 return false;
             }
         }

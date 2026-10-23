@@ -35,6 +35,11 @@ public class EnchantmentHarmonicAnchor extends DivineEnchantment {
     }
 
     @Override
+    public boolean isTreasureEnchantment() {
+        return true;
+    }
+
+    @Override
     public boolean canApply(ItemStack stack) {
         if (!com.divineenchantments.config.DivineConfig.isEnabled(this)) { return false; }
         return ItemCheckHelper.isFishingRod(stack);
@@ -43,6 +48,6 @@ public class EnchantmentHarmonicAnchor extends DivineEnchantment {
     @Override
     public boolean canApplyAtEnchantingTable(ItemStack stack) {
         if (!com.divineenchantments.config.DivineConfig.isEnabled(this)) { return false; }
-        return ItemCheckHelper.isFishingRod(stack);
+        return false;
     }
 }

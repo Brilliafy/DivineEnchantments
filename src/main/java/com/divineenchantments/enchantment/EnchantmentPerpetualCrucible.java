@@ -21,17 +21,17 @@ public class EnchantmentPerpetualCrucible extends DivineEnchantment {
 
     @Override
     public int getMaxLevel() {
-        return 1;
+        return 3;
     }
 
     @Override
     public int getMinEnchantability(int enchantmentLevel) {
-        return 25;
+        return 25 + (enchantmentLevel - 1) * 10;
     }
 
     @Override
     public int getMaxEnchantability(int enchantmentLevel) {
-        return 50;
+        return this.getMinEnchantability(enchantmentLevel) + 25;
     }
 
     @Override
