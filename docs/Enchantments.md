@@ -4,12 +4,12 @@ Complete list of all 73 Divine Enchantments, grouped by equipment type. For a qu
 
 ## Contents
 
-- [Melee Weapons](#melee-weapons) — 19 enchantments
-- [Ranged](#ranged) — 16 enchantments
-- [Armor & Shields](#armor-shields) — 22 enchantments
-- [Tools & Utility](#tools-utility) — 7 enchantments
-- [Hybrid & Universal](#hybrid-universal) — 4 enchantments
-- [Curses](#curses) — 5 enchantments
+- [Melee Weapons](#melee-weapons) - 19 enchantments
+- [Ranged](#ranged) - 16 enchantments
+- [Armor & Shields](#armor-shields) - 22 enchantments
+- [Tools & Utility](#tools-utility) - 7 enchantments
+- [Hybrid & Universal](#hybrid-universal) - 4 enchantments
+- [Curses](#curses) - 5 enchantments
 
 ---
 

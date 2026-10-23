@@ -1,6 +1,6 @@
 # Divine Enchantments
 
-**73 handcrafted enchantments for Minecraft 1.12.2 — built for Forge and Cleanroom.**
+**73 handcrafted enchantments for Minecraft 1.12.2 - built for Forge and Cleanroom.**
 
 > **1.12.2 note:** Maces, sabers, rapiers, spears, pikes, lances, glaives, halberds, nunchaku, and crossbows come from 1.12.2 weapon mods such as Spartan Weaponry, Better Survival, and Crossbows Backport. They are not vanilla 1.12.2 items.
 
@@ -14,7 +14,7 @@ Every enchantment includes **Enchantment Descriptions** support and a **JEI** in
 
 - **73 enchantments** across weapons, bows, crossbows, armor, shields, tools, fishing rods, and boots.
 - **Treasure and curse enchantments** with distinct acquisition rules.
-- **Colored ancient/rune enchantments** — green runes, red voodoo, yellow ancients.
+- **Colored ancient/rune enchantments** - green runes, red voodoo, yellow ancients.
 - **Custom potion effect** with a hand-drawn pixel-art icon.
 - **Custom projectile, chain-hook, and bullseye rendering.**
 - **No required dependencies.** Optional integrations activate automatically when the matching mod is installed.
@@ -29,22 +29,22 @@ Every enchantment includes **Enchantment Descriptions** support and a **JEI** in
 
 Permanently reduces attack speed by 10% per level. Every fully charged hit grants stacking attack speed (+2% / +3% / +5% per stack, up to 7 × level stacks) and shortens the victim's invulnerability frames. Stacks decay by 5 every 5 seconds without a hit. Incompatible with **Swifter Slashes** from SoManyEnchantments.
 
-### Enlargement I–II
+### Enlargement I-II
 *All melee weapons.*
 
 Melee hits have a 2% × level chance to apply **Enlargement** for 20 seconds. The target grows by 10% × level, including its hitbox and model. Uses a custom potion effect with a custom HUD/inventory icon.
 
-### Bullseye I–IV
+### Bullseye I-IV
 *Bows.*
 
 Hitting an enemy marks a small bullseye on them for 3 seconds. Arrows whose flight path crosses the bullseye deal an additional 20% × level damage. The marker moves with the target and is rendered as a camera-facing pixel-art target. Hitting the bullseye plays a distinct audio cue.
 
-### Hunter I–III
+### Hunter I-III
 *Bows.*
 
 Arrows make the struck enemy glow for `20 × level × draw` seconds, where `draw` is the bow's charge at release. A fully drawn Level III bow marks targets for 60 seconds.
 
-### Voodoo I–VI
+### Voodoo I-VI
 *All melee weapons. Red text. Treasure only.*
 
 Slaying an enemy has a 2% × level chance to raise a loyal zombie ally from the ground:
@@ -80,16 +80,16 @@ A full enchantment list is included in the project README.
 
 Optional integrations activate automatically when installed:
 
-- **Spartan Weaponry & Spartan Shields** — weapon, shield, and crossbow classification.
-- **Crossbows** — crossbow enchantments require a 1.12.2 crossbow mod (Spartan Weaponry, Crossbows Backport, etc.).
-- **Better Survival** — nunchaku support for Rune: Carnage.
-- **Rin's SoManyEnchantments** — Multishot/Splitshot synergy, Advanced Mending and Swifter Slashes incompatibilities, Advanced Looting synergy.
-- **Lycanites Mobs** — Ally summoning, projectile capture, Decay, Aphagia, Demon/Shadow detection, boss checks.
-- **Potion Core** — Extension, Solid Core, Weight, Vulnerability, Climbing, Trueshot, and curse interactions.
-- **Tough As Nails / Simple Difficulty** — temperature stabilization, clean-water infection reduction, hunger/thirst pause.
-- **ItemPhysic Full** — restored walk-over item pickup.
-- **JEI** — enchanted-book information pages.
-- **Enchantment Descriptions** — full tooltip descriptions for every enchantment.
+- **Spartan Weaponry & Spartan Shields** - weapon, shield, and crossbow classification.
+- **Crossbows** - crossbow enchantments require a 1.12.2 crossbow mod (Spartan Weaponry, Crossbows Backport, etc.).
+- **Better Survival** - nunchaku support for Rune: Carnage.
+- **Rin's SoManyEnchantments** - Multishot/Splitshot synergy, Advanced Mending and Swifter Slashes incompatibilities, Advanced Looting synergy.
+- **Lycanites Mobs** - Ally summoning, projectile capture, Decay, Aphagia, Demon/Shadow detection, boss checks.
+- **Potion Core** - Extension, Solid Core, Weight, Vulnerability, Climbing, Trueshot, and curse interactions.
+- **Tough As Nails / Simple Difficulty** - temperature stabilization, clean-water infection reduction, hunger/thirst pause.
+- **ItemPhysic Full** - restored walk-over item pickup.
+- **JEI** - enchanted-book information pages.
+- **Enchantment Descriptions** - full tooltip descriptions for every enchantment.
 
 ---
 
@@ -117,4 +117,5 @@ No mandatory dependencies. JEI, Enchantment Descriptions, and the integration mo
 - All custom enchantments are registered normally and can be scripted, viewed in JEI, and described by Enchantment Descriptions.
 - Treasure enchantments do not appear at the enchanting table unless explicitly stated.
 - The mod is designed to be server-authoritative for damage, durability, AI, and inventory behavior, with client-side rendering and UI sync.
-- Feedback and bug reports are welcome — include your Forge/Cleanroom version, mod list, and a log.
+- **AI-assisted development:** Portions of the code, documentation, and assets were developed with the help of AI tools, then reviewed, tested, and integrated by the author.
+- Feedback and bug reports are welcome - include your Forge/Cleanroom version, mod list, and a log.
