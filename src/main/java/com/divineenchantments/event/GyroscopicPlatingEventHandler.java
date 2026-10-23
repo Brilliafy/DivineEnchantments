@@ -40,7 +40,7 @@ public class GyroscopicPlatingEventHandler {
         EntityPlayer player = (EntityPlayer) event.getEntityLiving();
         ItemStack chest = player.getItemStackFromSlot(EntityEquipmentSlot.CHEST);
 
-        if (!chest.isEmpty() && EnchantmentHelper.getEnchantmentLevel(ModEnchantments.GYROSCOPIC_PLATING, chest) > 0) {
+        if (!chest.isEmpty() && ModEnchantments.getLevel(ModEnchantments.GYROSCOPIC_PLATING, chest) > 0) {
             float fallDist = event.getDistance();
 
             if (fallDist > 4.0F && player.isSneaking()) {
@@ -99,7 +99,7 @@ public class GyroscopicPlatingEventHandler {
         EntityPlayer player = (EntityPlayer) event.getEntityLiving();
         ItemStack chest = player.getItemStackFromSlot(EntityEquipmentSlot.CHEST);
 
-        if (!chest.isEmpty() && EnchantmentHelper.getEnchantmentLevel(ModEnchantments.GYROSCOPIC_PLATING, chest) > 0) {
+        if (!chest.isEmpty() && ModEnchantments.getLevel(ModEnchantments.GYROSCOPIC_PLATING, chest) > 0) {
             // Remove vanilla nausea
             if (player.isPotionActive(MobEffects.NAUSEA)) {
                 player.removePotionEffect(MobEffects.NAUSEA);

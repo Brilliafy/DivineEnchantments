@@ -130,7 +130,7 @@ public class CurseAndBuffEventHandler {
 
         // Arachnid Ascent: Grants potioncore:climb while wearing leggings
         ItemStack legs = entity.getItemStackFromSlot(EntityEquipmentSlot.LEGS);
-        int arachnidLevel = (!legs.isEmpty()) ? EnchantmentHelper.getEnchantmentLevel(ModEnchantments.ARACHNID_ASCENT, legs) : 0;
+        int arachnidLevel = (!legs.isEmpty()) ? ModEnchantments.getLevel(ModEnchantments.ARACHNID_ASCENT, legs) : 0;
         if (arachnidLevel > 0) {
             Potion climb = getClimbPotion();
             if (climb != null) {
@@ -152,7 +152,7 @@ public class CurseAndBuffEventHandler {
 
             // Umbral Prowess: Deep darkness (light level <= 4) grants Night Vision and +20% speed; light >= 12 inflicts Slowness
             ItemStack helmet = player.getItemStackFromSlot(EntityEquipmentSlot.HEAD);
-            int umbralLevel = (!helmet.isEmpty()) ? EnchantmentHelper.getEnchantmentLevel(ModEnchantments.UMBRAL_PROWESS, helmet) : 0;
+            int umbralLevel = (!helmet.isEmpty()) ? ModEnchantments.getLevel(ModEnchantments.UMBRAL_PROWESS, helmet) : 0;
             if (umbralLevel > 0) {
                 int light = player.world.getLight(player.getPosition());
                 if (light <= 4) {
@@ -170,7 +170,7 @@ public class CurseAndBuffEventHandler {
 
             // Mudstrider: Negates movement speed penalty of soul sand, cobwebs, modded mud/silt, shallow water
             ItemStack boots = player.getItemStackFromSlot(EntityEquipmentSlot.FEET);
-            int mudLevel = (!boots.isEmpty()) ? EnchantmentHelper.getEnchantmentLevel(ModEnchantments.MUDSTRIDER, boots) : 0;
+            int mudLevel = (!boots.isEmpty()) ? ModEnchantments.getLevel(ModEnchantments.MUDSTRIDER, boots) : 0;
             if (mudLevel > 0) {
                 BlockPos pos = new BlockPos(player.posX, player.posY, player.posZ);
                 Block blockHere = player.world.getBlockState(pos).getBlock();
@@ -207,7 +207,7 @@ public class CurseAndBuffEventHandler {
 
             // Suregrip: Quality of life utility. Cannot dual wield items (offhand drops)
             ItemStack main = player.getHeldItemMainhand();
-            if (!main.isEmpty() && EnchantmentHelper.getEnchantmentLevel(ModEnchantments.SUREGRIP, main) > 0) {
+            if (!main.isEmpty() && ModEnchantments.getLevel(ModEnchantments.SUREGRIP, main) > 0) {
                 ItemStack off = player.getHeldItemOffhand();
                 if (!off.isEmpty()) {
                     player.dropItem(off.copy(), false, false);
@@ -222,7 +222,7 @@ public class CurseAndBuffEventHandler {
                 shield = player.getHeldItemMainhand();
             }
             if (!shield.isEmpty() && com.divineenchantments.util.ItemCheckHelper.isShield(shield)
-                    && EnchantmentHelper.getEnchantmentLevel(ModEnchantments.BRACED_PIVOT, shield) > 0) {
+                    && ModEnchantments.getLevel(ModEnchantments.BRACED_PIVOT, shield) > 0) {
                 if (player.getCooldownTracker().hasCooldown(shield.getItem())) {
                     if (!player.getEntityData().getBoolean("DE_BracedPivotAdjusted")) {
                         player.getEntityData().setBoolean("DE_BracedPivotAdjusted", true);
@@ -238,7 +238,7 @@ public class CurseAndBuffEventHandler {
             return;
         }
 
-        int slowsinkLevel = EnchantmentHelper.getMaxEnchantmentLevel(ModEnchantments.SLOWSINK, entity);
+        int slowsinkLevel = ModEnchantments.getMaxLevel(ModEnchantments.SLOWSINK, entity);
         if (slowsinkLevel > 0 && entity.motionY < 0.0D) {
             double maxSink;
             if (slowsinkLevel == 1) {
@@ -273,7 +273,7 @@ public class CurseAndBuffEventHandler {
         if (event.getSource().getTrueSource() instanceof EntityLivingBase) {
             EntityLivingBase attacker = (EntityLivingBase) event.getSource().getTrueSource();
             ItemStack attackerHelmet = attacker.getItemStackFromSlot(EntityEquipmentSlot.HEAD);
-            if (!attackerHelmet.isEmpty() && EnchantmentHelper.getEnchantmentLevel(ModEnchantments.APEX, attackerHelmet) > 0) {
+            if (!attackerHelmet.isEmpty() && ModEnchantments.getLevel(ModEnchantments.APEX, attackerHelmet) > 0) {
                 double dy = attacker.posY - target.posY;
                 if (dy > 0.0D) {
                     float bonus = (float) (dy * 0.02D);
@@ -284,7 +284,7 @@ public class CurseAndBuffEventHandler {
 
         // Victim wearing Apex helmet takes +2% damage per block below attacker
         ItemStack victimHelmet = target.getItemStackFromSlot(EntityEquipmentSlot.HEAD);
-        if (!victimHelmet.isEmpty() && EnchantmentHelper.getEnchantmentLevel(ModEnchantments.APEX, victimHelmet) > 0) {
+        if (!victimHelmet.isEmpty() && ModEnchantments.getLevel(ModEnchantments.APEX, victimHelmet) > 0) {
             if (event.getSource().getTrueSource() instanceof EntityLivingBase) {
                 EntityLivingBase attacker = (EntityLivingBase) event.getSource().getTrueSource();
                 double dy = attacker.posY - target.posY;
@@ -297,14 +297,14 @@ public class CurseAndBuffEventHandler {
 
         // 2. Curse of the Tether (Chestplate): 10% less damage from all attacks
         ItemStack chest = target.getItemStackFromSlot(EntityEquipmentSlot.CHEST);
-        if (!chest.isEmpty() && EnchantmentHelper.getEnchantmentLevel(ModEnchantments.CURSE_OF_THE_TETHER, chest) > 0) {
+        if (!chest.isEmpty() && ModEnchantments.getLevel(ModEnchantments.CURSE_OF_THE_TETHER, chest) > 0) {
             event.setAmount(event.getAmount() * 0.90F);
         }
 
         // 3. Cushioned Heel: Dampens block-impact kinetic damage and minor falls (<= 4.5 blocks) by 30%
         if (target instanceof EntityPlayer) {
             ItemStack boots = target.getItemStackFromSlot(EntityEquipmentSlot.FEET);
-            if (!boots.isEmpty() && EnchantmentHelper.getEnchantmentLevel(ModEnchantments.CUSHIONED_HEEL, boots) > 0) {
+            if (!boots.isEmpty() && ModEnchantments.getLevel(ModEnchantments.CUSHIONED_HEEL, boots) > 0) {
                 DamageSource src = event.getSource();
                 String type = src.getDamageType().toLowerCase();
                 if (src == DamageSource.FLY_INTO_WALL || type.contains("kinetic") || type.contains("wall")
@@ -315,7 +315,7 @@ public class CurseAndBuffEventHandler {
 
             // 4. Cushioned Shirt: Dampens horizontal kinetic impact damage by 60% when colliding with terrain at high speed
             ItemStack chestplate = target.getItemStackFromSlot(EntityEquipmentSlot.CHEST);
-            if (!chestplate.isEmpty() && EnchantmentHelper.getEnchantmentLevel(ModEnchantments.CUSHIONED_SHIRT, chestplate) > 0) {
+            if (!chestplate.isEmpty() && ModEnchantments.getLevel(ModEnchantments.CUSHIONED_SHIRT, chestplate) > 0) {
                 DamageSource src = event.getSource();
                 String type = src.getDamageType().toLowerCase();
                 boolean isKineticCollision = src == DamageSource.FLY_INTO_WALL || type.contains("kinetic") || type.contains("wall") || type.contains("collision");
@@ -370,7 +370,7 @@ public class CurseAndBuffEventHandler {
 
         // 1. Curse of the Tether: 20% less durability damage to chestplate
         ItemStack chest = player.getItemStackFromSlot(EntityEquipmentSlot.CHEST);
-        if (!chest.isEmpty() && EnchantmentHelper.getEnchantmentLevel(ModEnchantments.CURSE_OF_THE_TETHER, chest) > 0) {
+        if (!chest.isEmpty() && ModEnchantments.getLevel(ModEnchantments.CURSE_OF_THE_TETHER, chest) > 0) {
             if (player.getEntityData().hasKey("DE_PreChestDmg")) {
                 int preDmg = player.getEntityData().getInteger("DE_PreChestDmg");
                 int currentDmg = chest.getItemDamage();
@@ -391,10 +391,10 @@ public class CurseAndBuffEventHandler {
 
         // 2. Royal Guard: Redirects 10 * n% of durability damage from armor onto weapon
         ItemStack weapon = player.getHeldItemMainhand();
-        int guardLevel = EnchantmentHelper.getEnchantmentLevel(ModEnchantments.ROYAL_GUARD, weapon);
+        int guardLevel = ModEnchantments.getLevel(ModEnchantments.ROYAL_GUARD, weapon);
         if (guardLevel == 0) {
             weapon = player.getHeldItemOffhand();
-            guardLevel = EnchantmentHelper.getEnchantmentLevel(ModEnchantments.ROYAL_GUARD, weapon);
+            guardLevel = ModEnchantments.getLevel(ModEnchantments.ROYAL_GUARD, weapon);
         }
 
         if (guardLevel > 0 && !weapon.isEmpty() && weapon.isItemStackDamageable() && player.getEntityData().hasKey("DE_PreArmorDmg")) {
@@ -439,7 +439,7 @@ public class CurseAndBuffEventHandler {
                 if (idxVoid < preArmorDmg.length) {
                     int pre = preArmorDmg[idxVoid];
                     if (pre >= 0 && !armor.isEmpty() && armor.isItemStackDamageable()
-                            && EnchantmentHelper.getEnchantmentLevel(ModEnchantments.DEBT_OF_THE_VOID, armor) > 0) {
+                            && ModEnchantments.getLevel(ModEnchantments.DEBT_OF_THE_VOID, armor) > 0) {
                         int took = armor.getItemDamage() - pre;
                         if (took > 0) {
                             armor.setItemDamage(pre); // Durability completely preserved!
@@ -456,7 +456,7 @@ public class CurseAndBuffEventHandler {
             int preMain = player.getEntityData().getInteger("DE_PreMainHandDmg");
             ItemStack main = player.getHeldItemMainhand();
             if (preMain >= 0 && !main.isEmpty() && main.isItemStackDamageable()
-                    && EnchantmentHelper.getEnchantmentLevel(ModEnchantments.DEBT_OF_THE_VOID, main) > 0) {
+                    && ModEnchantments.getLevel(ModEnchantments.DEBT_OF_THE_VOID, main) > 0) {
                 int took = main.getItemDamage() - preMain;
                 if (took > 0) {
                     main.setItemDamage(preMain);
@@ -469,7 +469,7 @@ public class CurseAndBuffEventHandler {
             int preOff = player.getEntityData().getInteger("DE_PreOffHandDmg");
             ItemStack off = player.getHeldItemOffhand();
             if (preOff >= 0 && !off.isEmpty() && off.isItemStackDamageable()
-                    && EnchantmentHelper.getEnchantmentLevel(ModEnchantments.DEBT_OF_THE_VOID, off) > 0) {
+                    && ModEnchantments.getLevel(ModEnchantments.DEBT_OF_THE_VOID, off) > 0) {
                 int took = off.getItemDamage() - preOff;
                 if (took > 0) {
                     off.setItemDamage(preOff);
@@ -503,9 +503,9 @@ public class CurseAndBuffEventHandler {
             }
 
             ItemStack prev = event.getFrom();
-            if (!prev.isEmpty() && EnchantmentHelper.getEnchantmentLevel(ModEnchantments.CURSE_OF_THE_TETHER, prev) > 0) {
+            if (!prev.isEmpty() && ModEnchantments.getLevel(ModEnchantments.CURSE_OF_THE_TETHER, prev) > 0) {
                 ItemStack current = event.getTo();
-                if (current.isEmpty() || EnchantmentHelper.getEnchantmentLevel(ModEnchantments.CURSE_OF_THE_TETHER, current) == 0) {
+                if (current.isEmpty() || ModEnchantments.getLevel(ModEnchantments.CURSE_OF_THE_TETHER, current) == 0) {
                     // Force the tethered chestplate back into the chest slot!
                     player.setItemStackToSlot(EntityEquipmentSlot.CHEST, prev.copy());
 
@@ -550,9 +550,9 @@ public class CurseAndBuffEventHandler {
 
         if (event.getSlot() == EntityEquipmentSlot.LEGS) {
             ItemStack from = event.getFrom();
-            if (!from.isEmpty() && EnchantmentHelper.getEnchantmentLevel(ModEnchantments.ARACHNID_ASCENT, from) > 0) {
+            if (!from.isEmpty() && ModEnchantments.getLevel(ModEnchantments.ARACHNID_ASCENT, from) > 0) {
                 ItemStack to = event.getTo();
-                if (to.isEmpty() || EnchantmentHelper.getEnchantmentLevel(ModEnchantments.ARACHNID_ASCENT, to) == 0) {
+                if (to.isEmpty() || ModEnchantments.getLevel(ModEnchantments.ARACHNID_ASCENT, to) == 0) {
                     Potion climb = getClimbPotion();
                     if (climb != null && event.getEntityLiving().isPotionActive(climb)) {
                         event.getEntityLiving().removePotionEffect(climb);
@@ -573,7 +573,7 @@ public class CurseAndBuffEventHandler {
         }
 
         ItemStack stack = event.getEntityItem().getItem();
-        if (!stack.isEmpty() && EnchantmentHelper.getEnchantmentLevel(ModEnchantments.CURSE_OF_THE_TETHER, stack) > 0) {
+        if (!stack.isEmpty() && ModEnchantments.getLevel(ModEnchantments.CURSE_OF_THE_TETHER, stack) > 0) {
             ItemStack chest = player.getItemStackFromSlot(EntityEquipmentSlot.CHEST);
             if (chest.isEmpty()) {
                 player.setItemStackToSlot(EntityEquipmentSlot.CHEST, stack.copy());
@@ -585,7 +585,7 @@ public class CurseAndBuffEventHandler {
 
         // Suregrip: Prevent weapon from being knocked out of main hand if offhand is empty (not dual wielding)
         if (!stack.isEmpty() && player.getHeldItemOffhand().isEmpty()
-                && EnchantmentHelper.getEnchantmentLevel(ModEnchantments.SUREGRIP, stack) > 0) {
+                && ModEnchantments.getLevel(ModEnchantments.SUREGRIP, stack) > 0) {
             event.setCanceled(true);
             if (player.getHeldItemMainhand().isEmpty()) {
                 player.setHeldItem(EnumHand.MAIN_HAND, stack);
@@ -613,7 +613,7 @@ public class CurseAndBuffEventHandler {
             int totalVoidTick = 0;
             for (EntityEquipmentSlot slot : EntityEquipmentSlot.values()) {
                 ItemStack eq = player.getItemStackFromSlot(slot);
-                if (!eq.isEmpty() && eq.isItemStackDamageable() && EnchantmentHelper.getEnchantmentLevel(ModEnchantments.DEBT_OF_THE_VOID, eq) > 0) {
+                if (!eq.isEmpty() && eq.isItemStackDamageable() && ModEnchantments.getLevel(ModEnchantments.DEBT_OF_THE_VOID, eq) > 0) {
                     NBTTagCompound tag = eq.getOrCreateSubCompound("DivineEnchantments");
                     int saved = tag.hasKey("VoidDmg") ? tag.getInteger("VoidDmg") : eq.getItemDamage();
                     int cur = eq.getItemDamage();
@@ -644,7 +644,7 @@ public class CurseAndBuffEventHandler {
 
         // Ground Sweep: Restores vanilla collision pickup without requiring right-clicks
         ItemStack bootsSweep = player.getItemStackFromSlot(EntityEquipmentSlot.FEET);
-        if (!bootsSweep.isEmpty() && EnchantmentHelper.getEnchantmentLevel(ModEnchantments.GROUND_SWEEP, bootsSweep) > 0) {
+        if (!bootsSweep.isEmpty() && ModEnchantments.getLevel(ModEnchantments.GROUND_SWEEP, bootsSweep) > 0) {
             net.minecraft.util.math.AxisAlignedBB sweepBox = new net.minecraft.util.math.AxisAlignedBB(
                     player.posX - 1.25D, player.posY - 0.2D, player.posZ - 1.25D,
                     player.posX + 1.25D, player.posY + 1.6D, player.posZ + 1.25D);
@@ -659,10 +659,10 @@ public class CurseAndBuffEventHandler {
         // Magnetic Clasp: Attracts ground items within 3 blocks (6 blocks if both chest and boots) if incomplete stack exists in inventory
         int claspPieces = 0;
         ItemStack chestClasp = player.getItemStackFromSlot(EntityEquipmentSlot.CHEST);
-        if (!chestClasp.isEmpty() && EnchantmentHelper.getEnchantmentLevel(ModEnchantments.MAGNETIC_CLASP, chestClasp) > 0) {
+        if (!chestClasp.isEmpty() && ModEnchantments.getLevel(ModEnchantments.MAGNETIC_CLASP, chestClasp) > 0) {
             claspPieces++;
         }
-        if (!bootsSweep.isEmpty() && EnchantmentHelper.getEnchantmentLevel(ModEnchantments.MAGNETIC_CLASP, bootsSweep) > 0) {
+        if (!bootsSweep.isEmpty() && ModEnchantments.getLevel(ModEnchantments.MAGNETIC_CLASP, bootsSweep) > 0) {
             claspPieces++;
         }
         if (claspPieces > 0) {
@@ -705,7 +705,7 @@ public class CurseAndBuffEventHandler {
 
         // Metabolic Slumber: Pauses hunger and thirst depletion while idle/not moving (takes effect after 10s = 200 ticks)
         ItemStack chestSlumber = player.getItemStackFromSlot(EntityEquipmentSlot.CHEST);
-        if (!chestSlumber.isEmpty() && EnchantmentHelper.getEnchantmentLevel(ModEnchantments.METABOLIC_SLUMBER, chestSlumber) > 0) {
+        if (!chestSlumber.isEmpty() && ModEnchantments.getLevel(ModEnchantments.METABOLIC_SLUMBER, chestSlumber) > 0) {
             double dx = player.posX - player.prevPosX;
             double dy = player.posY - player.prevPosY;
             double dz = player.posZ - player.prevPosZ;
@@ -752,7 +752,7 @@ public class CurseAndBuffEventHandler {
 
         // Desalination Mesh: 85% chance to cure/negate Parasites effect from drinking dirty/salt water
         ItemStack helmMesh = player.getItemStackFromSlot(EntityEquipmentSlot.HEAD);
-        if (!helmMesh.isEmpty() && EnchantmentHelper.getEnchantmentLevel(ModEnchantments.DESALINATION_MESH, helmMesh) > 0) {
+        if (!helmMesh.isEmpty() && ModEnchantments.getLevel(ModEnchantments.DESALINATION_MESH, helmMesh) > 0) {
             for (PotionEffect pe : player.getActivePotionEffects()) {
                 ResourceLocation reg = pe.getPotion().getRegistryName();
                 if (reg != null && reg.getPath().toLowerCase().contains("parasite")) {
@@ -769,7 +769,7 @@ public class CurseAndBuffEventHandler {
         if (!player.world.isRemote && player.world.getTotalWorldTime() % 10 == 0) {
             int foilPieces = 0;
             for (ItemStack arm : player.getArmorInventoryList()) {
-                if (!arm.isEmpty() && EnchantmentHelper.getEnchantmentLevel(ModEnchantments.THERMAL_FOIL, arm) > 0) {
+                if (!arm.isEmpty() && ModEnchantments.getLevel(ModEnchantments.THERMAL_FOIL, arm) > 0) {
                     foilPieces++;
                 }
             }
@@ -785,7 +785,7 @@ public class CurseAndBuffEventHandler {
 
         // Gargoyle Stance: Eliminates displacement from suction and vacuum effects (Djinn, whirlpools, siren pulls) while firmly on solid blocks
         ItemStack bootsGargoyle = player.getItemStackFromSlot(EntityEquipmentSlot.FEET);
-        if (!bootsGargoyle.isEmpty() && EnchantmentHelper.getEnchantmentLevel(ModEnchantments.GARGOYLE_STANCE, bootsGargoyle) > 0) {
+        if (!bootsGargoyle.isEmpty() && ModEnchantments.getLevel(ModEnchantments.GARGOYLE_STANCE, bootsGargoyle) > 0) {
             net.minecraft.util.math.BlockPos feetPos = new net.minecraft.util.math.BlockPos(player.posX, player.posY - 0.2D, player.posZ);
             boolean solidBelow = player.world.getBlockState(feetPos).getMaterial().isSolid() || player.world.getBlockState(player.getPosition().down()).getMaterial().isSolid();
             if (player.onGround && solidBelow) {
@@ -840,7 +840,7 @@ public class CurseAndBuffEventHandler {
 
         // Shadow Stalker visual indicator while sneaking in deep stealth
         ItemStack legsStalker = player.getItemStackFromSlot(EntityEquipmentSlot.LEGS);
-        if (!legsStalker.isEmpty() && EnchantmentHelper.getEnchantmentLevel(ModEnchantments.SHADOW_STALKER, legsStalker) > 0) {
+        if (!legsStalker.isEmpty() && ModEnchantments.getLevel(ModEnchantments.SHADOW_STALKER, legsStalker) > 0) {
             if (player.isSneaking() && !player.isSprinting() && (player.world.getTotalWorldTime() % 15 == 0)) {
                 long lastAttack = player.getEntityData().getLong("DE_LastAttackTime");
                 if (player.world.getTotalWorldTime() - lastAttack >= 60L && player.world instanceof WorldServer) {
@@ -851,7 +851,7 @@ public class CurseAndBuffEventHandler {
         }
 
         ItemStack legs = player.getItemStackFromSlot(EntityEquipmentSlot.LEGS);
-        boolean hasInertia = !legs.isEmpty() && EnchantmentHelper.getEnchantmentLevel(ModEnchantments.CURSE_OF_INERTIA, legs) > 0;
+        boolean hasInertia = !legs.isEmpty() && ModEnchantments.getLevel(ModEnchantments.CURSE_OF_INERTIA, legs) > 0;
 
         if (!hasInertia) {
             if (player.getEntityData().hasKey("Inertia_SprintTicks")) {
@@ -968,8 +968,8 @@ public class CurseAndBuffEventHandler {
     public static void onLivingHeal(LivingHealEvent event) {
         if (event.getEntityLiving() instanceof EntityPlayer) {
             EntityPlayer player = (EntityPlayer) event.getEntityLiving();
-            boolean hasBerserk = EnchantmentHelper.getEnchantmentLevel(ModEnchantments.BERSERKERS_BLOODLUST, player.getHeldItemMainhand()) > 0
-                    || EnchantmentHelper.getEnchantmentLevel(ModEnchantments.BERSERKERS_BLOODLUST, player.getHeldItemOffhand()) > 0;
+            boolean hasBerserk = ModEnchantments.getLevel(ModEnchantments.BERSERKERS_BLOODLUST, player.getHeldItemMainhand()) > 0
+                    || ModEnchantments.getLevel(ModEnchantments.BERSERKERS_BLOODLUST, player.getHeldItemOffhand()) > 0;
             if (hasBerserk) {
                 event.setAmount(event.getAmount() * 0.25F);
             }
@@ -984,7 +984,7 @@ public class CurseAndBuffEventHandler {
         if (event.getEntityLiving() instanceof EntityPlayer && !event.getEntityLiving().world.isRemote) {
             EntityPlayer player = (EntityPlayer) event.getEntityLiving();
             ItemStack chest = player.getItemStackFromSlot(EntityEquipmentSlot.CHEST);
-            int gourmandLvl = (!chest.isEmpty()) ? EnchantmentHelper.getEnchantmentLevel(ModEnchantments.GOURMANDS_VITALITY, chest) : 0;
+            int gourmandLvl = (!chest.isEmpty()) ? ModEnchantments.getLevel(ModEnchantments.GOURMANDS_VITALITY, chest) : 0;
             if (gourmandLvl > 0 && event.getItem().getItem() instanceof ItemFood) {
                 ItemFood food = (ItemFood) event.getItem().getItem();
                 int hunger = food.getHealAmount(event.getItem());
@@ -1049,7 +1049,7 @@ public class CurseAndBuffEventHandler {
         if (event.getTarget() instanceof EntityPlayer) {
             EntityPlayer player = (EntityPlayer) event.getTarget();
             ItemStack legs = player.getItemStackFromSlot(EntityEquipmentSlot.LEGS);
-            int stalkerLvl = (!legs.isEmpty()) ? EnchantmentHelper.getEnchantmentLevel(ModEnchantments.SHADOW_STALKER, legs) : 0;
+            int stalkerLvl = (!legs.isEmpty()) ? ModEnchantments.getLevel(ModEnchantments.SHADOW_STALKER, legs) : 0;
             if (stalkerLvl > 0) {
                 boolean isSneaking = player.isSneaking();
                 boolean isSprinting = player.isSprinting();

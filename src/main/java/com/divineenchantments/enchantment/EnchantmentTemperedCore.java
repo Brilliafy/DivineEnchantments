@@ -8,7 +8,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemTool;
 
-public class EnchantmentTemperedCore extends Enchantment {
+public class EnchantmentTemperedCore extends DivineEnchantment {
 
     public EnchantmentTemperedCore() {
         super(Rarity.COMMON, EnumEnchantmentType.DIGGER, new EntityEquipmentSlot[]{EntityEquipmentSlot.MAINHAND});
@@ -38,6 +38,7 @@ public class EnchantmentTemperedCore extends Enchantment {
 
     @Override
     public boolean canApply(ItemStack stack) {
+        if (!com.divineenchantments.config.DivineConfig.isEnabled(this)) { return false; }
         if (stack == null || stack.isEmpty()) return false;
         Item item = stack.getItem();
         return item instanceof ItemTool || ItemCheckHelper.isMeleeWeapon(stack) || stack.isItemStackDamageable();
@@ -45,6 +46,7 @@ public class EnchantmentTemperedCore extends Enchantment {
 
     @Override
     public boolean canApplyAtEnchantingTable(ItemStack stack) {
+        if (!com.divineenchantments.config.DivineConfig.isEnabled(this)) { return false; }
         return canApply(stack);
     }
 }

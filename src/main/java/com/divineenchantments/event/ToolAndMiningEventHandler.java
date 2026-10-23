@@ -56,7 +56,7 @@ public class ToolAndMiningEventHandler {
 
         ItemStack held = player.getHeldItemMainhand();
         if (!held.isEmpty() && held.isItemStackDamageable()
-                && EnchantmentHelper.getEnchantmentLevel(ModEnchantments.TEMPERED_CORE, held) > 0) {
+                && ModEnchantments.getLevel(ModEnchantments.TEMPERED_CORE, held) > 0) {
             // If tool is being used to attack a mob (which normally incurs 2 durability penalty)
             if (held.getItem() instanceof ItemTool) {
                 player.getEntityData().setInteger("DE_TemperedCorePreDmg", held.getItemDamage());
@@ -96,7 +96,7 @@ public class ToolAndMiningEventHandler {
         if (player == null) return;
 
         ItemStack held = player.getHeldItemMainhand();
-        if (!held.isEmpty() && EnchantmentHelper.getEnchantmentLevel(ModEnchantments.SOBER_CHISEL, held) > 0) {
+        if (!held.isEmpty() && ModEnchantments.getLevel(ModEnchantments.SOBER_CHISEL, held) > 0) {
             event.setNewSpeed(event.getOriginalSpeed() * 0.95F); // -5% speed
         }
     }
@@ -115,25 +115,25 @@ public class ToolAndMiningEventHandler {
         if (held.isEmpty()) return;
 
         // Tempered Core for swords breaking non-foliage blocks
-        if (held.getItem() instanceof ItemSword && EnchantmentHelper.getEnchantmentLevel(ModEnchantments.TEMPERED_CORE, held) > 0) {
+        if (held.getItem() instanceof ItemSword && ModEnchantments.getLevel(ModEnchantments.TEMPERED_CORE, held) > 0) {
             player.getEntityData().setInteger("DE_SwordBreakPreDmg", held.getItemDamage());
         }
 
         // Sober Chisel: track recent ore break position to intercept Geonachs and Tremors
-        if (EnchantmentHelper.getEnchantmentLevel(ModEnchantments.SOBER_CHISEL, held) > 0) {
+        if (ModEnchantments.getLevel(ModEnchantments.SOBER_CHISEL, held) > 0) {
             player.getEntityData().setLong("DE_SoberTime", world.getTotalWorldTime());
             player.getEntityData().setLong("DE_SoberPos", pos.toLong());
         }
 
         // Shimmered: highlight adjacent identical ore blocks within 2 blocks
-        if (EnchantmentHelper.getEnchantmentLevel(ModEnchantments.SHIMMERED, held) > 0) {
+        if (ModEnchantments.getLevel(ModEnchantments.SHIMMERED, held) > 0) {
             if (isOreBlock(block, state)) {
                 triggerShimmer(world, pos, block);
             }
         }
 
         // Dampening Strike: reduces sound / vibration radius by 70%
-        if (EnchantmentHelper.getEnchantmentLevel(ModEnchantments.DAMPENING_STRIKE, held) > 0) {
+        if (ModEnchantments.getLevel(ModEnchantments.DAMPENING_STRIKE, held) > 0) {
             double radius = 16.0D;
             AxisAlignedBB box = new AxisAlignedBB(pos).grow(radius);
             List<EntityLiving> mobs = world.getEntitiesWithinAABB(EntityLiving.class, box, m -> m instanceof IMob);
@@ -152,7 +152,7 @@ public class ToolAndMiningEventHandler {
         }
 
         // Quiet Chipping: reduces acoustic vibration range of mining blocks by 75%
-        if (EnchantmentHelper.getEnchantmentLevel(ModEnchantments.QUIET_CHIPPING, held) > 0) {
+        if (ModEnchantments.getLevel(ModEnchantments.QUIET_CHIPPING, held) > 0) {
             double radius = 16.0D;
             AxisAlignedBB box = new AxisAlignedBB(pos).grow(radius);
             List<EntityLiving> mobs = world.getEntitiesWithinAABB(EntityLiving.class, box, m -> m instanceof IMob);
@@ -218,7 +218,7 @@ public class ToolAndMiningEventHandler {
 
         // Silt Sifter
         if (!held.isEmpty() && (held.getItem() instanceof ItemSpade || ItemCheckHelper.isMeleeWeapon(held))
-                && EnchantmentHelper.getEnchantmentLevel(ModEnchantments.SILT_SIFTER, held) > 0) {
+                && ModEnchantments.getLevel(ModEnchantments.SILT_SIFTER, held) > 0) {
             Block block = event.getState().getBlock();
             if (block == Blocks.GRAVEL || block == Blocks.DIRT || block == Blocks.GRASS
                     || block == Blocks.CLAY || block == Blocks.SAND || block == Blocks.SOUL_SAND) {
@@ -297,10 +297,10 @@ public class ToolAndMiningEventHandler {
         if (player == null || player.world.isRemote) return;
 
         ItemStack held = player.getHeldItemMainhand();
-        if (held.isEmpty() || !ItemCheckHelper.isFishingRod(held) || EnchantmentHelper.getEnchantmentLevel(ModEnchantments.SALVAGE_LINE, held) == 0) {
+        if (held.isEmpty() || !ItemCheckHelper.isFishingRod(held) || ModEnchantments.getLevel(ModEnchantments.SALVAGE_LINE, held) == 0) {
             held = player.getHeldItemOffhand();
         }
-        if (held.isEmpty() || !ItemCheckHelper.isFishingRod(held) || EnchantmentHelper.getEnchantmentLevel(ModEnchantments.SALVAGE_LINE, held) == 0) {
+        if (held.isEmpty() || !ItemCheckHelper.isFishingRod(held) || ModEnchantments.getLevel(ModEnchantments.SALVAGE_LINE, held) == 0) {
             return;
         }
 

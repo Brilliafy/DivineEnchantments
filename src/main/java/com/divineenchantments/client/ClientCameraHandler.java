@@ -26,7 +26,7 @@ public class ClientCameraHandler {
         Minecraft mc = Minecraft.getMinecraft();
         if (mc.player != null) {
             ItemStack chest = mc.player.getItemStackFromSlot(EntityEquipmentSlot.CHEST);
-            if (!chest.isEmpty() && EnchantmentHelper.getEnchantmentLevel(ModEnchantments.GYROSCOPIC_PLATING, chest) > 0) {
+            if (!chest.isEmpty() && ModEnchantments.getLevel(ModEnchantments.GYROSCOPIC_PLATING, chest) > 0) {
                 event.setRoll(0.0F);
             }
         }
@@ -42,7 +42,7 @@ public class ClientCameraHandler {
             return;
         }
 
-        if (EnchantmentHelper.getEnchantmentLevel(ModEnchantments.SACRIFICIAL, stack) > 0) {
+        if (ModEnchantments.getLevel(ModEnchantments.SACRIFICIAL, stack) > 0) {
             event.getToolTip().add(TextFormatting.GRAY + "Sacrificial Effects (When in Main Hand):");
             event.getToolTip().add(TextFormatting.DARK_GREEN + " +10% Attack Damage");
             event.getToolTip().add(TextFormatting.DARK_GREEN + " +10% Attack Speed");
@@ -51,7 +51,7 @@ public class ClientCameraHandler {
             event.getToolTip().add(TextFormatting.RED + " -10% Armor");
         }
 
-        if (EnchantmentHelper.getEnchantmentLevel(ModEnchantments.HEAVYPLATED, stack) > 0) {
+        if (ModEnchantments.getLevel(ModEnchantments.HEAVYPLATED, stack) > 0) {
             event.getToolTip().add(TextFormatting.GRAY + "Heavyplated Effects (When Equipped):");
             event.getToolTip().add(TextFormatting.DARK_GREEN + " +5% Armor");
             event.getToolTip().add(TextFormatting.RED + " -5% Movement Speed");

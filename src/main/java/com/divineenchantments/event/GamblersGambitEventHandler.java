@@ -86,7 +86,7 @@ public class GamblersGambitEventHandler {
             EntityPlayer player = (EntityPlayer) event.getSource().getTrueSource();
             ItemStack held = player.getHeldItemMainhand();
 
-            if (ItemCheckHelper.isMeleeWeapon(held) && EnchantmentHelper.getEnchantmentLevel(ModEnchantments.GAMBLERS_GAMBIT, held) > 0) {
+            if (ItemCheckHelper.isMeleeWeapon(held) && ModEnchantments.getLevel(ModEnchantments.GAMBLERS_GAMBIT, held) > 0) {
                 initPotions();
                 if (NEGATIVE_POTIONS.isEmpty()) return;
 

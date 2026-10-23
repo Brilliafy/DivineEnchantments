@@ -9,16 +9,16 @@ import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 public class PacketEnlargement implements IMessage {
 
     private int entityId;
-    private int amplifier;
+    private float scaleFactor;
     private long expiryTime;
     private boolean clear;
 
     public PacketEnlargement() {
     }
 
-    public PacketEnlargement(int entityId, int amplifier, long expiryTime, boolean clear) {
+    public PacketEnlargement(int entityId, float scaleFactor, long expiryTime, boolean clear) {
         this.entityId = entityId;
-        this.amplifier = amplifier;
+        this.scaleFactor = scaleFactor;
         this.expiryTime = expiryTime;
         this.clear = clear;
     }
@@ -26,7 +26,7 @@ public class PacketEnlargement implements IMessage {
     @Override
     public void fromBytes(ByteBuf buf) {
         this.entityId = buf.readInt();
-        this.amplifier = buf.readInt();
+        this.scaleFactor = buf.readFloat();
         this.expiryTime = buf.readLong();
         this.clear = buf.readBoolean();
     }
@@ -34,7 +34,7 @@ public class PacketEnlargement implements IMessage {
     @Override
     public void toBytes(ByteBuf buf) {
         buf.writeInt(this.entityId);
-        buf.writeInt(this.amplifier);
+        buf.writeFloat(this.scaleFactor);
         buf.writeLong(this.expiryTime);
         buf.writeBoolean(this.clear);
     }
@@ -43,7 +43,7 @@ public class PacketEnlargement implements IMessage {
         @Override
         public IMessage onMessage(PacketEnlargement message, MessageContext ctx) {
             net.minecraft.client.Minecraft.getMinecraft().addScheduledTask(() ->
-                    EnlargementClientData.apply(message.entityId, message.amplifier, message.expiryTime, message.clear));
+                    EnlargementClientData.apply(message.entityId, message.scaleFactor, message.expiryTime, message.clear));
             return null;
         }
     }

@@ -1,5 +1,6 @@
 package com.divineenchantments.event;
 
+import com.divineenchantments.config.DivineConfig;
 import com.divineenchantments.entity.EntityVoodooAlly;
 import com.divineenchantments.init.ModEnchantments;
 import net.minecraft.enchantment.EnchantmentHelper;
@@ -36,12 +37,21 @@ public class VoodooEventHandler {
 
         EntityPlayer player = (EntityPlayer) event.getSource().getTrueSource();
         ItemStack held = player.getHeldItemMainhand();
-        int level = held.isEmpty() ? 0 : EnchantmentHelper.getEnchantmentLevel(ModEnchantments.VOODOO, held);
-        if (level <= 0 || player.world.rand.nextFloat() >= 0.02F * level) {
+        int level = held.isEmpty() ? 0 : ModEnchantments.getLevel(ModEnchantments.VOODOO, held);
+        if (level <= 0 || player.world.rand.nextFloat() >= (float) DivineConfig.voodooChancePerLevel * level) {
             return;
         }
 
         World world = player.world;
+        if (DivineConfig.voodooMaxAlliesPerPlayer <= 0) {
+            return;
+        }
+        int allyCount = world.getEntities(EntityVoodooAlly.class,
+                ally -> ally != null && ally.isEntityAlive() && ally.isOwner(player)).size();
+        if (allyCount >= DivineConfig.voodooMaxAlliesPerPlayer) {
+            return;
+        }
+
         EntityVoodooAlly ally = new EntityVoodooAlly(world);
         ally.setLocationAndAngles(dead.posX, dead.posY, dead.posZ, world.rand.nextFloat() * 360.0F, 0.0F);
         ally.setOwner(player, level);

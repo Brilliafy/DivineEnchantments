@@ -1,5 +1,6 @@
 package com.divineenchantments.entity;
 
+import com.divineenchantments.config.DivineConfig;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.SharedMonsterAttributes;
@@ -80,7 +81,7 @@ public class EntityVoodooAlly extends EntityZombie {
     @Override
     protected void applyEntityAttributes() {
         super.applyEntityAttributes();
-        this.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.23D * 1.35D);
+        this.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.23D * DivineConfig.voodooSpeedMultiplier);
         this.getEntityAttribute(SharedMonsterAttributes.FOLLOW_RANGE).setBaseValue(64.0D);
     }
 
@@ -146,11 +147,11 @@ public class EntityVoodooAlly extends EntityZombie {
     }
 
     private void applyAllyStats() {
-        double health = Math.max(4.0D, this.allyLevel * 4.0D);
+        double health = Math.max(1.0D, this.allyLevel * DivineConfig.voodooHealthPerLevel);
         this.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(health);
         this.setHealth((float) health);
-        this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(3.0D + this.allyLevel);
-        this.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.23D * 1.35D);
+        this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(DivineConfig.voodooBaseDamage + this.allyLevel * DivineConfig.voodooDamagePerLevel);
+        this.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.23D * DivineConfig.voodooSpeedMultiplier);
 
         for (EntityEquipmentSlot slot : EntityEquipmentSlot.values()) {
             this.setItemStackToSlot(slot, ItemStack.EMPTY);

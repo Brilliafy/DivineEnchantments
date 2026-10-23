@@ -1,6 +1,7 @@
 package com.divineenchantments.event;
 
 import com.divineenchantments.compat.LycanitesIntegration;
+import com.divineenchantments.config.DivineConfig;
 import com.divineenchantments.bullseye.BullseyeManager;
 import com.divineenchantments.init.ModEnchantments;
 import com.divineenchantments.slipbore.SlipBoreManager;
@@ -114,23 +115,23 @@ public class BowEventHandler {
             return;
         }
 
-        int grav = EnchantmentHelper.getEnchantmentLevel(ModEnchantments.GRAVITATIONAL, bow);
-        int pierce = EnchantmentHelper.getEnchantmentLevel(ModEnchantments.PIERCEFUL, bow);
+        int grav = ModEnchantments.getLevel(ModEnchantments.GRAVITATIONAL, bow);
+        int pierce = ModEnchantments.getLevel(ModEnchantments.PIERCEFUL, bow);
         int ally = (ModEnchantments.ALLY != null && Loader.isModLoaded("lycanitesmobs"))
-                ? EnchantmentHelper.getEnchantmentLevel(ModEnchantments.ALLY, bow)
+                ? ModEnchantments.getLevel(ModEnchantments.ALLY, bow)
                 : 0;
-        int autofire = EnchantmentHelper.getEnchantmentLevel(ModEnchantments.AUTOFIRE, bow);
-        int headhunter = EnchantmentHelper.getEnchantmentLevel(ModEnchantments.HEADHUNTER, bow);
-        int slipBore = EnchantmentHelper.getEnchantmentLevel(ModEnchantments.SLIP_BORE, bow);
-        int muzzle = EnchantmentHelper.getEnchantmentLevel(ModEnchantments.MUZZLE, bow);
-        int archery = EnchantmentHelper.getEnchantmentLevel(ModEnchantments.ARCHERY, bow);
-        int ballistic = EnchantmentHelper.getEnchantmentLevel(ModEnchantments.BALLISTIC_OVERDRIVE, bow);
-        int splintering = EnchantmentHelper.getEnchantmentLevel(ModEnchantments.SPLINTERING_IMPACT, bow);
-        int longdraw = EnchantmentHelper.getEnchantmentLevel(ModEnchantments.LONGDRAW, bow);
-        int glimmer = EnchantmentHelper.getEnchantmentLevel(ModEnchantments.GLIMMER, bow);
-        int scav = EnchantmentHelper.getEnchantmentLevel(ModEnchantments.SCAVENGERS_HABIT, bow);
-        int bullseye = EnchantmentHelper.getEnchantmentLevel(ModEnchantments.BULLSEYE, bow);
-        int hunter = EnchantmentHelper.getEnchantmentLevel(ModEnchantments.HUNTER, bow);
+        int autofire = ModEnchantments.getLevel(ModEnchantments.AUTOFIRE, bow);
+        int headhunter = ModEnchantments.getLevel(ModEnchantments.HEADHUNTER, bow);
+        int slipBore = ModEnchantments.getLevel(ModEnchantments.SLIP_BORE, bow);
+        int muzzle = ModEnchantments.getLevel(ModEnchantments.MUZZLE, bow);
+        int archery = ModEnchantments.getLevel(ModEnchantments.ARCHERY, bow);
+        int ballistic = ModEnchantments.getLevel(ModEnchantments.BALLISTIC_OVERDRIVE, bow);
+        int splintering = ModEnchantments.getLevel(ModEnchantments.SPLINTERING_IMPACT, bow);
+        int longdraw = ModEnchantments.getLevel(ModEnchantments.LONGDRAW, bow);
+        int glimmer = ModEnchantments.getLevel(ModEnchantments.GLIMMER, bow);
+        int scav = ModEnchantments.getLevel(ModEnchantments.SCAVENGERS_HABIT, bow);
+        int bullseye = ModEnchantments.getLevel(ModEnchantments.BULLSEYE, bow);
+        int hunter = ModEnchantments.getLevel(ModEnchantments.HUNTER, bow);
         float drawFraction = MathHelper.clamp((float) event.getCharge() / 20.0F, 0.0F, 1.0F);
 
         float longdrawCharge = 1.0F;
@@ -205,23 +206,23 @@ public class BowEventHandler {
                     held = player.getHeldItemOffhand();
                 }
                 if (!held.isEmpty() && ItemCheckHelper.isBowOrCrossbow(held)) {
-                    int grav = EnchantmentHelper.getEnchantmentLevel(ModEnchantments.GRAVITATIONAL, held);
-                    int pierce = EnchantmentHelper.getEnchantmentLevel(ModEnchantments.PIERCEFUL, held);
+                    int grav = ModEnchantments.getLevel(ModEnchantments.GRAVITATIONAL, held);
+                    int pierce = ModEnchantments.getLevel(ModEnchantments.PIERCEFUL, held);
                     int ally = (ModEnchantments.ALLY != null && Loader.isModLoaded("lycanitesmobs"))
-                            ? EnchantmentHelper.getEnchantmentLevel(ModEnchantments.ALLY, held)
+                            ? ModEnchantments.getLevel(ModEnchantments.ALLY, held)
                             : 0;
-                    int autofire = EnchantmentHelper.getEnchantmentLevel(ModEnchantments.AUTOFIRE, held);
-                    int headhunter = EnchantmentHelper.getEnchantmentLevel(ModEnchantments.HEADHUNTER, held);
-                    int slipBore = EnchantmentHelper.getEnchantmentLevel(ModEnchantments.SLIP_BORE, held);
-                    int muzzle = EnchantmentHelper.getEnchantmentLevel(ModEnchantments.MUZZLE, held);
-                    int archery = EnchantmentHelper.getEnchantmentLevel(ModEnchantments.ARCHERY, held);
-                    int ballistic = EnchantmentHelper.getEnchantmentLevel(ModEnchantments.BALLISTIC_OVERDRIVE, held);
-                    int splintering = EnchantmentHelper.getEnchantmentLevel(ModEnchantments.SPLINTERING_IMPACT, held);
-                    int longdraw = EnchantmentHelper.getEnchantmentLevel(ModEnchantments.LONGDRAW, held);
-                    int glimmer = EnchantmentHelper.getEnchantmentLevel(ModEnchantments.GLIMMER, held);
-                    int scav = EnchantmentHelper.getEnchantmentLevel(ModEnchantments.SCAVENGERS_HABIT, held);
-                    int bullseye = EnchantmentHelper.getEnchantmentLevel(ModEnchantments.BULLSEYE, held);
-                    int hunter = EnchantmentHelper.getEnchantmentLevel(ModEnchantments.HUNTER, held);
+                    int autofire = ModEnchantments.getLevel(ModEnchantments.AUTOFIRE, held);
+                    int headhunter = ModEnchantments.getLevel(ModEnchantments.HEADHUNTER, held);
+                    int slipBore = ModEnchantments.getLevel(ModEnchantments.SLIP_BORE, held);
+                    int muzzle = ModEnchantments.getLevel(ModEnchantments.MUZZLE, held);
+                    int archery = ModEnchantments.getLevel(ModEnchantments.ARCHERY, held);
+                    int ballistic = ModEnchantments.getLevel(ModEnchantments.BALLISTIC_OVERDRIVE, held);
+                    int splintering = ModEnchantments.getLevel(ModEnchantments.SPLINTERING_IMPACT, held);
+                    int longdraw = ModEnchantments.getLevel(ModEnchantments.LONGDRAW, held);
+                    int glimmer = ModEnchantments.getLevel(ModEnchantments.GLIMMER, held);
+                    int scav = ModEnchantments.getLevel(ModEnchantments.SCAVENGERS_HABIT, held);
+                    int bullseye = ModEnchantments.getLevel(ModEnchantments.BULLSEYE, held);
+                    int hunter = ModEnchantments.getLevel(ModEnchantments.HUNTER, held);
                     data = new BowData(grav, pierce, ally, autofire, headhunter, slipBore, muzzle, archery,
                             ballistic, splintering, longdraw, 1.0F, glimmer, scav, bullseye, hunter, 1.0F);
                 }
@@ -407,7 +408,7 @@ public class BowEventHandler {
                 int hunterLevel = arrow.getEntityData().getInteger("Divine_Hunter");
                 if (hunterLevel > 0) {
                     float draw = MathHelper.clamp(arrow.getEntityData().getFloat("Divine_HunterDraw"), 0.0F, 1.0F);
-                    int duration = (int) (400.0F * hunterLevel * draw);
+                    int duration = (int) (DivineConfig.hunterDurationPerLevelTicks * hunterLevel * draw);
                     if (duration > 0) {
                         livingHit.addPotionEffect(new PotionEffect(MobEffects.GLOWING, duration, 0, false, false));
                     }
@@ -576,7 +577,7 @@ public class BowEventHandler {
             if (arrow.getEntityData().getBoolean("Divine_BullseyeHit")) {
                 int bullseyeLevel = arrow.getEntityData().getInteger("Divine_Bullseye");
                 if (bullseyeLevel > 0) {
-                    event.setAmount(event.getAmount() * (1.0F + 0.20F * bullseyeLevel));
+                    event.setAmount(event.getAmount() * (1.0F + (float) DivineConfig.bullseyeDamagePerLevel * bullseyeLevel));
                     EntityLivingBase target = event.getEntityLiving();
                     if (target.world instanceof WorldServer) {
                         WorldServer ws = (WorldServer) target.world;
@@ -805,7 +806,7 @@ public class BowEventHandler {
                 held = player.getHeldItemOffhand();
             }
             if (!held.isEmpty() && ItemCheckHelper.isBowOrCrossbow(held)) {
-                archeryLvl = EnchantmentHelper.getEnchantmentLevel(ModEnchantments.ARCHERY, held);
+                archeryLvl = ModEnchantments.getLevel(ModEnchantments.ARCHERY, held);
             }
         }
 
@@ -943,7 +944,7 @@ public class BowEventHandler {
             ItemStack bow = event.getItem();
             if (!bow.isEmpty() && bow.getItem() instanceof ItemBow) {
                 // Feathered Draw: reduce movement speed penalty while drawing bow from -80% down to -50%
-                int feathered = EnchantmentHelper.getEnchantmentLevel(ModEnchantments.FEATHERED_DRAW, bow);
+                int feathered = ModEnchantments.getLevel(ModEnchantments.FEATHERED_DRAW, bow);
                 if (feathered > 0) {
                     applySpeedModifier(player, FEATHERED_DRAW_SPEED_UUID, "Feathered Draw Speed", 1.5D);
                 } else {
@@ -951,7 +952,7 @@ public class BowEventHandler {
                 }
 
                 // Machine Bow: auto-fire at full charge with recoil and spread
-                int machineLevel = EnchantmentHelper.getEnchantmentLevel(ModEnchantments.MACHINE_BOW, bow);
+                int machineLevel = ModEnchantments.getLevel(ModEnchantments.MACHINE_BOW, bow);
                 if (machineLevel > 0) {
                     int maxDuration = bow.getMaxItemUseDuration();
                     int durationUsed = maxDuration - event.getDuration();

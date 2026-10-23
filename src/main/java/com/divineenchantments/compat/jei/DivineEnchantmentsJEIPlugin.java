@@ -1,5 +1,6 @@
 package com.divineenchantments.compat.jei;
 
+import com.divineenchantments.config.DivineConfig;
 import com.divineenchantments.init.ModEnchantments;
 import mezz.jei.api.IModPlugin;
 import mezz.jei.api.IModRegistry;
@@ -19,7 +20,7 @@ public class DivineEnchantmentsJEIPlugin implements IModPlugin {
     @Override
     public void register(IModRegistry registry) {
         for (Enchantment ench : ModEnchantments.ENCHANTMENTS) {
-            if (ench == null || ench.getRegistryName() == null) {
+            if (ench == null || ench.getRegistryName() == null || !DivineConfig.isEnabled(ench)) {
                 continue;
             }
 

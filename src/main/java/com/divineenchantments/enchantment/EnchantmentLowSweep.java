@@ -6,7 +6,7 @@ import net.minecraft.enchantment.EnumEnchantmentType;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemStack;
 
-public class EnchantmentLowSweep extends Enchantment {
+public class EnchantmentLowSweep extends DivineEnchantment {
 
     public EnchantmentLowSweep() {
         super(Rarity.UNCOMMON, EnumEnchantmentType.WEAPON, new EntityEquipmentSlot[]{EntityEquipmentSlot.MAINHAND});
@@ -36,6 +36,7 @@ public class EnchantmentLowSweep extends Enchantment {
 
     @Override
     public boolean canApply(ItemStack stack) {
+        if (!com.divineenchantments.config.DivineConfig.isEnabled(this)) { return false; }
         if (stack == null || stack.isEmpty()) return false;
         return ItemCheckHelper.isPolearmOrHalberd(stack) || ItemCheckHelper.isMeleeWeapon(stack);
     }

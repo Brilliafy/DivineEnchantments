@@ -72,7 +72,7 @@ public class AttributeEventHandler {
         // 1. Sacrificial modifier on mainhand melee weapon
         ItemStack mainhand = entity.getHeldItemMainhand();
         boolean hasSacrificial = !mainhand.isEmpty()
-                && EnchantmentHelper.getEnchantmentLevel(ModEnchantments.SACRIFICIAL, mainhand) > 0;
+                && ModEnchantments.getLevel(ModEnchantments.SACRIFICIAL, mainhand) > 0;
 
         // Operation 2: Multiply total
         applyOrRemove(entity, SharedMonsterAttributes.ATTACK_DAMAGE, SACRIFICIAL_DMG_UUID, "Sacrificial Damage", 0.10D, 2, hasSacrificial);
@@ -96,7 +96,7 @@ public class AttributeEventHandler {
     private static void updateHeavyplatedSlot(EntityLivingBase entity, EntityEquipmentSlot slot, UUID armorUuid, UUID moveUuid, String slotName) {
         ItemStack piece = entity.getItemStackFromSlot(slot);
         boolean hasHeavyplated = !piece.isEmpty()
-                && EnchantmentHelper.getEnchantmentLevel(ModEnchantments.HEAVYPLATED, piece) > 0;
+                && ModEnchantments.getLevel(ModEnchantments.HEAVYPLATED, piece) > 0;
 
         applyOrRemove(entity, SharedMonsterAttributes.ARMOR, armorUuid, "Heavyplated Armor " + slotName, 0.05D, 2, hasHeavyplated);
         applyOrRemove(entity, SharedMonsterAttributes.MOVEMENT_SPEED, moveUuid, "Heavyplated Speed " + slotName, -0.05D, 2, hasHeavyplated);

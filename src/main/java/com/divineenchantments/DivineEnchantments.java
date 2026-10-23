@@ -8,6 +8,7 @@ import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.registry.EntityRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraft.util.ResourceLocation;
+import com.divineenchantments.config.DivineConfig;
 import com.divineenchantments.entity.EntityKratosHook;
 import com.divineenchantments.entity.EntityVoodooAlly;
 import com.divineenchantments.network.ModNetwork;
@@ -23,7 +24,7 @@ public class DivineEnchantments {
 
     public static final String MODID = "divineenchantments";
     public static final String NAME = "Divine Enchantments";
-    public static final String VERSION = "1.0.0";
+    public static final String VERSION = "1.0.1";
 
     @Mod.Instance(MODID)
     public static DivineEnchantments instance;
@@ -34,6 +35,8 @@ public class DivineEnchantments {
     public void preInit(FMLPreInitializationEvent event) {
         logger = event.getModLog();
         logger.info("Initializing " + NAME + " v" + VERSION + "...");
+
+        DivineConfig.load(event.getSuggestedConfigurationFile());
 
         if (Loader.isModLoaded("lycanitesmobs")) {
             logger.info("Lycanites Mobs detected! Ally enchantment enabled.");
