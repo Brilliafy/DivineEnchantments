@@ -91,7 +91,9 @@ public class PerpetualCrucibleEventHandler {
             }
 
             for (PotionEffect effect : positiveEffects) {
-                player.addPotionEffect(new PotionEffect(effect.getPotion(), effect.getDuration() + duration, effect.getAmplifier(), effect.getIsAmbient(), effect.doesShowParticles()));
+                int extended = effect.getDuration() > Integer.MAX_VALUE - duration
+                        ? Integer.MAX_VALUE : effect.getDuration() + duration;
+                player.addPotionEffect(new PotionEffect(effect.getPotion(), extended, effect.getAmplifier(), effect.getIsAmbient(), effect.doesShowParticles()));
             }
         }
 
