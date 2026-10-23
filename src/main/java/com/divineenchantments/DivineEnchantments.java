@@ -18,7 +18,7 @@ import org.apache.logging.log4j.Logger;
         modid = DivineEnchantments.MODID,
         name = DivineEnchantments.NAME,
         version = DivineEnchantments.VERSION,
-        dependencies = "after:spartanweaponry;after:spartanshields;after:lycanitesmobs;after:somanyenchantments;after:potioncore;after:simpledifficulty;after:toughasnails;after:itemphysic;after:jei"
+        dependencies = "after:spartanweaponry;after:spartanshields;after:lycanitesmobs;after:somanyenchantments;after:potioncore;after:simpledifficulty;after:toughasnails;after:itemphysic;after:jei;after:mujmajnkraftsbettersurvival"
 )
 public class DivineEnchantments {
 

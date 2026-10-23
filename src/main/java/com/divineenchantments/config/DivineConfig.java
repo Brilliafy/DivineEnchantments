@@ -16,6 +16,9 @@ public final class DivineConfig {
 
     public static boolean enableAllEnchantments = true;
 
+    // Compatibility fixes
+    public static boolean fixRangeEnchantmentDamage = true;
+
     // Rune: Carnage
     public static double carnagePenaltyPerLevel = 0.10D;
     public static double carnageBonusLevel1 = 0.02D;
@@ -66,6 +69,12 @@ public final class DivineConfig {
                     "Global Divine Enchantments settings. Changes require a game restart.");
             enableAllEnchantments = config.getBoolean("enableAllEnchantments", "general", true,
                     "Master switch. When false, every Divine Enchantment is inert and cannot be applied.");
+
+            config.setCategoryComment("compatibility",
+                    "Compatibility fixes for other mods. Changes require a game restart.");
+            fixRangeEnchantmentDamage = config.getBoolean("fixRangeEnchantmentDamage", "compatibility", true,
+                    "Remove the extra damage Better Survival's Range enchantment gains from its arrow velocity boost. "
+                            + "Arrows still fly faster and further. Requires Better Survival.");
 
             config.setCategoryComment("enchantments",
                     "Enable or disable individual enchantments. Disabled enchantments cannot be applied and their effects stop working. Restart required.");
