@@ -6,7 +6,7 @@ import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemArmor;
 import net.minecraft.item.ItemStack;
 
-public class EnchantmentShadowStalker extends Enchantment {
+public class EnchantmentShadowStalker extends DivineEnchantment {
 
     public EnchantmentShadowStalker() {
         super(Rarity.RARE, EnumEnchantmentType.ARMOR_LEGS, new EntityEquipmentSlot[]{EntityEquipmentSlot.LEGS});
@@ -36,6 +36,7 @@ public class EnchantmentShadowStalker extends Enchantment {
 
     @Override
     public boolean canApply(ItemStack stack) {
+        if (!com.divineenchantments.config.DivineConfig.isEnabled(this)) { return false; }
         if (stack == null || stack.isEmpty()) return false;
         if (stack.getItem() instanceof ItemArmor) {
             return ((ItemArmor) stack.getItem()).armorType == EntityEquipmentSlot.LEGS;

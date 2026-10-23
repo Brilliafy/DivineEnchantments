@@ -6,7 +6,7 @@ import net.minecraft.enchantment.EnumEnchantmentType;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemStack;
 
-public class EnchantmentVolatileDischarge extends Enchantment {
+public class EnchantmentVolatileDischarge extends DivineEnchantment {
 
     public EnchantmentVolatileDischarge() {
         super(Rarity.RARE, EnumEnchantmentType.WEAPON, new EntityEquipmentSlot[]{EntityEquipmentSlot.MAINHAND});
@@ -36,11 +36,13 @@ public class EnchantmentVolatileDischarge extends Enchantment {
 
     @Override
     public boolean canApply(ItemStack stack) {
+        if (!com.divineenchantments.config.DivineConfig.isEnabled(this)) { return false; }
         return this.canApplyAtEnchantingTable(stack);
     }
 
     @Override
     public boolean canApplyAtEnchantingTable(ItemStack stack) {
+        if (!com.divineenchantments.config.DivineConfig.isEnabled(this)) { return false; }
         return ItemCheckHelper.isMeleeWeapon(stack);
     }
 }

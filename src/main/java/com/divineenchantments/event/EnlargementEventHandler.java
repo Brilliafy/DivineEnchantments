@@ -1,6 +1,7 @@
 package com.divineenchantments.event;
 
 import com.divineenchantments.client.EnlargementClientData;
+import com.divineenchantments.config.DivineConfig;
 import com.divineenchantments.enlargement.EnlargementSync;
 import com.divineenchantments.potion.ModPotions;
 import net.minecraft.entity.EntityLivingBase;
@@ -30,9 +31,9 @@ public class EnlargementEventHandler {
         NBTTagCompound data = entity.getEntityData();
 
         if (entity.world.isRemote) {
-            int amplifier = EnlargementClientData.getAmplifier(entity, entity.world.getTotalWorldTime());
-            if (amplifier >= 0) {
-                applyScale(entity, data, amplifier);
+            float factor = EnlargementClientData.getFactor(entity, entity.world.getTotalWorldTime());
+            if (factor >= 0.0F) {
+                applyScale(entity, data, factor);
             } else if (data.getBoolean(TAG_ENLARGED)) {
                 restoreScale(entity, data);
             }
@@ -42,7 +43,8 @@ public class EnlargementEventHandler {
         PotionEffect effect = entity.getActivePotionEffect(ModPotions.ENLARGEMENT);
 
         if (effect != null) {
-            applyScale(entity, data, effect.getAmplifier());
+            float factor = 1.0F + (float) DivineConfig.enlargementSizePerLevel * (effect.getAmplifier() + 1);
+            applyScale(entity, data, factor);
             EnlargementSync.sync(entity, effect);
         } else if (data.getBoolean(TAG_ENLARGED)) {
             restoreScale(entity, data);
@@ -71,7 +73,7 @@ public class EnlargementEventHandler {
         }
     }
 
-    private static void applyScale(EntityLivingBase entity, NBTTagCompound data, int amplifier) {
+    private static void applyScale(EntityLivingBase entity, NBTTagCompound data, float factor) {
         if (!data.getBoolean(TAG_ENLARGED)) {
             data.setFloat(TAG_BASE_WIDTH, entity.width);
             data.setFloat(TAG_BASE_HEIGHT, entity.height);
@@ -85,7 +87,6 @@ public class EnlargementEventHandler {
             baseHeight = entity.height;
         }
 
-        float factor = 1.0F + 0.10F * (amplifier + 1);
         float newWidth = baseWidth * factor;
         float newHeight = baseHeight * factor;
 

@@ -8,7 +8,7 @@ import net.minecraft.item.ItemBow;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 
-public class EnchantmentLongdraw extends Enchantment {
+public class EnchantmentLongdraw extends DivineEnchantment {
 
     public EnchantmentLongdraw() {
         super(Rarity.VERY_RARE, EnumEnchantmentType.BOW, new EntityEquipmentSlot[]{EntityEquipmentSlot.MAINHAND, EntityEquipmentSlot.OFFHAND});
@@ -43,11 +43,13 @@ public class EnchantmentLongdraw extends Enchantment {
 
     @Override
     public boolean canApply(ItemStack stack) {
+        if (!com.divineenchantments.config.DivineConfig.isEnabled(this)) { return false; }
         return stack != null && !stack.isEmpty() && stack.getItem() instanceof ItemBow;
     }
 
     @Override
     public boolean canApplyAtEnchantingTable(ItemStack stack) {
+        if (!com.divineenchantments.config.DivineConfig.isEnabled(this)) { return false; }
         return false;
     }
 

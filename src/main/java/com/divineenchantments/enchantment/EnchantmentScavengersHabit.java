@@ -8,7 +8,7 @@ import net.minecraft.item.ItemBow;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 
-public class EnchantmentScavengersHabit extends Enchantment {
+public class EnchantmentScavengersHabit extends DivineEnchantment {
 
     public EnchantmentScavengersHabit() {
         super(Rarity.UNCOMMON, EnumEnchantmentType.BOW, new EntityEquipmentSlot[]{EntityEquipmentSlot.MAINHAND, EntityEquipmentSlot.OFFHAND});
@@ -38,11 +38,13 @@ public class EnchantmentScavengersHabit extends Enchantment {
 
     @Override
     public boolean canApply(ItemStack stack) {
+        if (!com.divineenchantments.config.DivineConfig.isEnabled(this)) { return false; }
         return stack != null && !stack.isEmpty() && (stack.getItem() instanceof ItemBow || ItemCheckHelper.isBowOrCrossbow(stack));
     }
 
     @Override
     public boolean canApplyAtEnchantingTable(ItemStack stack) {
+        if (!com.divineenchantments.config.DivineConfig.isEnabled(this)) { return false; }
         return canApply(stack);
     }
 

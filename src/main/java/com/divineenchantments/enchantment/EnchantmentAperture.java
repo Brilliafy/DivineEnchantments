@@ -6,7 +6,7 @@ import net.minecraft.enchantment.EnumEnchantmentType;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemStack;
 
-public class EnchantmentAperture extends Enchantment {
+public class EnchantmentAperture extends DivineEnchantment {
 
     public EnchantmentAperture() {
         super(Rarity.VERY_RARE, EnumEnchantmentType.ALL, new EntityEquipmentSlot[]{EntityEquipmentSlot.MAINHAND, EntityEquipmentSlot.OFFHAND});
@@ -41,11 +41,13 @@ public class EnchantmentAperture extends Enchantment {
 
     @Override
     public boolean canApply(ItemStack stack) {
+        if (!com.divineenchantments.config.DivineConfig.isEnabled(this)) { return false; }
         return ItemCheckHelper.isShield(stack);
     }
 
     @Override
     public boolean canApplyAtEnchantingTable(ItemStack stack) {
+        if (!com.divineenchantments.config.DivineConfig.isEnabled(this)) { return false; }
         return false;
     }
 }

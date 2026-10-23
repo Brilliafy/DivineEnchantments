@@ -36,7 +36,7 @@ public class VolatileSoulEventHandler {
         EntityPlayer player = (EntityPlayer) event.getEntityLiving();
         ItemStack chest = player.getItemStackFromSlot(EntityEquipmentSlot.CHEST);
 
-        if (!chest.isEmpty() && EnchantmentHelper.getEnchantmentLevel(ModEnchantments.CURSE_OF_THE_VOLATILE_SOUL, chest) > 0) {
+        if (!chest.isEmpty() && ModEnchantments.getLevel(ModEnchantments.CURSE_OF_THE_VOLATILE_SOUL, chest) > 0) {
             // Cancel death
             event.setCanceled(true);
 

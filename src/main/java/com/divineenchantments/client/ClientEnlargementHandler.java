@@ -24,12 +24,10 @@ public class ClientEnlargementHandler {
             return;
         }
         EntityLivingBase entity = event.getEntity();
-        int amplifier = EnlargementClientData.getAmplifier(entity, entity.world.getTotalWorldTime());
-        if (amplifier < 0) {
+        float factor = EnlargementClientData.getFactor(entity, entity.world.getTotalWorldTime());
+        if (factor < 0.0F) {
             return;
         }
-
-        float factor = 1.0F + 0.10F * (amplifier + 1);
         GlStateManager.pushMatrix();
         GlStateManager.translate(event.getX(), event.getY(), event.getZ());
         GlStateManager.scale(factor, factor, factor);

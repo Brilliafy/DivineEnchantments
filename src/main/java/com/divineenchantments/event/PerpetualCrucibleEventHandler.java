@@ -68,7 +68,7 @@ public class PerpetualCrucibleEventHandler {
 
     private static void triggerPerpetualCrucible(EntityPlayer player) {
         ItemStack chest = player.getItemStackFromSlot(EntityEquipmentSlot.CHEST);
-        if (chest.isEmpty() || EnchantmentHelper.getEnchantmentLevel(ModEnchantments.PERPETUAL_CRUCIBLE, chest) == 0) {
+        if (chest.isEmpty() || ModEnchantments.getLevel(ModEnchantments.PERPETUAL_CRUCIBLE, chest) == 0) {
             return;
         }
 

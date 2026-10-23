@@ -84,12 +84,12 @@ public class ApertureEventHandler {
 
     private static ItemStack getApertureShield(EntityPlayer player) {
         ItemStack offhand = player.getHeldItemOffhand();
-        if (ItemCheckHelper.isShield(offhand) && EnchantmentHelper.getEnchantmentLevel(ModEnchantments.APERTURE, offhand) > 0) {
+        if (ItemCheckHelper.isShield(offhand) && ModEnchantments.getLevel(ModEnchantments.APERTURE, offhand) > 0) {
             return offhand;
         }
 
         ItemStack mainhand = player.getHeldItemMainhand();
-        if (ItemCheckHelper.isShield(mainhand) && EnchantmentHelper.getEnchantmentLevel(ModEnchantments.APERTURE, mainhand) > 0) {
+        if (ItemCheckHelper.isShield(mainhand) && ModEnchantments.getLevel(ModEnchantments.APERTURE, mainhand) > 0) {
             return mainhand;
         }
 

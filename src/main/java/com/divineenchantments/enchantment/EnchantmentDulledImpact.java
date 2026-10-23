@@ -6,7 +6,7 @@ import net.minecraft.enchantment.EnumEnchantmentType;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemStack;
 
-public class EnchantmentDulledImpact extends Enchantment {
+public class EnchantmentDulledImpact extends DivineEnchantment {
 
     public EnchantmentDulledImpact() {
         super(Rarity.UNCOMMON, EnumEnchantmentType.WEAPON, new EntityEquipmentSlot[]{EntityEquipmentSlot.MAINHAND});
@@ -36,6 +36,7 @@ public class EnchantmentDulledImpact extends Enchantment {
 
     @Override
     public boolean canApply(ItemStack stack) {
+        if (!com.divineenchantments.config.DivineConfig.isEnabled(this)) { return false; }
         return ItemCheckHelper.isBluntWeapon(stack);
     }
 }

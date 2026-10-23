@@ -6,7 +6,7 @@ import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemArmor;
 import net.minecraft.item.ItemStack;
 
-public class EnchantmentMagneticClasp extends Enchantment {
+public class EnchantmentMagneticClasp extends DivineEnchantment {
 
     public EnchantmentMagneticClasp() {
         super(Rarity.RARE, EnumEnchantmentType.ARMOR, new EntityEquipmentSlot[]{EntityEquipmentSlot.CHEST, EntityEquipmentSlot.FEET});
@@ -36,6 +36,7 @@ public class EnchantmentMagneticClasp extends Enchantment {
 
     @Override
     public boolean canApply(ItemStack stack) {
+        if (!com.divineenchantments.config.DivineConfig.isEnabled(this)) { return false; }
         if (stack == null || stack.isEmpty() || !(stack.getItem() instanceof ItemArmor)) {
             return false;
         }
@@ -45,6 +46,7 @@ public class EnchantmentMagneticClasp extends Enchantment {
 
     @Override
     public boolean canApplyAtEnchantingTable(ItemStack stack) {
+        if (!com.divineenchantments.config.DivineConfig.isEnabled(this)) { return false; }
         return canApply(stack);
     }
 }

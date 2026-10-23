@@ -6,7 +6,7 @@ import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemArmor;
 import net.minecraft.item.ItemStack;
 
-public class EnchantmentArachnidAscent extends Enchantment {
+public class EnchantmentArachnidAscent extends DivineEnchantment {
 
     public EnchantmentArachnidAscent() {
         super(Rarity.VERY_RARE, EnumEnchantmentType.ARMOR_LEGS, new EntityEquipmentSlot[]{EntityEquipmentSlot.LEGS});
@@ -41,12 +41,14 @@ public class EnchantmentArachnidAscent extends Enchantment {
 
     @Override
     public boolean canApply(ItemStack stack) {
+        if (!com.divineenchantments.config.DivineConfig.isEnabled(this)) { return false; }
         return stack != null && !stack.isEmpty() && stack.getItem() instanceof ItemArmor
                 && ((ItemArmor) stack.getItem()).armorType == EntityEquipmentSlot.LEGS;
     }
 
     @Override
     public boolean canApplyAtEnchantingTable(ItemStack stack) {
+        if (!com.divineenchantments.config.DivineConfig.isEnabled(this)) { return false; }
         return false;
     }
 }

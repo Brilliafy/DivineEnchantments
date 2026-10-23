@@ -2,6 +2,7 @@ package com.divineenchantments.event;
 
 import com.divineenchantments.bleed.BleedManager;
 import com.divineenchantments.compat.LycanitesIntegration;
+import com.divineenchantments.config.DivineConfig;
 import com.divineenchantments.init.ModEnchantments;
 import com.divineenchantments.potion.ModPotions;
 import com.divineenchantments.util.ItemCheckHelper;
@@ -125,11 +126,11 @@ public class MeleeEventHandler {
             int challengerLvl = 0;
             ItemStack shield = ItemStack.EMPTY;
             ItemStack offhand = player.getHeldItemOffhand();
-            if (ItemCheckHelper.isShield(offhand) && EnchantmentHelper.getEnchantmentLevel(ModEnchantments.CHALLENGERS_MARK, offhand) > 0) {
-                challengerLvl = EnchantmentHelper.getEnchantmentLevel(ModEnchantments.CHALLENGERS_MARK, offhand);
+            if (ItemCheckHelper.isShield(offhand) && ModEnchantments.getLevel(ModEnchantments.CHALLENGERS_MARK, offhand) > 0) {
+                challengerLvl = ModEnchantments.getLevel(ModEnchantments.CHALLENGERS_MARK, offhand);
                 shield = offhand;
-            } else if (ItemCheckHelper.isShield(held) && EnchantmentHelper.getEnchantmentLevel(ModEnchantments.CHALLENGERS_MARK, held) > 0) {
-                challengerLvl = EnchantmentHelper.getEnchantmentLevel(ModEnchantments.CHALLENGERS_MARK, held);
+            } else if (ItemCheckHelper.isShield(held) && ModEnchantments.getLevel(ModEnchantments.CHALLENGERS_MARK, held) > 0) {
+                challengerLvl = ModEnchantments.getLevel(ModEnchantments.CHALLENGERS_MARK, held);
                 shield = held;
             }
 
@@ -165,7 +166,7 @@ public class MeleeEventHandler {
             if (!held.isEmpty()) {
 
                 // Chainsaw Enchantment
-                int chainsawLevel = EnchantmentHelper.getEnchantmentLevel(ModEnchantments.CHAINSAW, held);
+                int chainsawLevel = ModEnchantments.getLevel(ModEnchantments.CHAINSAW, held);
                 if (chainsawLevel > 0) {
                     float weaponDamage = event.getAmount();
                     if (weaponDamage <= 0.0F) {
@@ -179,7 +180,7 @@ public class MeleeEventHandler {
                 }
 
                 // Demonic Edge: +2.5 * level bonus damage to nether mobs and lycanites demon/shadow mobs
-                int demonicLevel = EnchantmentHelper.getEnchantmentLevel(ModEnchantments.DEMONIC_EDGE, held);
+                int demonicLevel = ModEnchantments.getLevel(ModEnchantments.DEMONIC_EDGE, held);
                 if (demonicLevel > 0 && isDemonicOrNetherTarget(target)) {
                     float bonus = 2.5F * demonicLevel;
                     event.setAmount(event.getAmount() + bonus);
@@ -192,7 +193,7 @@ public class MeleeEventHandler {
                 }
 
                 // Breach: 20*n% chance to apply Potion Core vulnerability for 15s, 15*n% chance for 10x durability damage to armor
-                int breachLevel = EnchantmentHelper.getEnchantmentLevel(ModEnchantments.BREACH, held);
+                int breachLevel = ModEnchantments.getLevel(ModEnchantments.BREACH, held);
                 if (breachLevel > 0) {
                     if (player.world.rand.nextFloat() < (0.20F * breachLevel)) {
                         Potion vuln = getVulnerablePotion();
@@ -223,7 +224,7 @@ public class MeleeEventHandler {
                 }
 
                 // Necrotic Stasis: Level 1 applies lycanitemobs:decay for 10s; Level 2 additionally strips regeneration and absorption
-                int necroticLevel = EnchantmentHelper.getEnchantmentLevel(ModEnchantments.NECROTIC_STASIS, held);
+                int necroticLevel = ModEnchantments.getLevel(ModEnchantments.NECROTIC_STASIS, held);
                 if (necroticLevel > 0) {
                     Potion decay = LycanitesIntegration.getDecayPotion();
                     if (decay != null) {
@@ -246,7 +247,7 @@ public class MeleeEventHandler {
                 }
 
                 // Volatile Discharge: Charges enemy by 3*n% per hit; at 100% and over explodes like a creeper
-                int volatileLevel = EnchantmentHelper.getEnchantmentLevel(ModEnchantments.VOLATILE_DISCHARGE, held);
+                int volatileLevel = ModEnchantments.getLevel(ModEnchantments.VOLATILE_DISCHARGE, held);
                 if (volatileLevel > 0) {
                     float charge = target.getEntityData().getFloat("DE_VolatileCharge");
                     charge += (3.0F * volatileLevel);
@@ -266,7 +267,7 @@ public class MeleeEventHandler {
                 }
 
                 // Berserker's Bloodlust: Up to +150% damage at near-death
-                int berserkLvl = EnchantmentHelper.getEnchantmentLevel(ModEnchantments.BERSERKERS_BLOODLUST, held);
+                int berserkLvl = ModEnchantments.getLevel(ModEnchantments.BERSERKERS_BLOODLUST, held);
                 if (berserkLvl > 0) {
                     float missingRatio = net.minecraft.util.math.MathHelper.clamp(1.0F - (player.getHealth() / player.getMaxHealth()), 0.0F, 1.0F);
                     event.setAmount(event.getAmount() * (1.0F + 1.50F * missingRatio));
@@ -277,7 +278,7 @@ public class MeleeEventHandler {
                 }
 
                 // Headslicer: +15%, +30%, +50% extra damage if airborne and near jump peak/maxima
-                int headslicerLvl = EnchantmentHelper.getEnchantmentLevel(ModEnchantments.HEADSLICER, held);
+                int headslicerLvl = ModEnchantments.getLevel(ModEnchantments.HEADSLICER, held);
                 if (headslicerLvl > 0) {
                     if (!player.onGround && !player.isInWater() && !player.isOnLadder() && !player.isRiding()) {
                         if (Math.abs(player.motionY) <= 0.12D) {
@@ -294,7 +295,7 @@ public class MeleeEventHandler {
                 }
 
                 // Culling: +15% damage exclusively to targets below 20% max health
-                int cullingLvl = EnchantmentHelper.getEnchantmentLevel(ModEnchantments.CULLING, held);
+                int cullingLvl = ModEnchantments.getLevel(ModEnchantments.CULLING, held);
                 if (cullingLvl > 0) {
                     if (target.getHealth() <= target.getMaxHealth() * 0.20F) {
                         event.setAmount(event.getAmount() * 1.15F);
@@ -307,7 +308,7 @@ public class MeleeEventHandler {
                 }
 
                 // Dulled Impact: Reduces target's attack damage by flat 1/2/3 points for 2 seconds
-                int dulledLvl = EnchantmentHelper.getEnchantmentLevel(ModEnchantments.DULLED_IMPACT, held);
+                int dulledLvl = ModEnchantments.getLevel(ModEnchantments.DULLED_IMPACT, held);
                 if (dulledLvl > 0) {
                     float flatReduction = (float) dulledLvl;
                     target.getEntityData().setFloat("DE_DulledReduction", flatReduction);
@@ -320,7 +321,7 @@ public class MeleeEventHandler {
 
                 // Umbral Prowess: +20% bonus physical damage in deep darkness (light level 4 or below)
                 net.minecraft.item.ItemStack helm = player.getItemStackFromSlot(net.minecraft.inventory.EntityEquipmentSlot.HEAD);
-                if (!helm.isEmpty() && EnchantmentHelper.getEnchantmentLevel(ModEnchantments.UMBRAL_PROWESS, helm) > 0) {
+                if (!helm.isEmpty() && ModEnchantments.getLevel(ModEnchantments.UMBRAL_PROWESS, helm) > 0) {
                     int light = player.world.getLight(player.getPosition());
                     if (light <= 4) {
                         event.setAmount(event.getAmount() * 1.20F);
@@ -332,7 +333,7 @@ public class MeleeEventHandler {
                 }
 
                 // Stagger: Melee hits pause basic mob attack windup by 0.25s (5 ticks). Bosses and champions immune.
-                int staggerLvl = EnchantmentHelper.getEnchantmentLevel(ModEnchantments.STAGGER, held);
+                int staggerLvl = ModEnchantments.getLevel(ModEnchantments.STAGGER, held);
                 if (staggerLvl > 0 && !ItemCheckHelper.isBossEntity(target)) {
                     boolean isChamp = target.getEntityData().hasKey("champions:championship");
                     if (!isChamp) {
@@ -347,7 +348,7 @@ public class MeleeEventHandler {
                 }
 
                 // Puncture: Bypasses a flat 2 points of natural mob armor
-                int punctureLvl = EnchantmentHelper.getEnchantmentLevel(ModEnchantments.PUNCTURE, held);
+                int punctureLvl = ModEnchantments.getLevel(ModEnchantments.PUNCTURE, held);
                 if (punctureLvl > 0) {
                     int naturalArmor = target.getTotalArmorValue();
                     if (naturalArmor > 0) {
@@ -377,7 +378,7 @@ public class MeleeEventHandler {
                 }
 
                 // Low Sweep: Sweeping strikes prioritize ankle-height hitboxes, applying 0.5s stagger to short/crawling mobs, sweep dmg -30%
-                int lowSweepLvl = EnchantmentHelper.getEnchantmentLevel(ModEnchantments.LOW_SWEEP, held);
+                int lowSweepLvl = ModEnchantments.getLevel(ModEnchantments.LOW_SWEEP, held);
                 if (lowSweepLvl > 0 && ItemCheckHelper.isPolearmOrHalberd(held)) {
                     event.setAmount(event.getAmount() * 0.70F); // Sweep damage reduced by 30%
 
@@ -430,10 +431,10 @@ public class MeleeEventHandler {
                 }
 
                 // Enlargement: 2 * level% chance to inflate the target by 10 * level% for 20 seconds.
-                int enlargementLevel = EnchantmentHelper.getEnchantmentLevel(ModEnchantments.ENLARGEMENT, held);
+                int enlargementLevel = ModEnchantments.getLevel(ModEnchantments.ENLARGEMENT, held);
                 if (enlargementLevel > 0 && target.isEntityAlive()) {
-                    if (player.world.rand.nextFloat() < 0.02F * enlargementLevel) {
-                        target.addPotionEffect(new PotionEffect(ModPotions.ENLARGEMENT, 400, enlargementLevel - 1, false, true));
+                    if (player.world.rand.nextFloat() < (float) DivineConfig.enlargementChancePerLevel * enlargementLevel) {
+                        target.addPotionEffect(new PotionEffect(ModPotions.ENLARGEMENT, DivineConfig.enlargementDurationTicks, enlargementLevel - 1, false, true));
                         if (target.world instanceof WorldServer) {
                             WorldServer ws = (WorldServer) target.world;
                             ws.spawnParticle(EnumParticleTypes.SPELL_WITCH,
@@ -450,7 +451,7 @@ public class MeleeEventHandler {
 
                 // Ally Enchantment (2% chance on hit to spawn friendly ephemeral Aegis)
                 if (ModEnchantments.ALLY != null && Loader.isModLoaded("lycanitesmobs")) {
-                    int allyLevel = EnchantmentHelper.getEnchantmentLevel(ModEnchantments.ALLY, held);
+                    int allyLevel = ModEnchantments.getLevel(ModEnchantments.ALLY, held);
                     if (allyLevel > 0) {
                         if (player.world.rand.nextFloat() < 0.02F) {
                             LycanitesIntegration.spawnAegis(player, target);
@@ -463,7 +464,7 @@ public class MeleeEventHandler {
         // 2. Ally defense proc: If a player is attacked and has Ally on an equipped item
         if (event.getEntityLiving() instanceof EntityPlayer && ModEnchantments.ALLY != null && Loader.isModLoaded("lycanitesmobs")) {
             EntityPlayer victim = (EntityPlayer) event.getEntityLiving();
-            int totalAllyLevel = EnchantmentHelper.getMaxEnchantmentLevel(ModEnchantments.ALLY, victim);
+            int totalAllyLevel = ModEnchantments.getMaxLevel(ModEnchantments.ALLY, victim);
             if (totalAllyLevel > 0 && victim.world.rand.nextFloat() < 0.02F) {
                 EntityLivingBase attacker = null;
                 if (event.getSource().getTrueSource() instanceof EntityLivingBase) {

@@ -1,5 +1,6 @@
 package com.divineenchantments.enlargement;
 
+import com.divineenchantments.config.DivineConfig;
 import com.divineenchantments.network.PacketEnlargement;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.nbt.NBTTagCompound;
@@ -33,8 +34,9 @@ public class EnlargementSync {
             data.setInteger(TAG_AMP, effect.getAmplifier());
             data.setLong(TAG_EXPIRY, expiry);
             data.setLong(TAG_LAST_SYNC, now);
+            float scaleFactor = 1.0F + (float) DivineConfig.enlargementSizePerLevel * (effect.getAmplifier() + 1);
             com.divineenchantments.network.ModNetwork.sendToAllTracking(
-                    new PacketEnlargement(entity.getEntityId(), effect.getAmplifier(), expiry, false), entity);
+                    new PacketEnlargement(entity.getEntityId(), scaleFactor, expiry, false), entity);
         }
     }
 

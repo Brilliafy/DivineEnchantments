@@ -34,7 +34,7 @@ public class RichesEventHandler {
             ItemStack held = player.getHeldItemMainhand();
 
             if (!held.isEmpty()) {
-                int level = EnchantmentHelper.getEnchantmentLevel(ModEnchantments.RICHES, held);
+                int level = ModEnchantments.getLevel(ModEnchantments.RICHES, held);
                 if (level > 0) {
                     // Level 1: 0.05% (0.0005F), Level 2: 0.1% (0.001F)
                     float chance = (level == 1) ? 0.0005F : 0.001F;

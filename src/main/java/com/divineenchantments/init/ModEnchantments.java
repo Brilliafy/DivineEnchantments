@@ -1,7 +1,11 @@
 package com.divineenchantments.init;
 
 import com.divineenchantments.enchantment.*;
+import com.divineenchantments.config.DivineConfig;
 import net.minecraft.enchantment.Enchantment;
+import net.minecraft.enchantment.EnchantmentHelper;
+import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.item.ItemStack;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.Mod;
@@ -198,5 +202,19 @@ public class ModEnchantments {
         for (Enchantment ench : ENCHANTMENTS) {
             event.getRegistry().register(ench);
         }
+    }
+
+    public static int getLevel(Enchantment enchantment, ItemStack stack) {
+        if (enchantment == null || stack == null || stack.isEmpty() || !DivineConfig.isEnabled(enchantment)) {
+            return 0;
+        }
+        return EnchantmentHelper.getEnchantmentLevel(enchantment, stack);
+    }
+
+    public static int getMaxLevel(Enchantment enchantment, EntityLivingBase entity) {
+        if (enchantment == null || entity == null || !DivineConfig.isEnabled(enchantment)) {
+            return 0;
+        }
+        return EnchantmentHelper.getMaxEnchantmentLevel(enchantment, entity);
     }
 }

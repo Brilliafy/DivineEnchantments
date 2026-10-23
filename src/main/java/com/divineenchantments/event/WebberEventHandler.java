@@ -35,7 +35,7 @@ public class WebberEventHandler {
             if (player != null) {
                 ItemStack held = player.getHeldItemMainhand();
                 if (ItemCheckHelper.isSword(held)) {
-                    if (EnchantmentHelper.getEnchantmentLevel(ModEnchantments.WEBBER, held) > 0) {
+                    if (ModEnchantments.getLevel(ModEnchantments.WEBBER, held) > 0) {
                         event.setNewSpeed(Float.MAX_VALUE);
                     }
                 }
@@ -56,7 +56,7 @@ public class WebberEventHandler {
             if (player != null && !player.isCreative()) {
                 ItemStack held = player.getHeldItemMainhand();
                 if (ItemCheckHelper.isSword(held)) {
-                    if (EnchantmentHelper.getEnchantmentLevel(ModEnchantments.WEBBER, held) > 0) {
+                    if (ModEnchantments.getLevel(ModEnchantments.WEBBER, held) > 0) {
                         if (!world.isRemote && player instanceof EntityPlayerMP) {
                             ((EntityPlayerMP) player).interactionManager.tryHarvestBlock(pos);
                         }
@@ -80,7 +80,7 @@ public class WebberEventHandler {
             ItemStack held = player.getHeldItemMainhand();
 
             if (ItemCheckHelper.isSword(held)) {
-                if (EnchantmentHelper.getEnchantmentLevel(ModEnchantments.WEBBER, held) > 0) {
+                if (ModEnchantments.getLevel(ModEnchantments.WEBBER, held) > 0) {
                     // 0.4% chance
                     if (player.world.rand.nextFloat() < 0.004F) {
                         EntityLivingBase target = event.getEntityLiving();

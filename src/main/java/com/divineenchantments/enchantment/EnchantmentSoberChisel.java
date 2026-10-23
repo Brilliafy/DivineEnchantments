@@ -7,7 +7,7 @@ import net.minecraft.item.ItemPickaxe;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 
-public class EnchantmentSoberChisel extends Enchantment {
+public class EnchantmentSoberChisel extends DivineEnchantment {
 
     public EnchantmentSoberChisel() {
         super(Rarity.UNCOMMON, EnumEnchantmentType.DIGGER, new EntityEquipmentSlot[]{EntityEquipmentSlot.MAINHAND});
@@ -37,6 +37,7 @@ public class EnchantmentSoberChisel extends Enchantment {
 
     @Override
     public boolean canApply(ItemStack stack) {
+        if (!com.divineenchantments.config.DivineConfig.isEnabled(this)) { return false; }
         if (stack == null || stack.isEmpty()) return false;
         if (stack.getItem() instanceof ItemPickaxe) return true;
         ResourceLocation reg = stack.getItem().getRegistryName();
@@ -46,6 +47,7 @@ public class EnchantmentSoberChisel extends Enchantment {
 
     @Override
     public boolean canApplyAtEnchantingTable(ItemStack stack) {
+        if (!com.divineenchantments.config.DivineConfig.isEnabled(this)) { return false; }
         return canApply(stack);
     }
 }

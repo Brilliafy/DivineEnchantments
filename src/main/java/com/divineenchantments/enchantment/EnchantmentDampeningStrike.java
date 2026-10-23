@@ -8,7 +8,7 @@ import net.minecraft.item.ItemPickaxe;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 
-public class EnchantmentDampeningStrike extends Enchantment {
+public class EnchantmentDampeningStrike extends DivineEnchantment {
 
     public EnchantmentDampeningStrike() {
         super(Rarity.UNCOMMON, EnumEnchantmentType.DIGGER, new EntityEquipmentSlot[]{EntityEquipmentSlot.MAINHAND});
@@ -38,6 +38,7 @@ public class EnchantmentDampeningStrike extends Enchantment {
 
     @Override
     public boolean canApply(ItemStack stack) {
+        if (!com.divineenchantments.config.DivineConfig.isEnabled(this)) { return false; }
         if (stack == null || stack.isEmpty()) return false;
         if (stack.getItem() instanceof ItemPickaxe || ItemCheckHelper.isBluntWeapon(stack)) return true;
         ResourceLocation reg = stack.getItem().getRegistryName();
@@ -51,6 +52,7 @@ public class EnchantmentDampeningStrike extends Enchantment {
 
     @Override
     public boolean canApplyAtEnchantingTable(ItemStack stack) {
+        if (!com.divineenchantments.config.DivineConfig.isEnabled(this)) { return false; }
         return canApply(stack);
     }
 }

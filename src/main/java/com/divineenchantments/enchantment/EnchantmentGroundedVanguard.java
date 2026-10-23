@@ -6,7 +6,7 @@ import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemArmor;
 import net.minecraft.item.ItemStack;
 
-public class EnchantmentGroundedVanguard extends Enchantment {
+public class EnchantmentGroundedVanguard extends DivineEnchantment {
 
     public EnchantmentGroundedVanguard() {
         super(Rarity.VERY_RARE, EnumEnchantmentType.ARMOR_FEET, new EntityEquipmentSlot[]{EntityEquipmentSlot.FEET});
@@ -36,12 +36,14 @@ public class EnchantmentGroundedVanguard extends Enchantment {
 
     @Override
     public boolean canApply(ItemStack stack) {
+        if (!com.divineenchantments.config.DivineConfig.isEnabled(this)) { return false; }
         return stack != null && !stack.isEmpty() && stack.getItem() instanceof ItemArmor
                 && ((ItemArmor) stack.getItem()).armorType == EntityEquipmentSlot.FEET;
     }
 
     @Override
     public boolean canApplyAtEnchantingTable(ItemStack stack) {
+        if (!com.divineenchantments.config.DivineConfig.isEnabled(this)) { return false; }
         return this.canApply(stack);
     }
 }

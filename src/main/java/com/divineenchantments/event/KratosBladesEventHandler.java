@@ -1,5 +1,6 @@
 package com.divineenchantments.event;
 
+import com.divineenchantments.config.DivineConfig;
 import com.divineenchantments.entity.EntityKratosHook;
 import com.divineenchantments.init.ModEnchantments;
 import net.minecraft.enchantment.EnchantmentHelper;
@@ -165,7 +166,7 @@ public class KratosBladesEventHandler {
         ItemStack original = isKratosOriginal(main) ? main : (isKratosOriginal(off) ? off : ItemStack.EMPTY);
 
         if (!original.isEmpty() && original.isItemStackDamageable()) {
-            original.damageItem(1, player);
+            original.damageItem(DivineConfig.kratosDurabilityCost, player);
             if (original.isEmpty()) {
                 player.getEntityData().removeTag(TAG_LAST_DAMAGE);
             } else {
@@ -212,10 +213,10 @@ public class KratosBladesEventHandler {
             hook.setDead();
         }
 
-        int level = EnchantmentHelper.getEnchantmentLevel(ModEnchantments.KRATOS_BLADES, event.getItemStack());
+        int level = ModEnchantments.getLevel(ModEnchantments.KRATOS_BLADES, event.getItemStack());
         EntityKratosHook hook = new EntityKratosHook(player.world, player, level);
         player.world.spawnEntity(hook);
-        player.getCooldownTracker().setCooldown(event.getItemStack().getItem(), 8);
+        player.getCooldownTracker().setCooldown(event.getItemStack().getItem(), DivineConfig.kratosCooldownTicks);
     }
 
     @SubscribeEvent
@@ -249,7 +250,7 @@ public class KratosBladesEventHandler {
 
     public static boolean isKratos(ItemStack stack) {
         return stack != null && !stack.isEmpty()
-                && EnchantmentHelper.getEnchantmentLevel(ModEnchantments.KRATOS_BLADES, stack) > 0;
+                && ModEnchantments.getLevel(ModEnchantments.KRATOS_BLADES, stack) > 0;
     }
 
     public static boolean isClone(ItemStack stack) {

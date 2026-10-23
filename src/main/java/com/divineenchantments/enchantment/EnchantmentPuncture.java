@@ -7,7 +7,7 @@ import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 
-public class EnchantmentPuncture extends Enchantment {
+public class EnchantmentPuncture extends DivineEnchantment {
 
     public EnchantmentPuncture() {
         super(Rarity.UNCOMMON, EnumEnchantmentType.WEAPON, new EntityEquipmentSlot[]{EntityEquipmentSlot.MAINHAND});
@@ -37,6 +37,7 @@ public class EnchantmentPuncture extends Enchantment {
 
     @Override
     public boolean canApply(ItemStack stack) {
+        if (!com.divineenchantments.config.DivineConfig.isEnabled(this)) { return false; }
         if (stack == null || stack.isEmpty()) return false;
         if (ItemCheckHelper.isDagger(stack)) return true;
         ResourceLocation reg = stack.getItem().getRegistryName();
@@ -54,6 +55,7 @@ public class EnchantmentPuncture extends Enchantment {
 
     @Override
     public boolean canApplyAtEnchantingTable(ItemStack stack) {
+        if (!com.divineenchantments.config.DivineConfig.isEnabled(this)) { return false; }
         return canApply(stack);
     }
 }

@@ -18,6 +18,7 @@ Every enchantment includes **Enchantment Descriptions** support and a **JEI** in
 - **Custom potion effect** with a hand-drawn pixel-art icon.
 - **Custom projectile, chain-hook, and bullseye rendering.**
 - **No required dependencies.** Optional integrations activate automatically when the matching mod is installed.
+- **Fully configurable:** master switch, per-enchantment toggles, and balance tuning.
 - **Multiplayer-aware:** inventory, durability, attributes, projectiles, status effects, and visuals are synchronized between client and server.
 
 ---
@@ -93,6 +94,16 @@ Optional integrations activate automatically when installed:
 
 ---
 
+## Configuration
+
+The generated `config/divineenchantments.cfg` includes:
+
+- A master switch for every enchantment.
+- Individual enable/disable toggles for each enchantment.
+- Balance settings for Rune: Carnage, Enlargement, Bullseye, Hunter, Voodoo, and Kratos Blades.
+
+Config changes require a game restart.
+
 ## Requirements
 
 - **Minecraft:** 1.12.2
@@ -106,7 +117,7 @@ No mandatory dependencies. JEI, Enchantment Descriptions, and the integration mo
 ## Installation
 
 1. Install Minecraft Forge 1.12.2 or Cleanroom.
-2. Drop `DivineEnchantments-1.12.2-1.0.0.jar` into the `mods` folder.
+2. Drop `DivineEnchantments-1.12.2-1.0.1.jar` into the `mods` folder.
 3. Install the same jar on the server for multiplayer.
 4. Launch the game.
 

@@ -218,19 +218,6 @@ Complete list of all 73 Divine Enchantments, grouped by equipment type. For a qu
 
 ---
 
-## Mod Compatibility & Integrations
-- **JEI (Just Enough Items)**: Automatically registers description pages for all 73 enchanted books via `@JEIPlugin`.
-- **Enchantment Descriptions Mod**: Full tooltip integration via sneak inspection (`enchantment.<modid>.<name>.desc`). Colored names (`Rune: Carnage` green, `Voodoo` red, `Ancient: Kratos Blades` yellow) are preserved.
-- **Potion Core**: Deep integration with `potioncore:extension` (Perpetual Crucible), `potioncore:solid_core` and `potioncore:weight` (Grounded Vanguard), `potioncore:vulnerable` (Breach), `potioncore:climb` (Arachnid Ascent), `potioncore:archery` (Archery), and the curse pool (Gambler's Gambit).
-- **Spartan Weaponry & Spartan Shields**: Full weapon, shield, and crossbow classification support across all custom items (Daggers, Hammers, Warhammers, Clubs, Heavy Shields, Crossbows).
-- **Lycanites Mobs**: Ephemeral Aegis summoning (`Ally`), projectile reflection (`Aperture`), anti-lift grounding (`Grounded Vanguard`), instability immunity (`Gyroscopic Plating`), Aphagia silencing (`Muzzle`), Decay infliction (`Necrotic Stasis`), Demon/Shadow creature detection (`Demonic Edge`), ore-spawn entity suppression (`Sober Chisel`), and Boss entity classification.
-- **Rin's SoManyEnchantments**: Full synergy with Multishot / Splitshot trailing arrow spawning, Advanced Mending mutual exclusion (`Headhunter`), Advanced Looting drop amplification (`Riches`), Strengthened Vitality mutual exclusion (`Gourmand's Vitality`), and Arrow Recovery mutual exclusion (`Scavenger's Habit`).
-- **Tough As Nails & Simple Difficulty**: Body temperature swing stabilization (`Thermal Foil`), parasite infection reduction from untreated water sources (`Desalination Mesh`), and hunger/thirst pause during stationary rest (`Metabolic Slumber`).
-- **ItemPhysic Full**: Automatic walk-over collision pickup restoration (`Ground Sweep`).
-
-## Building & Installation
-Run `./gradlew build` in the `DivineEnchantments` directory. The built mod jar will be in `build/libs/DivineEnchantments-1.12.2-1.0.0.jar`.
-
 [Back to top](#contents)
 
 ---

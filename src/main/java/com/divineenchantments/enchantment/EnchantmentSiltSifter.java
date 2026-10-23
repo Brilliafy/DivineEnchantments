@@ -7,7 +7,7 @@ import net.minecraft.item.ItemSpade;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 
-public class EnchantmentSiltSifter extends Enchantment {
+public class EnchantmentSiltSifter extends DivineEnchantment {
 
     public EnchantmentSiltSifter() {
         super(Rarity.COMMON, EnumEnchantmentType.DIGGER, new EntityEquipmentSlot[]{EntityEquipmentSlot.MAINHAND});
@@ -37,6 +37,7 @@ public class EnchantmentSiltSifter extends Enchantment {
 
     @Override
     public boolean canApply(ItemStack stack) {
+        if (!com.divineenchantments.config.DivineConfig.isEnabled(this)) { return false; }
         if (stack == null || stack.isEmpty()) return false;
         if (stack.getItem() instanceof ItemSpade) return true;
         ResourceLocation reg = stack.getItem().getRegistryName();
@@ -49,6 +50,7 @@ public class EnchantmentSiltSifter extends Enchantment {
 
     @Override
     public boolean canApplyAtEnchantingTable(ItemStack stack) {
+        if (!com.divineenchantments.config.DivineConfig.isEnabled(this)) { return false; }
         return canApply(stack);
     }
 }

@@ -1,5 +1,6 @@
 package com.divineenchantments.bullseye;
 
+import com.divineenchantments.config.DivineConfig;
 import com.divineenchantments.network.ModNetwork;
 import com.divineenchantments.network.PacketBullseye;
 import net.minecraft.entity.EntityLivingBase;
@@ -10,9 +11,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 public class BullseyeManager {
 
-    public static final double HIT_RADIUS = 0.30D;
-    public static final int DURATION_TICKS = 60;
-
+    
     private static final Map<Integer, BullseyeTarget> TARGETS = new ConcurrentHashMap<>();
 
     public static void place(EntityLivingBase target) {
@@ -24,7 +23,7 @@ public class BullseyeManager {
         float ox = (target.world.rand.nextFloat() * 2.0F - 1.0F) * spread;
         float oz = (target.world.rand.nextFloat() * 2.0F - 1.0F) * spread;
         float oy = target.height * (0.35F + 0.40F * target.world.rand.nextFloat());
-        long expiry = target.world.getTotalWorldTime() + DURATION_TICKS;
+        long expiry = target.world.getTotalWorldTime() + DivineConfig.bullseyeDurationTicks;
 
         BullseyeTarget spot = new BullseyeTarget(target.getEntityId(), ox, oy, oz, expiry);
         TARGETS.put(target.getEntityId(), spot);
@@ -51,7 +50,7 @@ public class BullseyeManager {
 
     public static boolean matches(EntityLivingBase target, Vec3d rayStart, Vec3d rayEnd) {
         BullseyeTarget spot = get(target);
-        return spot != null && spot.matchesRay(target, rayStart, rayEnd, HIT_RADIUS);
+        return spot != null && spot.matchesRay(target, rayStart, rayEnd, DivineConfig.bullseyeHitRadius);
     }
 
     public static void clear(int entityId) {

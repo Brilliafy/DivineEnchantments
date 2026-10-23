@@ -6,7 +6,7 @@ import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemArmor;
 import net.minecraft.item.ItemStack;
 
-public class EnchantmentCushionedHeel extends Enchantment {
+public class EnchantmentCushionedHeel extends DivineEnchantment {
 
     public EnchantmentCushionedHeel() {
         super(Rarity.UNCOMMON, EnumEnchantmentType.ARMOR_FEET, new EntityEquipmentSlot[]{EntityEquipmentSlot.FEET});
@@ -36,6 +36,7 @@ public class EnchantmentCushionedHeel extends Enchantment {
 
     @Override
     public boolean canApply(ItemStack stack) {
+        if (!com.divineenchantments.config.DivineConfig.isEnabled(this)) { return false; }
         return stack != null && !stack.isEmpty() && stack.getItem() instanceof ItemArmor
                 && ((ItemArmor) stack.getItem()).armorType == EntityEquipmentSlot.FEET;
     }

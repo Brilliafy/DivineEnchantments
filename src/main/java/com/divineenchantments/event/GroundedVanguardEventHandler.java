@@ -37,7 +37,7 @@ public class GroundedVanguardEventHandler {
 
         EntityPlayer player = (EntityPlayer) event.getEntityLiving();
         ItemStack boots = player.getItemStackFromSlot(EntityEquipmentSlot.FEET);
-        boolean hasGrounded = !boots.isEmpty() && EnchantmentHelper.getEnchantmentLevel(ModEnchantments.GROUNDED_VANGUARD, boots) > 0;
+        boolean hasGrounded = !boots.isEmpty() && ModEnchantments.getLevel(ModEnchantments.GROUNDED_VANGUARD, boots) > 0;
 
         if (hasGrounded && player.isSneaking()) {
             checkPotions();

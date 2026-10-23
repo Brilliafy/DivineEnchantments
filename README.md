@@ -22,6 +22,7 @@
   <a href="#featured-enchantments">Featured</a> ·
   <a href="#enchantment-library">Library</a> ·
   <a href="#compatibility">Compatibility</a> ·
+  <a href="#configuration">Configuration</a> ·
   <a href="#building-from-source">Building</a>
 </p>
 
@@ -55,7 +56,7 @@ Every enchantment has **JEI** information and **Enchantment Descriptions** suppo
 **Install**
 
 1. Install Minecraft Forge 1.12.2 or Cleanroom.
-2. Drop `DivineEnchantments-1.12.2-1.0.0.jar` into `mods/`.
+2. Drop `DivineEnchantments-1.12.2-1.0.1.jar` into `mods/`.
 3. Install the same jar on the server for multiplayer.
 4. Launch the game.
 
@@ -251,6 +252,29 @@ Every enchantment has **JEI** information and **Enchantment Descriptions** suppo
 
 ---
 
+## Configuration
+
+<details>
+<summary><b>Config file and toggles</b></summary>
+
+The config is created at:
+
+```text
+config/divineenchantments.cfg
+```
+
+- `enableAllEnchantments` is a master switch.
+- Every enchantment has its own enable/disable toggle.
+- Balance values cover Rune: Carnage, Enlargement, Bullseye, Hunter, Voodoo, and Kratos Blades.
+- Disabled enchantments cannot be applied and their effects stop working.
+- Changes require a game restart.
+
+[Read the full configuration reference](docs/Configuration.md)
+
+</details>
+
+---
+
 ## Building from Source
 
 <details>
@@ -265,7 +289,7 @@ Every enchantment has **JEI** information and **Enchantment Descriptions** suppo
 The jar is written to:
 
 ```text
-build/libs/DivineEnchantments-1.12.2-1.0.0.jar
+build/libs/DivineEnchantments-1.12.2-1.0.1.jar
 ```
 
 See [docs/Development.md](docs/Development.md) for the project layout and development notes.

@@ -163,7 +163,7 @@ public class HarmonicAnchorManager {
                 rod = player.getHeldItemOffhand();
             }
 
-            if (!rod.isEmpty() && EnchantmentHelper.getEnchantmentLevel(ModEnchantments.HARMONIC_ANCHOR, rod) > 0) {
+            if (!rod.isEmpty() && ModEnchantments.getLevel(ModEnchantments.HARMONIC_ANCHOR, rod) > 0) {
                 EntityLivingBase caught = (EntityLivingBase) player.fishEntity.caughtEntity;
                 applyAnchor(caught, 160); // 8 seconds = 160 ticks
 
@@ -187,7 +187,7 @@ public class HarmonicAnchorManager {
         }
 
         ItemStack held = event.getItemStack();
-        if (ItemCheckHelper.isFishingRod(held) && EnchantmentHelper.getEnchantmentLevel(ModEnchantments.HARMONIC_ANCHOR, held) > 0) {
+        if (ItemCheckHelper.isFishingRod(held) && ModEnchantments.getLevel(ModEnchantments.HARMONIC_ANCHOR, held) > 0) {
             Entity caught = player.fishEntity.caughtEntity;
             if (caught instanceof EntityLivingBase) {
                 applyAnchor((EntityLivingBase) caught, 160);

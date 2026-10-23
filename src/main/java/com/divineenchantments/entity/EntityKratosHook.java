@@ -1,5 +1,6 @@
 package com.divineenchantments.entity;
 
+import com.divineenchantments.config.DivineConfig;
 import com.divineenchantments.event.KratosBladesEventHandler;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
@@ -46,9 +47,9 @@ public class EntityKratosHook extends Entity {
         this.setPosition(owner.posX, owner.posY + owner.getEyeHeight() - 0.1D, owner.posZ);
 
         Vec3d look = owner.getLookVec();
-        this.motionX = look.x * 2.1D;
-        this.motionY = look.y * 2.1D;
-        this.motionZ = look.z * 2.1D;
+        this.motionX = look.x * DivineConfig.kratosHookSpeed;
+        this.motionY = look.y * DivineConfig.kratosHookSpeed;
+        this.motionZ = look.z * DivineConfig.kratosHookSpeed;
         this.velocityChanged = true;
 
         this.rotationYaw = owner.rotationYaw;
@@ -81,7 +82,7 @@ public class EntityKratosHook extends Entity {
         this.prevRotationYaw = this.rotationYaw;
         this.prevRotationPitch = this.rotationPitch;
 
-        if (this.ticksExisted > 70) {
+        if (this.ticksExisted > DivineConfig.kratosHookLifetimeTicks) {
             this.setDead();
             return;
         }
@@ -176,7 +177,7 @@ public class EntityKratosHook extends Entity {
             return;
         }
 
-        double power = 1.35D;
+        double power = DivineConfig.kratosPullPower;
         target.motionX += (dx / distance) * power;
         target.motionY += 0.42D + Math.max(0.0D, dy / distance) * 0.35D;
         target.motionZ += (dz / distance) * power;
@@ -197,7 +198,7 @@ public class EntityKratosHook extends Entity {
             stack = owner.getHeldItemOffhand();
         }
         if (KratosBladesEventHandler.isKratosOriginal(stack) && stack.isItemStackDamageable()) {
-            stack.damageItem(1, owner);
+            stack.damageItem(DivineConfig.kratosDurabilityCost, owner);
         }
     }
 
