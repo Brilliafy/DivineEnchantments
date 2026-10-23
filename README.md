@@ -5,7 +5,7 @@
 <h1 align="center">Divine Enchantments</h1>
 
 <p align="center">
-  <b>73 handcrafted enchantments for Minecraft 1.12.2 — Forge &amp; Cleanroom.</b><br>
+  <b>73 handcrafted enchantments for Minecraft 1.12.2 - Forge &amp; Cleanroom.</b><br>
   Deeper combat, skill-shot archery, summoned allies, and rare rune and ancient blades.
 </p>
 
@@ -14,6 +14,7 @@
   <img alt="Forge / Cleanroom" src="https://img.shields.io/badge/Loader-Forge%20%7C%20Cleanroom-E04E14?style=for-the-badge">
   <img alt="73 enchantments" src="https://img.shields.io/badge/Enchantments-73-8A2BE2?style=for-the-badge">
   <img alt="Multiplayer ready" src="https://img.shields.io/badge/Multiplayer-Ready-2EA043?style=for-the-badge">
+  <img alt="License GPL-3.0" src="https://img.shields.io/badge/License-GPL--3.0-blue?style=for-the-badge">
 </p>
 
 <p align="center">
@@ -93,7 +94,7 @@ Every enchantment has **JEI** information and **Enchantment Descriptions** suppo
 
 
 <details>
-<summary><b>⚔️ Melee Weapons</b> — 19 enchantments</summary>
+<summary><b>⚔️ Melee Weapons</b> - 19 enchantments</summary>
 
 | Enchantment | Type | Max | Source | Effect |
 | :-- | :-- | :-- | :-- | :-- |
@@ -120,7 +121,7 @@ Every enchantment has **JEI** information and **Enchantment Descriptions** suppo
 </details>
 
 <details>
-<summary><b>🏹 Ranged</b> — 16 enchantments</summary>
+<summary><b>🏹 Ranged</b> - 16 enchantments</summary>
 
 | Enchantment | Type | Max | Source | Effect |
 | :-- | :-- | :-- | :-- | :-- |
@@ -144,7 +145,7 @@ Every enchantment has **JEI** information and **Enchantment Descriptions** suppo
 </details>
 
 <details>
-<summary><b>🛡️ Armor & Shields</b> — 22 enchantments</summary>
+<summary><b>🛡️ Armor & Shields</b> - 22 enchantments</summary>
 
 | Enchantment | Type | Max | Source | Effect |
 | :-- | :-- | :-- | :-- | :-- |
@@ -174,7 +175,7 @@ Every enchantment has **JEI** information and **Enchantment Descriptions** suppo
 </details>
 
 <details>
-<summary><b>⛏️ Tools & Utility</b> — 7 enchantments</summary>
+<summary><b>⛏️ Tools & Utility</b> - 7 enchantments</summary>
 
 | Enchantment | Type | Max | Source | Effect |
 | :-- | :-- | :-- | :-- | :-- |
@@ -189,7 +190,7 @@ Every enchantment has **JEI** information and **Enchantment Descriptions** suppo
 </details>
 
 <details>
-<summary><b>🧩 Hybrid & Universal</b> — 4 enchantments</summary>
+<summary><b>🧩 Hybrid & Universal</b> - 4 enchantments</summary>
 
 | Enchantment | Type | Max | Source | Effect |
 | :-- | :-- | :-- | :-- | :-- |
@@ -201,7 +202,7 @@ Every enchantment has **JEI** information and **Enchantment Descriptions** suppo
 </details>
 
 <details>
-<summary><b>☠️ Curses</b> — 5 enchantments</summary>
+<summary><b>☠️ Curses</b> - 5 enchantments</summary>
 
 | Enchantment | Type | Max | Source | Effect |
 | :-- | :-- | :-- | :-- | :-- |
@@ -218,17 +219,17 @@ Every enchantment has **JEI** information and **Enchantment Descriptions** suppo
 ## Compatibility
 
 <details>
-<summary><b>Optional integrations</b> — the mod runs fine without them</summary>
+<summary><b>Optional integrations</b> - the mod runs fine without them</summary>
 
-- **Spartan Weaponry & Spartan Shields** — weapon, shield, and modded-crossbow classification.
-- **Better Survival** — nunchaku support for Rune: Carnage.
-- **Rin's SoManyEnchantments** — Multishot/Splitshot synergy, Advanced Mending and Swifter Slashes incompatibilities, Advanced Looting synergy.
-- **Lycanites Mobs** — Ally summoning, projectile capture, Decay, Aphagia, Demon/Shadow detection, boss checks.
-- **Potion Core** — Extension, Solid Core, Weight, Vulnerability, Climbing, Trueshot, and curse interactions.
-- **Tough As Nails / Simple Difficulty** — temperature stabilization, clean-water infection reduction, hunger/thirst pause.
-- **ItemPhysic Full** — restored walk-over item pickup.
-- **JEI** — enchanted-book information pages.
-- **Enchantment Descriptions** — full tooltip descriptions, including colored rune/ancient names.
+- **Spartan Weaponry & Spartan Shields** - weapon, shield, and modded-crossbow classification.
+- **Better Survival** - nunchaku support for Rune: Carnage.
+- **Rin's SoManyEnchantments** - Multishot/Splitshot synergy, Advanced Mending and Swifter Slashes incompatibilities, Advanced Looting synergy.
+- **Lycanites Mobs** - Ally summoning, projectile capture, Decay, Aphagia, Demon/Shadow detection, boss checks.
+- **Potion Core** - Extension, Solid Core, Weight, Vulnerability, Climbing, Trueshot, and curse interactions.
+- **Tough As Nails / Simple Difficulty** - temperature stabilization, clean-water infection reduction, hunger/thirst pause.
+- **ItemPhysic Full** - restored walk-over item pickup.
+- **JEI** - enchanted-book information pages.
+- **Enchantment Descriptions** - full tooltip descriptions, including colored rune/ancient names.
 
 [Read the full compatibility notes →](docs/Compatibility.md)
 
@@ -270,6 +271,12 @@ build/libs/DivineEnchantments-1.12.2-1.0.0.jar
 See [docs/Development.md](docs/Development.md) for the project layout and development notes.
 
 </details>
+
+---
+
+## License
+
+Divine Enchantments is licensed under the [GNU General Public License v3.0](LICENSE).
 
 ---
 
