@@ -1,0 +1,170 @@
+# Divine Enchantments - Language File (en_us)
+
+# Enchantment Names
+enchantment.divineenchantments.gravitational=Gravitational
+enchantment.divineenchantments.chainsaw=Chainsaw
+enchantment.divineenchantments.pierceful=Pierceful
+enchantment.divineenchantments.ally=Ally
+enchantment.divineenchantments.sacrificial=Sacrificial
+enchantment.divineenchantments.heavyplated=Heavyplated
+enchantment.divineenchantments.autofire=Autofire
+enchantment.divineenchantments.webber=Webber
+enchantment.divineenchantments.headhunter=Headhunter
+enchantment.divineenchantments.riches=Riches
+enchantment.divineenchantments.slowsink=Slowsink
+enchantment.divineenchantments.apex=Apex
+enchantment.divineenchantments.royal_guard=Royal Guard
+enchantment.divineenchantments.curse_of_the_tether=Curse of the Tether
+enchantment.divineenchantments.curse_of_inertia=Curse of Inertia
+
+enchantment.divineenchantments.aperture=Aperture
+enchantment.divineenchantments.gyroscopic_plating=Gyroscopic Plating
+enchantment.divineenchantments.slip_bore=Slip-Bore
+enchantment.divineenchantments.harmonic_anchor=Harmonic Anchor
+enchantment.divineenchantments.perpetual_crucible=Perpetual Crucible
+enchantment.divineenchantments.gamblers_gambit=Gambler's Gambit
+enchantment.divineenchantments.grounded_vanguard=Grounded Vanguard
+enchantment.divineenchantments.curse_of_the_volatile_soul=Curse of the Volatile Soul
+
+enchantment.divineenchantments.breach=Breach
+enchantment.divineenchantments.demonic_edge=Demonic Edge
+enchantment.divineenchantments.necrotic_stasis=Necrotic Stasis
+enchantment.divineenchantments.volatile_discharge=Volatile Discharge
+enchantment.divineenchantments.muzzle=Muzzle
+enchantment.divineenchantments.archery=Archery
+enchantment.divineenchantments.arachnid_ascent=Arachnid Ascent
+
+enchantment.divineenchantments.umbral_prowess=Umbral Prowess
+enchantment.divineenchantments.gourmands_vitality=Gourmand's Vitality
+enchantment.divineenchantments.ballistic_overdrive=Ballistic Overdrive
+enchantment.divineenchantments.curse_debt_of_the_void=Curse of the Debt of the Void
+enchantment.divineenchantments.curse_berserkers_bloodlust=Curse of Berserker's Bloodlust
+enchantment.divineenchantments.splintering_impact=Splintering Impact
+enchantment.divineenchantments.headslicer=Headslicer
+enchantment.divineenchantments.longdraw=Longdraw
+enchantment.divineenchantments.suregrip=Suregrip
+enchantment.divineenchantments.cushioned_heel=Cushioned Heel
+enchantment.divineenchantments.mudstrider=Mudstrider
+enchantment.divineenchantments.culling=Culling
+enchantment.divineenchantments.dulled_impact=Dulled Impact
+enchantment.divineenchantments.glimmer=Glimmer
+enchantment.divineenchantments.braced_pivot=Braced Pivot
+
+enchantment.divineenchantments.feathered_draw=Feathered Draw
+enchantment.divineenchantments.stagger=Stagger
+enchantment.divineenchantments.puncture=Puncture
+enchantment.divineenchantments.tempered_core=Tempered Core
+enchantment.divineenchantments.scavengers_habit=Scavenger's Habit
+enchantment.divineenchantments.thermal_foil=Thermal Foil
+enchantment.divineenchantments.machine_bow=Machine Bow
+enchantment.divineenchantments.desalination_mesh=Desalination Mesh
+enchantment.divineenchantments.metabolic_slumber=Metabolic Slumber
+enchantment.divineenchantments.sober_chisel=Sober Chisel
+enchantment.divineenchantments.shimmered=Shimmered
+enchantment.divineenchantments.silt_sifter=Silt Sifter
+enchantment.divineenchantments.dampening_strike=Dampening Strike
+enchantment.divineenchantments.cushioned_shirt=Cushioned Shirt
+enchantment.divineenchantments.magnetic_clasp=Magnetic Clasp
+enchantment.divineenchantments.ground_sweep=Ground Sweep
+
+enchantment.divineenchantments.shadow_stalker=Shadow Stalker
+enchantment.divineenchantments.challengers_mark=Challenger's Mark
+enchantment.divineenchantments.low_sweep=Low Sweep
+enchantment.divineenchantments.gargoyle_stance=Gargoyle Stance
+enchantment.divineenchantments.quiet_chipping=Quiet Chipping
+enchantment.divineenchantments.salvage_line=Salvage Line
+
+enchantment.divineenchantments.rune_carnage=§aRune: Carnage
+enchantment.divineenchantments.enlargement=Enlargement
+enchantment.divineenchantments.bullseye=Bullseye
+enchantment.divineenchantments.hunter=Hunter
+enchantment.divineenchantments.voodoo=§cVoodoo
+enchantment.divineenchantments.kratos_blades=§eAncient: Kratos Blades
+
+effect.divineenchantments.enlargement=Enlargement
+description.effect.divineenchantments.enlargement=Enlargement increases the target's size and hitbox by 10% per level for 20 seconds.
+
+# Enchantment Descriptions (Enchantment Descriptions Mod & JEI Information Pages)
+enchantment.divineenchantments.gravitational.desc=Arrows create a gravitational anomaly upon landing, pulling all entities within a 5-block radius 2 blocks toward the impact point. Treasure enchantment (cannot be obtained from the enchanting table).
+enchantment.divineenchantments.chainsaw.desc=Direct melee hits cause the target to bleed, taking (4 + level)% weapon damage every 0.3 seconds for (3 + level) ticks. Bleeds bypass target invulnerability frames and produce bleeding particles.
+enchantment.divineenchantments.pierceful.desc=Arrows pass through up to (level) entities, damaging each in their path before landing on their final target or surface. Triggers Gravitational on final impact. Treasure enchantment (cannot be obtained from the enchanting table).
+enchantment.divineenchantments.ally.desc=Grants a 2% chance on hit to summon an ephemeral friendly Aegis minion that fights alongside the player in Assist mode for 60 seconds. Requires Lycanites Mobs.
+enchantment.divineenchantments.sacrificial.desc=While held in the main hand, grants +10% attack damage, +10% attack speed, and +10% movement speed in exchange for -10% maximum health and -10% armor.
+enchantment.divineenchantments.heavyplated.desc=Increases armor rating by +5% per piece worn, at the cost of -5% movement speed per piece.
+enchantment.divineenchantments.autofire.desc=Fires 1 (Level I) or 2 (Level II) trailing arrows directly behind each arrow with matched velocity and draw power. Bypasses target invulnerability frames so all arrows inflict damage. Fully compatible with Multishot. Super rare treasure enchantment (cannot be obtained from the enchanting table).
+enchantment.divineenchantments.webber.desc=Swords instantly slice through cobwebs with zero delay. Melee attacks also have a 0.4% chance to ensnare the target in a cobweb. Treasure enchantment (cannot be obtained from the enchanting table).
+enchantment.divineenchantments.headhunter.desc=Arrows striking an entity's head or upper hitbox deal 1.5x critical damage with special sound and particle effects. Incompatible with Mending, Advanced Mending, and Infinity. Treasure enchantment (cannot be obtained from the enchanting table).
+enchantment.divineenchantments.riches.desc=Slain mobs have a 0.05% (Level I) or 0.1% (Level II) chance to drop 10x experience and 10x item drops. Stacks with Looting and Advanced Looting. Very rare from the enchanting table.
+enchantment.divineenchantments.slowsink.desc=Slows your sinking speed in water like a falling feather, allowing controlled underwater descent. Sneak to sink at normal speed.
+enchantment.divineenchantments.apex.desc=Deals +2% bonus damage per block of elevation above your target, but causes you to take +2% extra damage per block below attackers. Treasure enchantment (cannot be obtained from the enchanting table).
+enchantment.divineenchantments.royal_guard.desc=When taking damage, redirects (10 * level)% of durability damage dealt to worn armor onto the durability of the held weapon or tool instead. Cannot be applied to bows. Treasure enchantment (cannot be obtained from the enchanting table).
+enchantment.divineenchantments.curse_of_the_tether.desc=Grants 10% damage resistance against all attacks and reduces durability damage to the chestplate by 20%, but the chestplate becomes permanently tethered to your body and cannot be removed in Survival mode.
+enchantment.divineenchantments.curse_of_inertia.desc=Continuous sprinting ramps up movement speed linearly up to +80% over 5 seconds. However, turning radius is severely restricted, and stopping incurs 1.5 seconds of slippery sliding deceleration across all surfaces.
+
+enchantment.divineenchantments.aperture.desc=Captures incoming enemy projectiles (arrows, dragon breath orbs, cacodemon balls) on your shield, re-firing them from your eye height along your look vector with +50% boosted speed as allied projectiles. Treasure enchantment (cannot be obtained from the enchanting table).
+enchantment.divineenchantments.gyroscopic_plating.desc=Grants absolute camera stability, immunizing against screen spin, inversion, and forced roll tilt (Nausea, Instability, Perplexity). Additionally, tapping Crouch right before landing from a fall of over 4 blocks converts 100% of vertical fall momentum into forward sprint velocity, completely negating fall damage. Treasure enchantment (cannot be obtained from the enchanting table).
+enchantment.divineenchantments.slip_bore.desc=Arrows punch a low-pressure vacuum tunnel through the air (3-block radius), dragging all nearby mobs inward toward the flight path, crashing flying mobs to the ground, and pulling ground mobs into a tight line behind the arrow. Applicable to bows and crossbows.
+enchantment.divineenchantments.harmonic_anchor.desc=Hooking a mob drops a spectral anchor stone at their feet. For 8 seconds, the mob cannot move more than 5 blocks from the anchor point; any attempt to charge, fly, or leap away pulls the line taut, slingshotting them backward to the anchor center.
+enchantment.divineenchantments.perpetual_crucible.desc=Landing critical hits or killing a mob grants 3 seconds of Extension, completely freezing active potion buff timers from ticking down as long as you remain aggressively engaged in combat. Treasure enchantment (cannot be obtained from the enchanting table).
+enchantment.divineenchantments.gamblers_gambit.desc=Melee attacks inflict a random negative status effect on the target, selected from vanilla and Potion Core curses.
+enchantment.divineenchantments.grounded_vanguard.desc=Sneaking grants Solid Core (cancels knockback) and Weight III (heavy downward gravity), preventing flying mobs from lifting, carrying, or displacing you. Releasing sneak smoothly purges the effect without fall damage.
+enchantment.divineenchantments.curse_of_the_volatile_soul.desc=When suffering fatal damage, the chestplate acts as a Totem of Undying, consuming itself and triggering a colossal power 20 explosion that completely ruins surrounding terrain and obliterates enemies while leaving you unharmed. Treasure enchantment (cannot be obtained from the enchanting table).
+
+enchantment.divineenchantments.breach.desc=Melee attacks have a (20 * level)% chance to afflict the target with Vulnerability for 15 seconds, and a (15 * level)% chance to inflict 10x durability damage to the victim's armor.
+enchantment.divineenchantments.demonic_edge.desc=Deals +2.5 bonus damage per level against Nether mobs (Blazes, Ghasts, Magma Cubes, Wither Skeletons, Withers, Zombie Pigmen) and Lycanites Mobs demon and shadow creatures. Mutually exclusive with Sharpness, Smite, and Bane of Arthropods.
+enchantment.divineenchantments.necrotic_stasis.desc=Melee strikes afflict the target with Decay for 10 seconds. At Level II, also completely strips and purges Regeneration and Absorption effects and shields from the target.
+enchantment.divineenchantments.volatile_discharge.desc=Melee attacks charge the target by (3 * level)% per strike. Upon reaching 100% charge or higher, the enemy violently detonates in a creeper-style explosion.
+enchantment.divineenchantments.muzzle.desc=Fired crossbow bolts and arrows afflict targets with Aphagia for 10 seconds, disabling item usage and consumption. Rare Level 30 crossbow enchantment from the enchanting table.
+enchantment.divineenchantments.archery.desc=Killing an enemy with your bow grants Trueshot I for 10 seconds. At Level II, killing 4 enemies within those 10 seconds upgrades to Trueshot II. At Level III, killing 10 enemies within those 10 seconds upgrades to Trueshot III. Costs 8 levels per enchantment tier.
+enchantment.divineenchantments.arachnid_ascent.desc=Grants the Climbing effect while wearing leggings, allowing you to walk directly up solid vertical surfaces like a spider. Treasure enchantment (cannot be obtained from the enchanting table).
+
+enchantment.divineenchantments.umbral_prowess.desc=In deep darkness (light level 4 or below), the wearer gains innate night vision, +20% movement speed, and +20% bonus physical damage. Stepping into full daylight (light level 12+) inflicts a minor slowness debuff. Treasure enchantment (cannot be obtained from the enchanting table).
+enchantment.divineenchantments.gourmands_vitality.desc=Eating any food item grants an emergency surge of health regeneration (3 * level seconds), resistance (5 * level seconds), and absorption (10 * level seconds) proportional to the food's hunger and saturation value. Mutually exclusive with Strengthened Vitality.
+enchantment.divineenchantments.ballistic_overdrive.desc=Loaded crossbow projectiles ignore gravity completely, travelling in a pure laser-straight line with infinite punch-through piercing on non-boss entities until colliding with solid terrain or a boss monster. Mutually exclusive with Rapid Load and Strafe.
+enchantment.divineenchantments.curse_debt_of_the_void.desc=Prevents the item from ever losing durability. In exchange, every point of durability damage the item would have taken is converted directly into hunger depletion and minor true damage dealt to the wearer.
+enchantment.divineenchantments.curse_berserkers_bloodlust.desc=Base attack damage scales up to +150% higher as your health drops toward death. In exchange, natural health regeneration and incoming healing from potions or lifesteal are reduced by 75%.
+enchantment.divineenchantments.splintering_impact.desc=Crossbow arrows striking a solid block shatter into homing shrapnel shards (4 at level I, 9 at level II, 13 at level III) that fire like shrapnel from a grenade toward hostile mobs within 6, 9, or 12 blocks.
+enchantment.divineenchantments.headslicer.desc=Airborne melee attacks deal +15% (Level I), +30% (Level II), or +50% (Level III) bonus damage when timed precisely at the apex of a jump where vertical momentum is near zero.
+enchantment.divineenchantments.longdraw.desc=Allows bows to be drawn past 100% up to 250% power (50 ticks). Overdrawing creates a concussive muzzle blast, pierces up to 5 targets with scaled damage, and recoils the archer backward 6 blocks. Incompatible with Mending, Strafe, Multishot, Splitshot, Rapid Fire, and Range. Treasure enchantment (cannot be obtained from the enchanting table).
+enchantment.divineenchantments.suregrip.desc=Prevents your held weapon or tool from being knocked out or stolen by Sticky mob affixes and disarm abilities. However, the tight grip prevents dual-wielding, forcing offhand items to drop. Treasure enchantment (cannot be obtained from the enchanting table).
+enchantment.divineenchantments.cushioned_heel.desc=Dampens kinetic wall-impact collision damage and minor fall damage (4.5 blocks or less) by 30%.
+enchantment.divineenchantments.mudstrider.desc=Negates movement speed penalties when traversing non-solid friction blocks like Soul Sand, Mud, Cobwebs, and shallow water while preserving standard dry-land sprint speed.
+enchantment.divineenchantments.culling.desc=Axe and dagger attacks deal +15% bonus damage exclusively against targets that are already below 20% of their maximum health.
+enchantment.divineenchantments.dulled_impact.desc=Blunt weapon and hammer attacks daze the target, reducing their attack damage by flat 1 (Level I), 2 (Level II), or 3 (Level III) points for 2 seconds. Does not stack.
+enchantment.divineenchantments.glimmer.desc=Fired arrows and bolts leave a faint shimmering particle trail and mark struck targets with the Glowing status effect for 5 seconds without bonus damage.
+enchantment.divineenchantments.braced_pivot.desc=Reinforces shield posture, shortening the shield-disable stun timer from heavy axe strikes and smashes by 1 second (20 ticks).
+
+enchantment.divineenchantments.feathered_draw.desc=Reduces the movement speed penalty while drawing a bow from -80% down to -50%, allowing modest repositioning while aiming.
+enchantment.divineenchantments.stagger.desc=Melee strikes briefly interrupt a basic mob's attack windup animation by 0.25 seconds (5 ticks). Bosses and champions are immune.
+enchantment.divineenchantments.puncture.desc=Piercing strikes bypass a flat 2 points of natural mob armor.
+enchantment.divineenchantments.tempered_core.desc=Eliminates the extra durability penalty for using the wrong tool on a block or mob (e.g. hitting mobs with a pickaxe or breaking cobwebs with a sword only consumes 1 durability instead of 2).
+enchantment.divineenchantments.scavengers_habit.desc=Killing an enemy with an arrow or thrown weapon has a (25 * level)% chance to refund the projectile directly into your inventory. Works only for the initial arrow. Mutually exclusive with Arrow Recovery.
+enchantment.divineenchantments.thermal_foil.desc=Slows down the rate at which your body temperature changes in Tough As Nails or Simple Difficulty by 20% per piece worn.
+enchantment.divineenchantments.machine_bow.desc=When charging the bow reaches full power, it fires automatically with slight recoil and spread, immediately re-drawing for continuous rapid-fire bursts. Higher levels increase draw speed and reduce recoil and spread. Incompatible with Multishot, Rapid Fire, Strafe, and Infinity.
+enchantment.divineenchantments.desalination_mesh.desc=Reduces the infection chance of dirty or salt water (such as Parasites from Tough As Nails / Simple Difficulty) by 85% when drinking directly from a water source with an empty hand.
+enchantment.divineenchantments.metabolic_slumber.desc=Pauses hunger and thirst depletion while idle and stationary, taking effect after 10 seconds of resting.
+enchantment.divineenchantments.sober_chisel.desc=Reduces the chance of triggering aggressive ore-spawn entities (like Lycanites Geonachs from coal/iron or Tremors from stone) by 75%, at the cost of -5% mining speed.
+enchantment.divineenchantments.shimmered.desc=Breaking an ore block highlights directly adjacent identical ore blocks within a 2-block radius with a brief 1-second particle shimmer.
+enchantment.divineenchantments.silt_sifter.desc=Digging natural gravel, clay, sand, or dirt has a 5% chance to yield minor foraging bits (flint, stray string, clay balls, or iron nuggets).
+enchantment.divineenchantments.dampening_strike.desc=Mining blocks produces 70% less vibration and acoustic sound radius, preventing subterranean predators from aggroing through cave walls.
+enchantment.divineenchantments.cushioned_shirt.desc=Dampens horizontal kinetic impact damage by 60% when colliding with terrain while flying, grappling, or riding at high speed.
+enchantment.divineenchantments.magnetic_clasp.desc=Attracts ground items within 3 blocks (6 blocks if worn on both boots and chestplate), but only if that exact item already exists in your inventory in an incomplete stack.
+enchantment.divineenchantments.ground_sweep.desc=Restores vanilla walk-over collision pickup, automatically collecting items you walk over without requiring manual right-clicking or aiming. Super rare treasure enchantment (cannot be obtained from the enchanting table).
+
+enchantment.divineenchantments.shadow_stalker.desc=Reduces the detection radius of unaware, sleeping, or idle mobs by (25 * level)% while sneaking. Breaks upon sprinting, attacking, or entering direct line-of-sight within 6 blocks.
+enchantment.divineenchantments.challengers_mark.desc=Performing a shield bash forces the target to lock onto you for (3 * level) seconds, breaking their target lock on passive pets, tamed mounts, or party members. Has a 6-second cooldown per target.
+enchantment.divineenchantments.low_sweep.desc=Sweeping strikes with polearms prioritize ankle-height hitboxes, applying a 0.5-second stagger to ground-crawling or short mobs (Silverfish, small spiders, hounds) and spacing them back, at the cost of -30% sweep damage.
+enchantment.divineenchantments.gargoyle_stance.desc=Eliminates involuntary displacement from external suction and vacuum effects (such as Lycanites Djinn vortexes, underwater whirlpools, or siren pulls) as long as both feet remain firmly on solid blocks.
+enchantment.divineenchantments.quiet_chipping.desc=Reduces the acoustic vibration range of mining blocks by 75%, significantly lowering the chance of alerting sound-tracking subterranean predators through cave walls.
+enchantment.divineenchantments.salvage_line.desc=Catching non-fish junk items (boots, rusted tools, string, bones) automatically breaks them down into bonus experience points and useful repair materials (nuggets, leather, string).
+
+enchantment.divineenchantments.rune_carnage.desc=Permanently reduces attack speed by (10 * level)%, but every fully charged hit grants +2%/+3%/+5% attack speed (stacking up to 7 * level times) and shortens the victim's invulnerability frames by (1 * level)%. Stacks decay by 5 whenever you go 5 seconds without hitting an enemy. Nunchaku, sabers, and rapiers only. Incompatible with Swifter Slashes. Super rare level 30 enchanting table enchantment costing 8 levels per tier (8/16/24).
+enchantment.divineenchantments.enlargement.desc=Melee hits have a (2 * level)% chance to apply Enlargement for 20 seconds, increasing the target's size and hitbox by (10 * level)%.
+enchantment.divineenchantments.bullseye.desc=Hitting an enemy with an arrow marks a small bullseye on them for 3 seconds. Arrows that strike the bullseye deal an additional (20 * level)% damage. Hitting the enemy again marks a fresh bullseye.
+enchantment.divineenchantments.hunter.desc=Arrows make the struck enemy glow for (20 * level * draw) seconds, where draw is the bow's charge at release (0.0 to 1.0). A fully drawn bow at level III marks the target for 60 seconds.
+enchantment.divineenchantments.voodoo.desc=Slaying an enemy has a (2 * level)% chance to raise a loyal zombie ally from the ground at their corpse. The ally has (4 * level) health, moves 35% faster than a zombie, deals (3 + level) damage, follows you across dimensions, attacks hostile mobs, cannot pick up items or armor, and cannot be harmed by its owner. Treasure enchantment (cannot be obtained from the enchanting table).
+enchantment.divineenchantments.kratos_blades.desc=While held, forces the other hand to drop its item and manifests a duplicate of the blade there. Right-clicking hurls a fishing-hook chain that pulls the first mob or player it touches toward you, consuming 1 durability. Sabers only. Treasure enchantment (cannot be obtained from the enchanting table).
+
+# Death Messages
+death.attack.bleed=%1$s bled out
+death.attack.bleed.player=%1$s bled out while fighting %2$s
