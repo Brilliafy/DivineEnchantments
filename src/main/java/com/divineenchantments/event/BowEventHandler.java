@@ -859,12 +859,6 @@ public class BowEventHandler {
 
         World world = arrow.world;
         int shardCount = level == 1 ? 4 : (level == 2 ? 9 : 13);
-        double radius = level == 1 ? 6.0D : (level == 2 ? 9.0D : 12.0D);
-
-        AxisAlignedBB searchBox = new AxisAlignedBB(hitVec.x - radius, hitVec.y - radius, hitVec.z - radius,
-                hitVec.x + radius, hitVec.y + radius, hitVec.z + radius);
-        List<EntityLivingBase> candidates = world.getEntitiesWithinAABB(EntityLivingBase.class, searchBox,
-                e -> e != null && e.isEntityAlive() && e != arrow.shootingEntity && !(e instanceof EntityPlayer && ((EntityPlayer) e).isCreative()));
 
         if (world instanceof WorldServer) {
             WorldServer ws = (WorldServer) world;
@@ -873,44 +867,43 @@ public class BowEventHandler {
         }
         world.playSound(null, hitVec.x, hitVec.y, hitVec.z, SoundEvents.ENTITY_GENERIC_EXPLODE, SoundCategory.PLAYERS, 1.2F, 1.6F);
 
+        // Grenade-style fragmentation: a radial burst of independent shrapnel, no target seeking.
+        double baseAngle = world.rand.nextDouble() * Math.PI * 2.0D;
         double angleStep = (Math.PI * 2.0D) / shardCount;
+
         for (int i = 0; i < shardCount; i++) {
             EntityTippedArrow shard = new EntityTippedArrow(world);
             shard.shootingEntity = arrow.shootingEntity;
-            shard.setPosition(hitVec.x, hitVec.y + 0.3D, hitVec.z);
+            shard.setPosition(
+                    hitVec.x + (world.rand.nextDouble() - 0.5D) * 0.15D,
+                    hitVec.y + 0.25D + world.rand.nextDouble() * 0.2D,
+                    hitVec.z + (world.rand.nextDouble() - 0.5D) * 0.15D);
             shard.pickupStatus = EntityArrow.PickupStatus.CREATIVE_ONLY;
             shard.setDamage(3.0D + level * 0.5D);
+            shard.setIsCritical(true);
 
-            EntityLivingBase target = (!candidates.isEmpty()) ? candidates.get(i % candidates.size()) : null;
-            double dirX, dirY, dirZ;
+            double angle = baseAngle + angleStep * i + (world.rand.nextDouble() - 0.5D) * 0.45D;
+            double pitch = -0.15D + world.rand.nextDouble() * 0.95D;
+            double horizontal = Math.cos(pitch);
 
-            if (target != null) {
-                double dx = target.posX - hitVec.x;
-                double dy = (target.posY + target.getEyeHeight() * 0.5D) - (hitVec.y + 0.3D);
-                double dz = target.posZ - hitVec.z;
-                double dist = Math.sqrt(dx * dx + dy * dy + dz * dz);
-                if (dist > 0.01D) {
-                    dirX = dx / dist;
-                    dirY = dy / dist + 0.1D;
-                    dirZ = dz / dist;
-                } else {
-                    dirX = Math.cos(angleStep * i);
-                    dirY = 0.3D;
-                    dirZ = Math.sin(angleStep * i);
-                }
-            } else {
-                dirX = Math.cos(angleStep * i);
-                dirY = 0.25D + world.rand.nextDouble() * 0.25D;
-                dirZ = Math.sin(angleStep * i);
-            }
+            double dirX = Math.cos(angle) * horizontal;
+            double dirY = Math.sin(pitch);
+            double dirZ = Math.sin(angle) * horizontal;
 
-            double speed = 1.2D + world.rand.nextDouble() * 0.4D;
+            double speed = 1.05D + world.rand.nextDouble() * 0.75D;
             shard.motionX = dirX * speed;
             shard.motionY = dirY * speed;
             shard.motionZ = dirZ * speed;
-            shard.setIsCritical(true);
-            shard.getEntityData().setBoolean("Divine_IsShrapnelShard", true);
 
+            float yaw = (float) (Math.atan2(shard.motionX, shard.motionZ) * (180.0D / Math.PI));
+            float shardPitch = (float) (Math.atan2(shard.motionY,
+                    Math.sqrt(shard.motionX * shard.motionX + shard.motionZ * shard.motionZ)) * (180.0D / Math.PI));
+            shard.rotationYaw = yaw;
+            shard.rotationPitch = shardPitch;
+            shard.prevRotationYaw = yaw;
+            shard.prevRotationPitch = shardPitch;
+
+            shard.getEntityData().setBoolean("Divine_IsShrapnelShard", true);
             world.spawnEntity(shard);
         }
     }

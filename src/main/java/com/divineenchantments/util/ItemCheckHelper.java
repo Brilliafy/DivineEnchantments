@@ -226,7 +226,7 @@ public class ItemCheckHelper {
     }
 
     /**
-     * Checks if the given ItemStack is a blunt weapon (Warhammer, Hammer, Mace, Club, Quarterstaff, Axe).
+     * Checks if the given ItemStack is a blunt weapon (Warhammer, Hammer, Spartan mace, Club, Quarterstaff, Axe).
      */
     public static boolean isBluntWeapon(ItemStack stack) {
         if (stack == null || stack.isEmpty()) {

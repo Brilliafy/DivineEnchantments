@@ -2,6 +2,8 @@
 
 **73 handcrafted enchantments for Minecraft 1.12.2 — built for Forge and Cleanroom.**
 
+> **1.12.2 note:** Maces, sabers, rapiers, spears, pikes, lances, glaives, halberds, nunchaku, and crossbows come from 1.12.2 weapon mods such as Spartan Weaponry, Better Survival, and Crossbows Backport. They are not vanilla 1.12.2 items.
+
 Divine Enchantments expands combat, exploration, and build variety with enchantments that do more than add flat numbers. Expect stacking combat momentum, positional bow play, summoned allies, size-altering curses and blessings, treasure-only blades, and deep cross-mod interactions.
 
 Every enchantment includes **Enchantment Descriptions** support and a **JEI** information page. Treasure enchantments are clearly marked, curses have real drawbacks, and every mechanic is designed to work in **singleplayer and multiplayer** with server-authoritative logic and client synchronization.
@@ -79,6 +81,7 @@ A full enchantment list is included in the project README.
 Optional integrations activate automatically when installed:
 
 - **Spartan Weaponry & Spartan Shields** — weapon, shield, and crossbow classification.
+- **Crossbows** — crossbow enchantments require a 1.12.2 crossbow mod (Spartan Weaponry, Crossbows Backport, etc.).
 - **Better Survival** — nunchaku support for Rune: Carnage.
 - **Rin's SoManyEnchantments** — Multishot/Splitshot synergy, Advanced Mending and Swifter Slashes incompatibilities, Advanced Looting synergy.
 - **Lycanites Mobs** — Ally summoning, projectile capture, Decay, Aphagia, Demon/Shadow detection, boss checks.
