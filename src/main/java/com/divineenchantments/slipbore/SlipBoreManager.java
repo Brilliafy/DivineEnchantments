@@ -95,7 +95,7 @@ public class SlipBoreManager {
                     mob.motionX += dx * strength;
                     mob.motionZ += dz * strength;
 
-                    // Drag flying mobs (Cacodemons, Raikos, Phantoms, etc.) crashing to the ground!
+                    // Drag flying mobs (Cacodemons, Raikos, etc.) crashing to the ground!
                     mob.motionY = Math.min(mob.motionY - 0.35D, dy * strength - 0.22D);
                     mob.velocityChanged = true;
 

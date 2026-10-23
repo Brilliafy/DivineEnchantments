@@ -168,7 +168,7 @@ public class CurseAndBuffEventHandler {
                 removeSpeedModifier(player, UMBRAL_SPEED_UUID);
             }
 
-            // Mudstrider: Negates movement speed penalty of soul sand, cobwebs, mud, shallow water
+            // Mudstrider: Negates movement speed penalty of soul sand, cobwebs, modded mud/silt, shallow water
             ItemStack boots = player.getItemStackFromSlot(EntityEquipmentSlot.FEET);
             int mudLevel = (!boots.isEmpty()) ? EnchantmentHelper.getEnchantmentLevel(ModEnchantments.MUDSTRIDER, boots) : 0;
             if (mudLevel > 0) {
