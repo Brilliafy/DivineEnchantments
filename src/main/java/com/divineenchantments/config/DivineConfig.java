@@ -34,6 +34,20 @@ public final class DivineConfig {
     public static double enlargementSizePerLevel = 0.10D;
     public static int enlargementDurationTicks = 400;
 
+    // Sound stealth
+    public static double dampeningStrikeAggroRadius = 4.8D;
+    public static double quietChippingAggroRadius = 4.0D;
+
+    // Perpetual Crucible
+    public static int perpetualCrucibleBaseDurationTicks = 60;
+    public static int perpetualCrucibleDurationPerLevelTicks = 40;
+
+    // Feathered Draw
+    public static double featheredDrawSpeedLevel1 = 1.5D;
+    public static double featheredDrawSpeedLevel2 = 2.5D;
+    public static double featheredDrawSpeedLevel3 = 3.5D;
+    public static double featheredDrawSpeedLevel4 = 4.0D;
+
     // Bullseye
     public static double bullseyeDamagePerLevel = 0.20D;
     public static int bullseyeDurationTicks = 60;
@@ -122,6 +136,25 @@ public final class DivineConfig {
                     "Enlargement size increase per level (0.10 = 10%).");
             enlargementDurationTicks = config.getInt("enlargementDurationTicks", "balance", 400, 1, 72000,
                     "Enlargement effect duration in ticks (400 = 20 seconds).");
+
+            dampeningStrikeAggroRadius = config.getFloat("dampeningStrikeAggroRadius", "balance", 4.8F, 0.0F, 64.0F,
+                    "Maximum distance at which mobs can target a player holding a Dampening Strike tool.");
+            quietChippingAggroRadius = config.getFloat("quietChippingAggroRadius", "balance", 4.0F, 0.0F, 64.0F,
+                    "Maximum distance at which mobs can target a player holding a Quiet Chipping tool.");
+
+            perpetualCrucibleBaseDurationTicks = config.getInt("perpetualCrucibleBaseDurationTicks", "balance", 60, 1, 72000,
+                    "Perpetual Crucible Extension duration at level I in ticks (60 = 3 seconds).");
+            perpetualCrucibleDurationPerLevelTicks = config.getInt("perpetualCrucibleDurationPerLevelTicks", "balance", 40, 0, 72000,
+                    "Additional Perpetual Crucible duration per level in ticks (40 = +2 seconds).");
+
+            featheredDrawSpeedLevel1 = config.getFloat("featheredDrawSpeedLevel1", "balance", 1.5F, 0.0F, 10.0F,
+                    "Feathered Draw additive movement speed compensation at level I (1.5 = -50% draw slowdown).");
+            featheredDrawSpeedLevel2 = config.getFloat("featheredDrawSpeedLevel2", "balance", 2.5F, 0.0F, 10.0F,
+                    "Feathered Draw additive movement speed compensation at level II (2.5 = -30%).");
+            featheredDrawSpeedLevel3 = config.getFloat("featheredDrawSpeedLevel3", "balance", 3.5F, 0.0F, 10.0F,
+                    "Feathered Draw additive movement speed compensation at level III (3.5 = -10%).");
+            featheredDrawSpeedLevel4 = config.getFloat("featheredDrawSpeedLevel4", "balance", 4.0F, 0.0F, 10.0F,
+                    "Feathered Draw additive movement speed compensation at level IV (4.0 = no draw slowdown).");
 
             bullseyeDamagePerLevel = config.getFloat("bullseyeDamagePerLevel", "balance", 0.20F, 0.0F, 10.0F,
                     "Bullseye bonus damage per level (0.20 = 20%).");

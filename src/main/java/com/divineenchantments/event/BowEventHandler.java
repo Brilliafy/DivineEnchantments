@@ -946,7 +946,10 @@ public class BowEventHandler {
                 // Feathered Draw: reduce movement speed penalty while drawing bow from -80% down to -50%
                 int feathered = ModEnchantments.getLevel(ModEnchantments.FEATHERED_DRAW, bow);
                 if (feathered > 0) {
-                    applySpeedModifier(player, FEATHERED_DRAW_SPEED_UUID, "Feathered Draw Speed", 1.5D);
+                    double speedBonus = feathered == 1 ? DivineConfig.featheredDrawSpeedLevel1
+                            : (feathered == 2 ? DivineConfig.featheredDrawSpeedLevel2
+                            : (feathered == 3 ? DivineConfig.featheredDrawSpeedLevel3 : DivineConfig.featheredDrawSpeedLevel4));
+                    applySpeedModifier(player, FEATHERED_DRAW_SPEED_UUID, "Feathered Draw Speed", speedBonus);
                 } else {
                     removeSpeedModifier(player, FEATHERED_DRAW_SPEED_UUID);
                 }

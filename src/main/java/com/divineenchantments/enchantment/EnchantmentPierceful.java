@@ -6,6 +6,7 @@ import net.minecraft.enchantment.EnumEnchantmentType;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemBow;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.ResourceLocation;
 
 public class EnchantmentPierceful extends DivineEnchantment {
 
@@ -50,5 +51,22 @@ public class EnchantmentPierceful extends DivineEnchantment {
     public boolean canApplyAtEnchantingTable(ItemStack stack) {
         if (!com.divineenchantments.config.DivineConfig.isEnabled(this)) { return false; }
         return false;
+    }
+
+    @Override
+    public boolean canApplyTogether(Enchantment other) {
+        if (!super.canApplyTogether(other)) {
+            return false;
+        }
+        if (other != null) {
+            ResourceLocation name = other.getRegistryName();
+            if (name != null) {
+                String path = name.getPath().toLowerCase();
+                if ("rune_arrowpiercing".equals(path) || "longdraw".equals(path)) {
+                    return false;
+                }
+            }
+        }
+        return true;
     }
 }

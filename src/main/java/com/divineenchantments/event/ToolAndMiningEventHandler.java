@@ -1,5 +1,6 @@
 package com.divineenchantments.event;
 
+import com.divineenchantments.config.DivineConfig;
 import com.divineenchantments.init.ModEnchantments;
 import com.divineenchantments.util.ItemCheckHelper;
 import net.minecraft.block.Block;
@@ -29,6 +30,7 @@ import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 import net.minecraft.entity.item.EntityXPOrb;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
+import net.minecraftforge.event.entity.living.LivingSetAttackTargetEvent;
 import net.minecraftforge.event.entity.living.LivingSpawnEvent;
 import net.minecraftforge.event.entity.player.AttackEntityEvent;
 import net.minecraftforge.event.entity.player.ItemFishedEvent;
@@ -140,7 +142,7 @@ public class ToolAndMiningEventHandler {
             for (EntityLiving mob : mobs) {
                 if (mob.getAttackTarget() == player) {
                     double dist = mob.getDistance(player);
-                    if (dist > 4.8D) { // Beyond 30% of normal 16-block aggro threshold
+                    if (dist > DivineConfig.dampeningStrikeAggroRadius) { // Reduced sound/vibration aggro radius
                         mob.setAttackTarget(null);
                         mob.setRevengeTarget(null);
                     }
@@ -159,7 +161,7 @@ public class ToolAndMiningEventHandler {
             for (EntityLiving mob : mobs) {
                 if (mob.getAttackTarget() == player) {
                     double dist = mob.getDistance(player);
-                    if (dist > 4.0D) { // Alert threshold shrunk to 4 blocks (75% noise reduction)
+                    if (dist > DivineConfig.quietChippingAggroRadius) { // Reduced sound/vibration aggro radius
                         mob.setAttackTarget(null);
                         mob.setRevengeTarget(null);
                         mob.getNavigator().clearPath();
@@ -169,6 +171,40 @@ public class ToolAndMiningEventHandler {
             if (world instanceof WorldServer) {
                 ((WorldServer) world).spawnParticle(EnumParticleTypes.SMOKE_NORMAL, pos.getX() + 0.5D, pos.getY() + 0.5D, pos.getZ() + 0.5D, 2, 0.1D, 0.1D, 0.1D, 0.01D);
             }
+        }
+    }
+
+    @SubscribeEvent(priority = EventPriority.LOWEST)
+    public static void onSetAttackTarget(LivingSetAttackTargetEvent event) {
+        if (event.getEntityLiving().world.isRemote || !(event.getTarget() instanceof EntityPlayer)) {
+            return;
+        }
+        if (!(event.getEntityLiving() instanceof EntityLiving)) {
+            return;
+        }
+
+        EntityPlayer player = (EntityPlayer) event.getTarget();
+        EntityLiving mob = (EntityLiving) event.getEntityLiving();
+        ItemStack held = player.getHeldItemMainhand();
+
+        int dampening = ModEnchantments.getLevel(ModEnchantments.DAMPENING_STRIKE, held);
+        int quiet = ModEnchantments.getLevel(ModEnchantments.QUIET_CHIPPING, held);
+        if (dampening <= 0 && quiet <= 0) {
+            return;
+        }
+
+        double radius = Double.MAX_VALUE;
+        if (dampening > 0) {
+            radius = Math.min(radius, DivineConfig.dampeningStrikeAggroRadius);
+        }
+        if (quiet > 0) {
+            radius = Math.min(radius, DivineConfig.quietChippingAggroRadius);
+        }
+
+        if (mob.getDistance(player) > radius) {
+            mob.setAttackTarget(null);
+            mob.setRevengeTarget(null);
+            mob.getNavigator().clearPath();
         }
     }
 

@@ -1,6 +1,7 @@
 package com.divineenchantments.event;
 
 import com.divineenchantments.init.ModEnchantments;
+import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItem;
@@ -9,6 +10,7 @@ import net.minecraft.init.SoundEvents;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.SoundCategory;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.WorldServer;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.entity.living.LivingDropsEvent;
@@ -23,6 +25,23 @@ import java.util.List;
 @Mod.EventBusSubscriber(modid = "divineenchantments")
 public class RichesEventHandler {
 
+    private static Enchantment ADEPT = null;
+    private static boolean LOOKED_UP_ADEPT = false;
+
+    private static Enchantment getAdept() {
+        if (!LOOKED_UP_ADEPT) {
+            LOOKED_UP_ADEPT = true;
+            for (Enchantment enchantment : Enchantment.REGISTRY) {
+                ResourceLocation name = enchantment.getRegistryName();
+                if (name != null && "adept".equals(name.getPath())) {
+                    ADEPT = enchantment;
+                    break;
+                }
+            }
+        }
+        return ADEPT;
+    }
+
     @SubscribeEvent
     public static void onLivingDeath(LivingDeathEvent event) {
         if (event.getEntityLiving().world.isRemote) {
@@ -36,11 +55,17 @@ public class RichesEventHandler {
             if (!held.isEmpty()) {
                 int level = ModEnchantments.getLevel(ModEnchantments.RICHES, held);
                 if (level > 0) {
-                    // Level 1: 0.05% (0.0005F), Level 2: 0.1% (0.001F)
-                    float chance = (level == 1) ? 0.0005F : 0.001F;
+                    Enchantment adeptEnchantment = getAdept();
+                    int adeptLevel = adeptEnchantment == null ? 0 : EnchantmentHelper.getEnchantmentLevel(adeptEnchantment, held);
+
+                    // Base chance is 0.05% / 0.1%; Adept adds a small chance bonus.
+                    float baseChance = (level == 1) ? 0.0005F : 0.001F;
+                    float chance = baseChance * (1.0F + 0.25F * adeptLevel);
                     if (player.world.rand.nextFloat() < chance) {
                         EntityLivingBase target = event.getEntityLiving();
                         target.getEntityData().setBoolean("Divine_Riches_Proc", true);
+                        target.getEntityData().setInteger("Divine_Riches_XpMultiplier", Math.min(50, 10 + adeptLevel * 2));
+                        target.getEntityData().setInteger("Divine_Riches_LootMultiplier", Math.min(50, 10 + adeptLevel));
 
                         // Grand sound & celebration particles
                         target.world.playSound(null, target.posX, target.posY, target.posZ, SoundEvents.ENTITY_PLAYER_LEVELUP, SoundCategory.PLAYERS, 1.2F, 1.0F);
@@ -60,7 +85,8 @@ public class RichesEventHandler {
     @SubscribeEvent(priority = EventPriority.LOWEST)
     public static void onExperienceDrop(LivingExperienceDropEvent event) {
         if (event.getEntityLiving() != null && event.getEntityLiving().getEntityData().getBoolean("Divine_Riches_Proc")) {
-            event.setDroppedExperience(event.getDroppedExperience() * 10);
+            int multiplier = event.getEntityLiving().getEntityData().getInteger("Divine_Riches_XpMultiplier");
+            event.setDroppedExperience(event.getDroppedExperience() * Math.max(10, multiplier));
         }
     }
 
@@ -71,6 +97,7 @@ public class RichesEventHandler {
         }
 
         if (event.getEntityLiving().getEntityData().getBoolean("Divine_Riches_Proc")) {
+            int multiplier = Math.max(10, event.getEntityLiving().getEntityData().getInteger("Divine_Riches_LootMultiplier"));
             List<EntityItem> drops = event.getDrops();
             List<EntityItem> extraDrops = new ArrayList<>();
 
@@ -80,7 +107,7 @@ public class RichesEventHandler {
                     continue;
                 }
 
-                int totalCount = stack.getCount() * 10;
+                int totalCount = stack.getCount() * multiplier;
                 int maxStack = stack.getMaxStackSize();
 
                 stack.setCount(Math.min(totalCount, maxStack));

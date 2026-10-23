@@ -7,7 +7,9 @@ import com.divineenchantments.init.ModEnchantments;
 import com.divineenchantments.potion.ModPotions;
 import com.divineenchantments.util.ItemCheckHelper;
 import net.minecraft.enchantment.EnchantmentHelper;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
+import net.minecraft.entity.EnumCreatureType;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.boss.EntityWither;
 import net.minecraft.entity.monster.EntityBlaze;
@@ -24,11 +26,16 @@ import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundCategory;
+import net.minecraft.world.biome.Biome;
 import net.minecraft.world.WorldServer;
+import net.minecraftforge.common.BiomeDictionary;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+
+import java.util.HashSet;
+import java.util.Set;
 
 @Mod.EventBusSubscriber(modid = "divineenchantments")
 public class MeleeEventHandler {
@@ -44,35 +51,89 @@ public class MeleeEventHandler {
         return VULNERABLE_POTION;
     }
 
+    private static volatile Set<Class<?>> NETHER_SPAWN_CLASSES = null;
+
+    private static void ensureNetherSpawnTable() {
+        if (NETHER_SPAWN_CLASSES != null) {
+            return;
+        }
+        synchronized (MeleeEventHandler.class) {
+            if (NETHER_SPAWN_CLASSES != null) {
+                return;
+            }
+
+            Set<Class<?>> classes = new HashSet<>();
+            for (Biome biome : Biome.REGISTRY) {
+                if (biome == null) {
+                    continue;
+                }
+                ResourceLocation biomeName = biome.getRegistryName();
+                boolean isNether = BiomeDictionary.hasType(biome, BiomeDictionary.Type.NETHER);
+                if (!isNether && biomeName != null) {
+                    String path = biomeName.getPath().toLowerCase();
+                    isNether = path.contains("nether") || path.contains("hell") || path.contains("infernal");
+                }
+                if (!isNether) {
+                    continue;
+                }
+                for (EnumCreatureType type : EnumCreatureType.values()) {
+                    for (Biome.SpawnListEntry entry : biome.getSpawnableList(type)) {
+                        if (entry != null && entry.entityClass != null) {
+                            classes.add(entry.entityClass);
+                        }
+                    }
+                }
+            }
+
+            // Structure and boss mobs that do not appear in the Nether biome spawn lists.
+            classes.add(EntityBlaze.class);
+            classes.add(EntityWitherSkeleton.class);
+            classes.add(EntityWither.class);
+
+            NETHER_SPAWN_CLASSES = classes;
+        }
+    }
+
+    private static boolean isNaturalNetherSpawn(EntityLivingBase target) {
+        ensureNetherSpawnTable();
+        for (Class<?> clazz = target.getClass(); clazz != null && clazz != Entity.class; clazz = clazz.getSuperclass()) {
+            if (NETHER_SPAWN_CLASSES.contains(clazz)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     private static boolean isDemonicOrNetherTarget(EntityLivingBase target) {
         if (target == null) {
             return false;
         }
 
-        // Vanilla Nether bosses and mobs
+        // Any mob that naturally spawns in a Nether biome, including modded Nether biomes.
+        if (isNaturalNetherSpawn(target)) {
+            return true;
+        }
+
+        // Vanilla Nether bosses and structure mobs.
         if (target instanceof EntityGhast || target instanceof EntityMagmaCube
                 || target instanceof EntityBlaze || target instanceof EntityWitherSkeleton
                 || target instanceof EntityPigZombie || target instanceof EntityWither) {
             return true;
         }
 
-        // Nether dimension fire-immune mobs
-        if (target.dimension == -1 && target.isImmuneToFire()) {
-            return true;
-        }
-
-        // Lycanites Mobs demon / shadow check
+        // Lycanites Mobs demon / shadow check.
         if (Loader.isModLoaded("lycanitesmobs") && LycanitesIntegration.isDemonOrShadowCreature(target)) {
             return true;
         }
 
-        // Registry key or class name fallback
+        // Registry key fallback for modded mobs whose spawn entries are not exposed.
         ResourceLocation reg = EntityList.getKey(target);
         if (reg != null) {
             String path = reg.getPath().toLowerCase();
             if (path.contains("wither") || path.contains("blaze") || path.contains("ghast")
-                    || path.contains("magma") || path.contains("nether") || path.contains("pigman")
-                    || path.contains("pig_zombie") || path.contains("demon") || path.contains("shadow")) {
+                    || path.contains("magma") || path.contains("nether") || path.contains("hell")
+                    || path.contains("infernal") || path.contains("pigman") || path.contains("pig_zombie")
+                    || path.contains("demon") || path.contains("shadow") || path.contains("imp")) {
                 return true;
             }
         }

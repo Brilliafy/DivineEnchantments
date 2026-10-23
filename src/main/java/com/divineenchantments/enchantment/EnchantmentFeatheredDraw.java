@@ -5,6 +5,7 @@ import net.minecraft.enchantment.EnumEnchantmentType;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemBow;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.ResourceLocation;
 
 public class EnchantmentFeatheredDraw extends DivineEnchantment {
 
@@ -21,22 +22,36 @@ public class EnchantmentFeatheredDraw extends DivineEnchantment {
 
     @Override
     public int getMaxLevel() {
-        return 1;
+        return 4;
     }
 
     @Override
     public int getMinEnchantability(int enchantmentLevel) {
-        return 12;
+        return 12 + (enchantmentLevel - 1) * 6;
     }
 
     @Override
     public int getMaxEnchantability(int enchantmentLevel) {
-        return 45;
+        return this.getMinEnchantability(enchantmentLevel) + 25;
     }
 
     @Override
     public boolean canApply(ItemStack stack) {
         if (!com.divineenchantments.config.DivineConfig.isEnabled(this)) { return false; }
         return stack != null && !stack.isEmpty() && stack.getItem() instanceof ItemBow;
+    }
+
+    @Override
+    public boolean canApplyTogether(Enchantment other) {
+        if (!super.canApplyTogether(other)) {
+            return false;
+        }
+        if (other != null) {
+            ResourceLocation name = other.getRegistryName();
+            if (name != null && "strafe".equals(name.getPath().toLowerCase())) {
+                return false;
+            }
+        }
+        return true;
     }
 }

@@ -82,6 +82,9 @@ A full enchantment list is included in the project README.
 Optional integrations activate automatically when installed:
 
 - **Spartan Weaponry & Spartan Shields** - weapon, shield, and crossbow classification.
+- **CollisionDamage** - Cushioned Shirt reduces kinetic collision damage.
+- **Dynamic Surroundings** - Dampening Strike and Quiet Chipping reduce sound-based mob detection.
+- **Infernal Mobs** - Suregrip blocks Sticky/Thieving disarms.
 - **Crossbows** - crossbow enchantments require a 1.12.2 crossbow mod (Spartan Weaponry, Crossbows Backport, etc.).
 - **Better Survival** - nunchaku support for Rune: Carnage.
 - **Rin's SoManyEnchantments** - Multishot/Splitshot synergy, Advanced Mending and Swifter Slashes incompatibilities, Advanced Looting synergy.
@@ -100,7 +103,8 @@ The generated `config/divineenchantments.cfg` includes:
 
 - A master switch for every enchantment.
 - Individual enable/disable toggles for each enchantment.
-- Balance settings for Rune: Carnage, Enlargement, Bullseye, Hunter, Voodoo, and Kratos Blades.
+- Balance settings for Rune: Carnage, Enlargement, Bullseye, Hunter, Voodoo, Kratos Blades, Feathered Draw, Perpetual Crucible, and sound-stealth radii.
+- Compatibility toggles, including the Better Survival Range damage fix.
 
 Config changes require a game restart.
 
@@ -117,7 +121,7 @@ No mandatory dependencies. JEI, Enchantment Descriptions, and the integration mo
 ## Installation
 
 1. Install Minecraft Forge 1.12.2 or Cleanroom.
-2. Drop `DivineEnchantments-1.12.2-1.0.1.jar` into the `mods` folder.
+2. Drop `DivineEnchantments-1.12.2-1.0.2.jar` into the `mods` folder.
 3. Install the same jar on the server for multiplayer.
 4. Launch the game.
 
