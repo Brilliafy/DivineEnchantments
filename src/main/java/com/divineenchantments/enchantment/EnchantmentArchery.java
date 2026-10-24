@@ -25,16 +25,6 @@ public class EnchantmentArchery extends DivineEnchantment {
     }
 
     @Override
-    public int getMinEnchantability(int enchantmentLevel) {
-        return 8 * enchantmentLevel; // 8 levels per level (8, 16, 24)
-    }
-
-    @Override
-    public int getMaxEnchantability(int enchantmentLevel) {
-        return this.getMinEnchantability(enchantmentLevel) + 20;
-    }
-
-    @Override
     public boolean canApply(ItemStack stack) {
         if (!com.divineenchantments.config.DivineConfig.isEnabled(this)) { return false; }
         return ItemCheckHelper.isBowOrCrossbow(stack);

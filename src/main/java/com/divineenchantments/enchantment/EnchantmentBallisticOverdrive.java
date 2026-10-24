@@ -26,16 +26,6 @@ public class EnchantmentBallisticOverdrive extends DivineEnchantment {
     }
 
     @Override
-    public int getMinEnchantability(int enchantmentLevel) {
-        return 28;
-    }
-
-    @Override
-    public int getMaxEnchantability(int enchantmentLevel) {
-        return 60;
-    }
-
-    @Override
     public boolean canApply(ItemStack stack) {
         if (!com.divineenchantments.config.DivineConfig.isEnabled(this)) { return false; }
         return ItemCheckHelper.isCrossbow(stack);

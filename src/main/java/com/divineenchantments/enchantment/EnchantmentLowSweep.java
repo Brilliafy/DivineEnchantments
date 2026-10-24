@@ -25,16 +25,6 @@ public class EnchantmentLowSweep extends DivineEnchantment {
     }
 
     @Override
-    public int getMinEnchantability(int level) {
-        return 8 + (level - 1) * 9;
-    }
-
-    @Override
-    public int getMaxEnchantability(int level) {
-        return this.getMinEnchantability(level) + 25;
-    }
-
-    @Override
     public boolean canApply(ItemStack stack) {
         if (!com.divineenchantments.config.DivineConfig.isEnabled(this)) { return false; }
         if (stack == null || stack.isEmpty()) return false;

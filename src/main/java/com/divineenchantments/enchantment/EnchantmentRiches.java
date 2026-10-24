@@ -26,16 +26,6 @@ public class EnchantmentRiches extends DivineEnchantment {
     }
 
     @Override
-    public int getMinEnchantability(int enchantmentLevel) {
-        return 25 + (enchantmentLevel - 1) * 25;
-    }
-
-    @Override
-    public int getMaxEnchantability(int enchantmentLevel) {
-        return this.getMinEnchantability(enchantmentLevel) + 30;
-    }
-
-    @Override
     public boolean canApply(ItemStack stack) {
         if (!com.divineenchantments.config.DivineConfig.isEnabled(this)) { return false; }
         return this.canApplyAtEnchantingTable(stack);

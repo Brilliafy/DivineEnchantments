@@ -25,16 +25,6 @@ public class EnchantmentQuietChipping extends DivineEnchantment {
     }
 
     @Override
-    public int getMinEnchantability(int level) {
-        return 10;
-    }
-
-    @Override
-    public int getMaxEnchantability(int level) {
-        return 40;
-    }
-
-    @Override
     public boolean canApply(ItemStack stack) {
         if (!com.divineenchantments.config.DivineConfig.isEnabled(this)) { return false; }
         return ItemCheckHelper.isPickaxeOrHammer(stack);

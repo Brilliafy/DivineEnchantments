@@ -25,16 +25,6 @@ public class EnchantmentCushionedHeel extends DivineEnchantment {
     }
 
     @Override
-    public int getMinEnchantability(int enchantmentLevel) {
-        return 10;
-    }
-
-    @Override
-    public int getMaxEnchantability(int enchantmentLevel) {
-        return 35;
-    }
-
-    @Override
     public boolean canApply(ItemStack stack) {
         if (!com.divineenchantments.config.DivineConfig.isEnabled(this)) { return false; }
         return stack != null && !stack.isEmpty() && stack.getItem() instanceof ItemArmor

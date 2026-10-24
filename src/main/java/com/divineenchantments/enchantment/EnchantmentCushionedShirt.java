@@ -25,16 +25,6 @@ public class EnchantmentCushionedShirt extends DivineEnchantment {
     }
 
     @Override
-    public int getMinEnchantability(int enchantmentLevel) {
-        return 12;
-    }
-
-    @Override
-    public int getMaxEnchantability(int enchantmentLevel) {
-        return 45;
-    }
-
-    @Override
     public boolean canApply(ItemStack stack) {
         if (!com.divineenchantments.config.DivineConfig.isEnabled(this)) { return false; }
         return stack != null && !stack.isEmpty() && stack.getItem() instanceof ItemArmor

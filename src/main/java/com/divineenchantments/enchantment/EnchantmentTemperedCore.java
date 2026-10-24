@@ -27,16 +27,6 @@ public class EnchantmentTemperedCore extends DivineEnchantment {
     }
 
     @Override
-    public int getMinEnchantability(int enchantmentLevel) {
-        return 5;
-    }
-
-    @Override
-    public int getMaxEnchantability(int enchantmentLevel) {
-        return 40;
-    }
-
-    @Override
     public boolean canApply(ItemStack stack) {
         if (!com.divineenchantments.config.DivineConfig.isEnabled(this)) { return false; }
         if (stack == null || stack.isEmpty()) return false;

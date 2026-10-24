@@ -26,16 +26,6 @@ public class EnchantmentSoberChisel extends DivineEnchantment {
     }
 
     @Override
-    public int getMinEnchantability(int enchantmentLevel) {
-        return 12;
-    }
-
-    @Override
-    public int getMaxEnchantability(int enchantmentLevel) {
-        return 45;
-    }
-
-    @Override
     public boolean canApply(ItemStack stack) {
         if (!com.divineenchantments.config.DivineConfig.isEnabled(this)) { return false; }
         if (stack == null || stack.isEmpty()) return false;

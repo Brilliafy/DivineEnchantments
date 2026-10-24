@@ -26,16 +26,6 @@ public class EnchantmentStagger extends DivineEnchantment {
     }
 
     @Override
-    public int getMinEnchantability(int enchantmentLevel) {
-        return 15;
-    }
-
-    @Override
-    public int getMaxEnchantability(int enchantmentLevel) {
-        return 50;
-    }
-
-    @Override
     public boolean canApply(ItemStack stack) {
         if (!com.divineenchantments.config.DivineConfig.isEnabled(this)) { return false; }
         if (stack == null || stack.isEmpty()) return false;
