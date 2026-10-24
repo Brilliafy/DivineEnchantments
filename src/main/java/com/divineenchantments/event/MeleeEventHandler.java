@@ -163,7 +163,7 @@ public class MeleeEventHandler {
                 }
             }
 
-            // Stagger attack interruption: pauses basic mob attack windup for 5 ticks (0.25s)
+            // Stagger attack interruption: pauses basic mob attack windup for 10 ticks (0.5s)
             if (sourceEntity.getEntityData().hasKey("DE_StaggerUntil")) {
                 long staggerUntil = sourceEntity.getEntityData().getLong("DE_StaggerUntil");
                 if (sourceEntity.world.getTotalWorldTime() <= staggerUntil) {
@@ -355,7 +355,7 @@ public class MeleeEventHandler {
                     }
                 }
 
-                // Culling: +15% damage exclusively to targets below 20% max health
+                // Culling: +25% damage exclusively to targets below 25% max health
                 int cullingLvl = ModEnchantments.getLevel(ModEnchantments.CULLING, held);
                 if (cullingLvl > 0) {
                     if (target.getHealth() <= target.getMaxHealth() * 0.25F) {
