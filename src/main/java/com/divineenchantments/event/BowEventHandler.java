@@ -5,6 +5,7 @@ import com.divineenchantments.config.DivineConfig;
 import com.divineenchantments.bullseye.BullseyeManager;
 import com.divineenchantments.init.ModEnchantments;
 import com.divineenchantments.slipbore.SlipBoreManager;
+import com.divineenchantments.util.ChanceHelper;
 import com.divineenchantments.util.ItemCheckHelper;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.Entity;
@@ -48,6 +49,7 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 
 import java.util.List;
+import java.lang.reflect.Method;
 import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
@@ -58,6 +60,7 @@ public class BowEventHandler {
     public static final UUID FEATHERED_DRAW_SPEED_UUID = UUID.fromString("c7821649-74e2-4ea5-a249-183027b140fa");
     private static final Map<UUID, BowData> PENDING_BOW_DATA = new ConcurrentHashMap<>();
     private static final java.util.Set<EntityArrow> GLIMMER_ARROWS = java.util.Collections.newSetFromMap(new ConcurrentHashMap<>());
+    private static final java.util.Set<EntityArrow> BALLISTIC_ARROWS = java.util.Collections.newSetFromMap(new ConcurrentHashMap<>());
 
     private static class BowData {
         final int gravitational;
@@ -109,6 +112,7 @@ public class BowEventHandler {
         }
 
         PENDING_BOW_DATA.remove(player.getUniqueID());
+        player.getEntityData().setLong("DE_LastShotId", player.world.rand.nextLong());
 
         ItemStack bow = event.getBow();
         if (bow.isEmpty()) {
@@ -195,7 +199,22 @@ public class BowEventHandler {
         }
 
         EntityArrow arrow = (EntityArrow) event.getEntity();
+        if (arrow.getEntityData().getBoolean("Divine_IsShrapnelShard")) {
+            return;
+        }
         if (arrow.shootingEntity instanceof EntityPlayer) {
+            EntityPlayer shooter = (EntityPlayer) arrow.shootingEntity;
+            if (!arrow.getEntityData().hasKey("Divine_ShotId")) {
+                String arrowClass = arrow.getClass().getName().toLowerCase();
+                if (arrowClass.contains("bolt")) {
+                    long tickShotId = shooter.world.getTotalWorldTime() * 1000003L
+                            + shooter.getUniqueID().getLeastSignificantBits();
+                    arrow.getEntityData().setLong("Divine_ShotId", tickShotId);
+                    shooter.getEntityData().setLong("DE_LastShotId", tickShotId);
+                } else {
+                    arrow.getEntityData().setLong("Divine_ShotId", playerShotId(shooter));
+                }
+            }
             EntityPlayer player = (EntityPlayer) arrow.shootingEntity;
             BowData data = PENDING_BOW_DATA.get(player.getUniqueID());
 
@@ -254,6 +273,7 @@ public class BowEventHandler {
                 if (data.ballisticOverdrive > 0) {
                     arrow.getEntityData().setBoolean("Divine_BallisticOverdrive", true);
                     arrow.setNoGravity(true);
+                    BALLISTIC_ARROWS.add(arrow);
                 }
                 if (data.splinteringImpact > 0) {
                     arrow.getEntityData().setInteger("Divine_SplinteringImpact", data.splinteringImpact);
@@ -318,6 +338,7 @@ public class BowEventHandler {
                         // Mark as copy to prevent recursion
                         trailing.getEntityData().setBoolean("Divine_IsAutofireCopy", true);
                         trailing.getEntityData().setBoolean("Divine_Autofire", true);
+                        trailing.getEntityData().setLong("Divine_ShotId", arrow.getEntityData().getLong("Divine_ShotId"));
 
                         // Copy other divine enchantment tags
                         if (arrow.getEntityData().hasKey("Divine_Gravitational")) {
@@ -345,6 +366,7 @@ public class BowEventHandler {
                         if (arrow.getEntityData().getBoolean("Divine_BallisticOverdrive")) {
                             trailing.getEntityData().setBoolean("Divine_BallisticOverdrive", true);
                             trailing.setNoGravity(true);
+                            BALLISTIC_ARROWS.add(trailing);
                         }
                         if (arrow.getEntityData().hasKey("Divine_SplinteringImpact")) {
                             trailing.getEntityData().setInteger("Divine_SplinteringImpact", arrow.getEntityData().getInteger("Divine_SplinteringImpact"));
@@ -369,8 +391,11 @@ public class BowEventHandler {
     }
 
     @SubscribeEvent
-    public static void onProjectileImpact(ProjectileImpactEvent.Arrow event) {
-        EntityArrow arrow = event.getArrow();
+    public static void onProjectileImpact(ProjectileImpactEvent event) {
+        if (!(event.getEntity() instanceof EntityArrow)) {
+            return;
+        }
+        EntityArrow arrow = (EntityArrow) event.getEntity();
         if (arrow == null || arrow.world.isRemote) {
             return;
         }
@@ -415,13 +440,17 @@ public class BowEventHandler {
                 }
             }
 
-            // Headhunter detection: check if hit was on the head / topmost area (height ratio >= 0.72)
+            // Headhunter detection: use the actual entry point on the target hitbox, not a null entity ray hitVec.
             if (arrow.getEntityData().hasKey("Divine_Headhunter") && hit instanceof EntityLivingBase) {
                 EntityLivingBase livingTarget = (EntityLivingBase) hit;
-                double hitY = ray.hitVec != null ? ray.hitVec.y : arrow.posY;
+                Vec3d start = new Vec3d(arrow.posX, arrow.posY, arrow.posZ);
+                Vec3d end = start.add(new Vec3d(arrow.motionX, arrow.motionY, arrow.motionZ));
+                RayTraceResult boxHit = livingTarget.getEntityBoundingBox().grow(0.30D).calculateIntercept(start, end);
+                double hitY = boxHit != null && boxHit.hitVec != null ? boxHit.hitVec.y : arrow.posY;
                 double relativeY = hitY - livingTarget.posY;
                 double heightRatio = livingTarget.height > 0 ? (relativeY / livingTarget.height) : 1.0D;
-                if (heightRatio >= 0.72D) {
+                double headThreshold = Math.max(0.62D * livingTarget.height, livingTarget.getEyeHeight() - 0.30D);
+                if (relativeY >= headThreshold || heightRatio >= 0.72D) {
                     arrow.getEntityData().setBoolean("Divine_Headshot", true);
                 }
             }
@@ -734,12 +763,51 @@ public class BowEventHandler {
 
     private static void checkAllyProc(EntityArrow arrow, Entity hit) {
         if (arrow.getEntityData().hasKey("Divine_Ally") && ModEnchantments.ALLY != null && Loader.isModLoaded("lycanitesmobs")) {
-            if (arrow.world.rand.nextFloat() < 0.02F && arrow.shootingEntity instanceof EntityPlayer) {
+            if (arrow.shootingEntity instanceof EntityPlayer && ChanceHelper.roll((EntityPlayer) arrow.shootingEntity, "ally_bow", 0.02F)) {
                 EntityPlayer shooter = (EntityPlayer) arrow.shootingEntity;
                 EntityLivingBase target = hit instanceof EntityLivingBase ? (EntityLivingBase) hit : null;
                 LycanitesIntegration.spawnAegis(shooter, target);
             }
         }
+    }
+
+    private static long playerShotId(EntityPlayer player) {
+        long shotId = player.getEntityData().getLong("DE_LastShotId");
+        if (shotId == 0L) {
+            shotId = player.world.rand.nextLong();
+            player.getEntityData().setLong("DE_LastShotId", shotId);
+        }
+        return shotId;
+    }
+
+    private static ItemStack getProjectileStack(EntityArrow arrow) {
+        try {
+            Method method = null;
+            for (String methodName : new String[]{"getArrowStack", "func_184550_j"}) {
+                Class<?> clazz = arrow.getClass();
+                while (clazz != null && clazz != Object.class && method == null) {
+                    try {
+                        method = clazz.getDeclaredMethod(methodName);
+                    } catch (NoSuchMethodException ignored) {
+                    }
+                    clazz = clazz.getSuperclass();
+                }
+                if (method != null) {
+                    break;
+                }
+            }
+            if (method != null) {
+                method.setAccessible(true);
+                Object result = method.invoke(arrow);
+                if (result instanceof ItemStack) {
+                    ItemStack stack = ((ItemStack) result).copy();
+                    stack.setCount(1);
+                    return stack;
+                }
+            }
+        } catch (Throwable ignored) {
+        }
+        return new ItemStack(Items.ARROW);
     }
 
     private static boolean arrayContains(int[] array, int val) {
@@ -911,6 +979,7 @@ public class BowEventHandler {
             shard.prevRotationPitch = shardPitch;
 
             shard.getEntityData().setBoolean("Divine_IsShrapnelShard", true);
+            shard.getEntityData().setBoolean("Divine_SplinteringTriggered", true);
             world.spawnEntity(shard);
         }
     }
@@ -919,6 +988,7 @@ public class BowEventHandler {
     public static void onWorldUnload(net.minecraftforge.event.world.WorldEvent.Unload event) {
         if (!event.getWorld().isRemote) {
             GLIMMER_ARROWS.removeIf(arrow -> arrow != null && arrow.world == event.getWorld());
+            BALLISTIC_ARROWS.removeIf(arrow -> arrow != null && arrow.world == event.getWorld());
             PENDING_BOW_DATA.clear();
         }
         BullseyeManager.clearAll();
@@ -945,6 +1015,18 @@ public class BowEventHandler {
                         break;
                     }
                 }
+            }
+        }
+
+        if (!BALLISTIC_ARROWS.isEmpty()) {
+            java.util.Iterator<EntityArrow> ballisticIt = BALLISTIC_ARROWS.iterator();
+            while (ballisticIt.hasNext()) {
+                EntityArrow arr = ballisticIt.next();
+                if (arr == null || arr.isDead || arr.world.isRemote || arr.onGround || arr.getEntityData().getBoolean("Divine_InGround")) {
+                    ballisticIt.remove();
+                    continue;
+                }
+                arr.motionY += 0.05D;
             }
         }
 
@@ -988,7 +1070,7 @@ public class BowEventHandler {
                     int maxDuration = bow.getMaxItemUseDuration();
                     int durationUsed = maxDuration - event.getDuration();
                     // Draw time: I: 20 ticks, II: 16 ticks, III: 13 ticks, IV: 10 ticks
-                    int threshold = (machineLevel == 1) ? 20 : (machineLevel == 2 ? 18 : (machineLevel == 3 ? 16 : 14));
+                    int threshold = (machineLevel == 1) ? 20 : (machineLevel == 2 ? 16 : (machineLevel == 3 ? 13 : 10));
                     if (durationUsed >= threshold) {
                         if (!player.world.isRemote) {
                             player.stopActiveHand();

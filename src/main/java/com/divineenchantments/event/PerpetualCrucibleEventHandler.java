@@ -33,6 +33,24 @@ public class PerpetualCrucibleEventHandler {
         if (!CHECKED_POTION) {
             CHECKED_POTION = true;
             EXTENSION_POTION = Potion.REGISTRY.getObject(new ResourceLocation("potioncore", "extension"));
+            if (EXTENSION_POTION == null) {
+                for (Potion potion : Potion.REGISTRY) {
+                    if (potion != null && potion.getRegistryName() != null && "extension".equals(potion.getRegistryName().getPath())) {
+                        EXTENSION_POTION = potion;
+                        break;
+                    }
+                }
+            }
+            if (EXTENSION_POTION == null) {
+                try {
+                    Class<?> clazz = Class.forName("com.tmtravlr.potioncore.potion.PotionExtension");
+                    Object instance = clazz.getField("INSTANCE").get(null);
+                    if (instance instanceof Potion) {
+                        EXTENSION_POTION = (Potion) instance;
+                    }
+                } catch (Throwable ignored) {
+                }
+            }
         }
         return EXTENSION_POTION;
     }

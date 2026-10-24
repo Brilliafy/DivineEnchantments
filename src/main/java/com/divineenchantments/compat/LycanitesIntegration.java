@@ -1,5 +1,6 @@
 package com.divineenchantments.compat;
 
+import com.divineenchantments.config.DivineConfig;
 import com.lycanitesmobs.core.entity.BaseCreatureEntity;
 import com.lycanitesmobs.core.entity.creature.EntityAegis;
 import com.lycanitesmobs.core.info.ElementInfo;
@@ -8,6 +9,7 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.potion.Potion;
+import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundCategory;
@@ -21,6 +23,9 @@ public class LycanitesIntegration {
 
     private static Potion APHAGIA_POTION = null;
     private static boolean CHECKED_APHAGIA = false;
+
+    private static Potion PARALYSIS_POTION = null;
+    private static boolean CHECKED_PARALYSIS = false;
 
     public static Potion getDecayPotion() {
         if (!CHECKED_DECAY) {
@@ -36,6 +41,32 @@ public class LycanitesIntegration {
             APHAGIA_POTION = Potion.REGISTRY.getObject(new ResourceLocation("lycanitesmobs", "aphagia"));
         }
         return APHAGIA_POTION;
+    }
+
+    public static Potion getParalysisPotion() {
+        if (!CHECKED_PARALYSIS) {
+            CHECKED_PARALYSIS = true;
+            PARALYSIS_POTION = Potion.REGISTRY.getObject(new ResourceLocation("lycanitesmobs", "paralysis"));
+            if (PARALYSIS_POTION == null) {
+                for (Potion potion : Potion.REGISTRY) {
+                    if (potion != null && potion.getRegistryName() != null && "paralysis".equals(potion.getRegistryName().getPath())) {
+                        PARALYSIS_POTION = potion;
+                        break;
+                    }
+                }
+            }
+        }
+        return PARALYSIS_POTION;
+    }
+
+    public static void applyParalysis(EntityLivingBase target, int durationTicks) {
+        if (target == null || target.world.isRemote || durationTicks <= 0) {
+            return;
+        }
+        Potion paralysis = getParalysisPotion();
+        if (paralysis != null) {
+            target.addPotionEffect(new PotionEffect(paralysis, durationTicks, 0, false, true));
+        }
     }
 
     /**
@@ -100,6 +131,12 @@ public class LycanitesIntegration {
         World world = player.world;
 
         try {
+            int currentAegis = world.getEntities(EntityAegis.class,
+                    aegis -> aegis != null && aegis.isEntityAlive() && aegis.getPlayerOwner() == player).size();
+            if (DivineConfig.allyMaxAegisPerPlayer <= 0 || currentAegis >= DivineConfig.allyMaxAegisPerPlayer) {
+                return;
+            }
+
             EntityAegis aegis = new EntityAegis(world);
 
             // Spawn near player

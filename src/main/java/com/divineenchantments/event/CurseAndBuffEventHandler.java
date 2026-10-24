@@ -4,6 +4,7 @@ import com.divineenchantments.config.DivineConfig;
 import com.divineenchantments.compat.SimpleDifficultyCompat;
 import com.divineenchantments.compat.TANCompat;
 import com.divineenchantments.init.ModEnchantments;
+import com.divineenchantments.util.ChanceHelper;
 import net.minecraft.block.Block;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.Entity;
@@ -23,6 +24,7 @@ import net.minecraft.item.ItemFood;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.play.server.SPacketEntityVelocity;
+import net.minecraft.network.play.server.SPacketSetSlot;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.DamageSource;
@@ -183,17 +185,7 @@ public class CurseAndBuffEventHandler {
                         || (blockDown.getRegistryName() != null && blockDown.getRegistryName().getPath().contains("mud"));
 
                 if (inWeb) {
-                    if (mudLevel == 1) {
-                        player.motionX *= 1.6D;
-                        player.motionZ *= 1.6D;
-                    } else if (mudLevel == 2) {
-                        player.motionX *= 2.5D;
-                        player.motionZ *= 2.5D;
-                    } else {
-                        player.motionX *= 4.0D;
-                        player.motionZ *= 4.0D;
-                        setIsInWeb(player, false);
-                    }
+                    setIsInWeb(player, false);
                 }
 
                 if (onSoulSand || onMud || (inWater && !player.isSneaking())) {
@@ -217,7 +209,7 @@ public class CurseAndBuffEventHandler {
                 }
             }
 
-            // Braced Pivot: Reduces shield stun cooldown by 20 ticks (1s)
+            // Braced Pivot: cuts the base 100-tick shield disable cooldown by the configured percentage (60% by default)
             ItemStack shield = player.getHeldItemOffhand();
             if (!com.divineenchantments.util.ItemCheckHelper.isShield(shield)) {
                 shield = player.getHeldItemMainhand();
@@ -227,7 +219,8 @@ public class CurseAndBuffEventHandler {
                 if (player.getCooldownTracker().hasCooldown(shield.getItem())) {
                     if (!player.getEntityData().getBoolean("DE_BracedPivotAdjusted")) {
                         player.getEntityData().setBoolean("DE_BracedPivotAdjusted", true);
-                        player.getCooldownTracker().setCooldown(shield.getItem(), 80);
+                        int reducedCooldown = Math.max(1, (int) Math.round(100.0D * (1.0D - DivineConfig.bracedPivotCooldownReduction)));
+                        player.getCooldownTracker().setCooldown(shield.getItem(), reducedCooldown);
                     }
                 } else {
                     player.getEntityData().removeTag("DE_BracedPivotAdjusted");
@@ -545,6 +538,7 @@ public class CurseAndBuffEventHandler {
                     if (player.openContainer != null && player.openContainer != player.inventoryContainer) {
                         player.openContainer.detectAndSendChanges();
                     }
+                    syncSlot(player, 6, player.getItemStackFromSlot(EntityEquipmentSlot.CHEST));
                 }
             }
         }
@@ -580,6 +574,7 @@ public class CurseAndBuffEventHandler {
                 player.setItemStackToSlot(EntityEquipmentSlot.CHEST, stack.copy());
                 event.setCanceled(true);
                 player.inventoryContainer.detectAndSendChanges();
+                syncSlot(player, 6, player.getItemStackFromSlot(EntityEquipmentSlot.CHEST));
                 return;
             }
         }
@@ -595,6 +590,14 @@ public class CurseAndBuffEventHandler {
             }
             player.world.playSound(null, player.posX, player.posY, player.posZ, SoundEvents.BLOCK_ANVIL_USE, SoundCategory.PLAYERS, 0.5F, 1.8F);
             player.inventoryContainer.detectAndSendChanges();
+            syncSlot(player, 36 + player.inventory.currentItem, player.getHeldItemMainhand());
+            syncSlot(player, 45, player.getHeldItemOffhand());
+        }
+    }
+
+    private static void syncSlot(EntityPlayer player, int slot, ItemStack stack) {
+        if (player instanceof EntityPlayerMP) {
+            ((EntityPlayerMP) player).connection.sendPacket(new SPacketSetSlot(0, slot, stack));
         }
     }
 
@@ -608,6 +611,31 @@ public class CurseAndBuffEventHandler {
         }
 
         EntityPlayer player = event.player;
+
+        // Mudstrider END-tick correction: undo soul sand and cobweb motion damping
+        ItemStack mudBoots = player.getItemStackFromSlot(EntityEquipmentSlot.FEET);
+        if (!player.world.isRemote && !mudBoots.isEmpty() && ModEnchantments.getLevel(ModEnchantments.MUDSTRIDER, mudBoots) > 0) {
+            BlockPos mudPos = new BlockPos(player.posX, player.posY, player.posZ);
+            Block mudHere = player.world.getBlockState(mudPos).getBlock();
+            Block mudDown = player.world.getBlockState(mudPos.down()).getBlock();
+            boolean onSoul = mudHere == Blocks.SOUL_SAND || mudDown == Blocks.SOUL_SAND;
+            boolean inWeb = getIsInWeb(player) || mudHere == Blocks.WEB;
+            if (onSoul || inWeb) {
+                player.motionX *= 2.5D;
+                player.motionZ *= 2.5D;
+                double horizontal = Math.sqrt(player.motionX * player.motionX + player.motionZ * player.motionZ);
+                if (horizontal > 0.50D) {
+                    double scale = 0.50D / horizontal;
+                    player.motionX *= scale;
+                    player.motionZ *= scale;
+                }
+                setIsInWeb(player, false);
+                player.velocityChanged = true;
+                if (player instanceof EntityPlayerMP) {
+                    ((EntityPlayerMP) player).connection.sendPacket(new SPacketEntityVelocity(player));
+                }
+            }
+        }
 
         // Debt of the Void continuous protection for all equipment slots
         if (!player.world.isRemote) {
@@ -651,8 +679,21 @@ public class CurseAndBuffEventHandler {
                     player.posX + 1.25D, player.posY + 1.6D, player.posZ + 1.25D);
             List<net.minecraft.entity.item.EntityItem> nearbyItems = player.world.getEntitiesWithinAABB(net.minecraft.entity.item.EntityItem.class, sweepBox);
             for (net.minecraft.entity.item.EntityItem groundItem : nearbyItems) {
-                if (groundItem != null && !groundItem.isDead && !groundItem.cannotPickup()) {
-                    groundItem.onCollideWithPlayer(player);
+                if (groundItem == null || groundItem.isDead || groundItem.cannotPickup()) {
+                    continue;
+                }
+                groundItem.onCollideWithPlayer(player);
+                if (!groundItem.isDead && groundItem.getAge() > 10 && !groundItem.getItem().isEmpty()) {
+                    ItemStack stack = groundItem.getItem().copy();
+                    if (player.inventory.addItemStackToInventory(stack)) {
+                        groundItem.setItem(ItemStack.EMPTY);
+                        groundItem.setDead();
+                        player.world.playSound(null, player.posX, player.posY, player.posZ,
+                                SoundEvents.ENTITY_ITEM_PICKUP, SoundCategory.PLAYERS, 0.2F,
+                                ((player.world.rand.nextFloat() - player.world.rand.nextFloat()) * 0.7F + 1.0F) * 2.0F);
+                    } else if (stack.getCount() != groundItem.getItem().getCount()) {
+                        groundItem.setItem(stack);
+                    }
                 }
             }
         }
@@ -790,6 +831,11 @@ public class CurseAndBuffEventHandler {
             net.minecraft.util.math.BlockPos feetPos = new net.minecraft.util.math.BlockPos(player.posX, player.posY - 0.2D, player.posZ);
             boolean solidBelow = player.world.getBlockState(feetPos).getMaterial().isSolid() || player.world.getBlockState(player.getPosition().down()).getMaterial().isSolid();
             if (player.onGround && solidBelow) {
+                // Potion Core Weight makes Lycanites Roa/whirlpool effects skip the player.
+                Potion weight = Potion.REGISTRY.getObject(new ResourceLocation("potioncore", "weight"));
+                if (weight != null) {
+                    player.addPotionEffect(new PotionEffect(weight, 20, 2, false, false));
+                }
                 boolean suctionNearby = false;
                 net.minecraft.util.math.AxisAlignedBB checkArea = player.getEntityBoundingBox().grow(16.0D, 8.0D, 16.0D);
                 List<Entity> nearbyEntities = player.world.getEntitiesWithinAABB(Entity.class, checkArea);
@@ -799,8 +845,10 @@ public class CurseAndBuffEventHandler {
                         net.minecraft.util.ResourceLocation reg = net.minecraft.entity.EntityList.getKey(e);
                         String regName = (reg != null) ? reg.toString().toLowerCase() : "";
                         if (name.contains("djinn") || name.contains("whirlpool") || name.contains("siren")
-                                || name.contains("vortex") || regName.contains("djinn") || regName.contains("siren")
-                                || regName.contains("whirlpool") || regName.contains("vortex")) {
+                                || name.contains("vortex") || name.contains("roa") || name.contains("lochness")
+                                || name.contains("sharknado") || regName.contains("djinn") || regName.contains("siren")
+                                || regName.contains("whirlpool") || regName.contains("vortex")
+                                || regName.contains("roa") || regName.contains("lochness") || regName.contains("sharknado")) {
                             suctionNearby = true;
                             break;
                         }

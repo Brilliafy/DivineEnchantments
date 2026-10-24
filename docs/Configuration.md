@@ -50,10 +50,10 @@ These live under the `balance` category.
 
 | Key | Default | Description |
 | :-- | :-- | :-- |
-| `carnagePenaltyPerLevel` | `0.10` | Attack speed penalty per level. |
-| `carnageBonusLevel1` | `0.05` | Multiplicative attack speed per stack at level I. |
-| `carnageBonusLevel2` | `0.0572` | Multiplicative attack speed per stack at level II. |
-| `carnageBonusLevel3` | `0.0715` | Multiplicative attack speed per stack at level III (about 2.2x at 21 stacks after the 30% penalty). |
+| `carnagePenaltyPerLevel` | `0.0` | Attack speed penalty per level. The default is no penalty. |
+| `carnageBonusLevel1` | `0.0667` | Additive attack speed per stack at level I. |
+| `carnageBonusLevel2` | `0.0667` | Additive attack speed per stack at level II. |
+| `carnageBonusLevel3` | `0.0667` | Additive attack speed per stack at level III (`+1.4` at 21 stacks, matching Swifter Slashes VII). |
 | `carnageMaxStacksPerLevel` | `7` | Maximum stacks per level (7 = 7/14/21). |
 | `carnageDecayTicks` | `100` | Ticks without a hit before stacks decay. |
 | `carnageDecayStacks` | `5` | Stacks lost per decay interval. |
@@ -88,6 +88,7 @@ These live under the `balance` category.
 | Key | Default | Description |
 | :-- | :-- | :-- |
 | `dulledImpactReductionPerLevel` | `0.10` | Outgoing damage reduction per level. |
+| `dulledImpactDurationTicks` | `100` | Dulled Impact duration in ticks (100 = 5 seconds). |
 | `punctureArmorBypass` | `0.10` | Fraction of natural armor bypassed. |
 
 ### Bullseye
@@ -97,6 +98,20 @@ These live under the `balance` category.
 | `bullseyeDamagePerLevel` | `0.20` | Bonus damage per level. |
 | `bullseyeDurationTicks` | `60` | Marker lifetime in ticks. |
 | `bullseyeHitRadius` | `0.30` | Bullseye hit radius in blocks. |
+
+### Braced Pivot / Volatile Discharge
+
+| Key | Default | Description |
+| :-- | :-- | :-- |
+| `bracedPivotCooldownReduction` | `0.60` | Fraction of the base 100-tick shield cooldown removed. |
+| `volatileDischargeExplosionPower` | `5.0` | Explosion power when Volatile Discharge reaches 100%. |
+
+### Stagger / Low Sweep
+
+| Key | Default | Description |
+| :-- | :-- | :-- |
+| `staggerParalysisTicks` | `60` | Lycanites Paralysis duration from Stagger (3 seconds). |
+| `lowSweepParalysisTicks` | `30` | Lycanites Paralysis duration from Low Sweep (1.5 seconds). |
 
 ### Hunter
 
@@ -114,6 +129,7 @@ These live under the `balance` category.
 
 | Key | Default | Description |
 | :-- | :-- | :-- |
+| `gamblersGambitChance` | `0.25` | Chance per hit to apply a negative effect. |
 | `gamblersGambitBlacklist` | empty | Potion registry names or paths to exclude. Example: `potioncore:flight`. |
 
 ### Perpetual Crucible
@@ -123,12 +139,25 @@ These live under the `balance` category.
 | `perpetualCrucibleBaseDurationTicks` | `60` | Extension duration at level I in ticks. |
 | `perpetualCrucibleDurationPerLevelTicks` | `30` | Extra Extension duration per level in ticks. |
 
+### Shimmered
+
+| Key | Default | Description |
+| :-- | :-- | :-- |
+| `shimmeredHighlightDurationTicks` | `100` | Ore outline duration in ticks (100 = 5 seconds). |
+| `shimmeredHighlightRadius` | `2` | Radius scanned for identical ore blocks. |
+
 ### Sound stealth
 
 | Key | Default | Description |
 | :-- | :-- | :-- |
 | `dampeningStrikeAggroRadius` | `4.8` | Maximum mob targeting distance while holding a Dampening Strike tool. |
 | `quietChippingAggroRadius` | `4.0` | Maximum mob targeting distance while holding a Quiet Chipping tool. |
+
+### Ally
+
+| Key | Default | Description |
+| :-- | :-- | :-- |
+| `allyMaxAegisPerPlayer` | `4` | Maximum living Aegis per player across all Ally weapons. |
 
 ### Voodoo
 

@@ -51,4 +51,13 @@ public class EnchantmentVoodoo extends DivineEnchantment {
         return false;
     }
 
+    @Override
+    public boolean canApplyTogether(Enchantment other) {
+        if (!super.canApplyTogether(other)) {
+            return false;
+        }
+        return other == null || other.getRegistryName() == null
+                || !"ally".equals(other.getRegistryName().getPath());
+    }
+
 }

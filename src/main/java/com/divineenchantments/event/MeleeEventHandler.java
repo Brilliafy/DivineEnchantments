@@ -4,6 +4,7 @@ import com.divineenchantments.bleed.BleedManager;
 import com.divineenchantments.compat.LycanitesIntegration;
 import com.divineenchantments.config.DivineConfig;
 import com.divineenchantments.init.ModEnchantments;
+import com.divineenchantments.util.ChanceHelper;
 import com.divineenchantments.potion.ModPotions;
 import com.divineenchantments.util.ItemCheckHelper;
 import net.minecraft.enchantment.EnchantmentHelper;
@@ -256,7 +257,7 @@ public class MeleeEventHandler {
                 // Breach: 20*n% chance to apply Potion Core vulnerability for 15s, 15*n% chance for 10x durability damage to armor
                 int breachLevel = ModEnchantments.getLevel(ModEnchantments.BREACH, held);
                 if (breachLevel > 0) {
-                    if (player.world.rand.nextFloat() < (0.20F * breachLevel)) {
+                    if (ChanceHelper.roll(player, "breach_vulnerable_" + target.getEntityId(), 0.20F * breachLevel)) {
                         Potion vuln = getVulnerablePotion();
                         if (vuln != null) {
                             target.addPotionEffect(new PotionEffect(vuln, 300, 0, false, true));
@@ -266,7 +267,7 @@ public class MeleeEventHandler {
                         target.world.playSound(null, target.posX, target.posY, target.posZ, SoundEvents.ENTITY_ITEM_BREAK, SoundCategory.PLAYERS, 0.9F, 1.4F);
                     }
 
-                    if (player.world.rand.nextFloat() < (0.15F * breachLevel)) {
+                    if (ChanceHelper.roll(player, "breach_armor_" + target.getEntityId(), 0.15F * breachLevel)) {
                         boolean damagedAny = false;
                         for (ItemStack armor : target.getArmorInventoryList()) {
                             if (!armor.isEmpty() && armor.isItemStackDamageable()) {
@@ -317,7 +318,7 @@ public class MeleeEventHandler {
                         target.getEntityData().setFloat("DE_VolatileCharge", 0.0F);
                         target.world.playSound(null, target.posX, target.posY, target.posZ, SoundEvents.ENTITY_CREEPER_PRIMED, SoundCategory.HOSTILE, 1.2F, 0.5F);
                         boolean grief = target.world.getGameRules().getBoolean("mobGriefing");
-                        target.world.createExplosion(target, target.posX, target.posY + target.height * 0.5D, target.posZ, 3.0F, grief);
+                        target.world.createExplosion(target, target.posX, target.posY + target.height * 0.5D, target.posZ, (float) DivineConfig.volatileDischargeExplosionPower, grief);
                     } else {
                         target.getEntityData().setFloat("DE_VolatileCharge", charge);
                         if (target.world instanceof WorldServer) {
@@ -338,20 +339,18 @@ public class MeleeEventHandler {
                     }
                 }
 
-                // Headslicer: +15%, +30%, +50% extra damage if airborne and near jump peak/maxima
+                // Headslicer: +15%, +30%, +50% extra damage while airborne
                 int headslicerLvl = ModEnchantments.getLevel(ModEnchantments.HEADSLICER, held);
                 if (headslicerLvl > 0) {
                     if (!player.onGround && !player.isInWater() && !player.isOnLadder() && !player.isRiding()) {
-                        if (Math.abs(player.motionY) <= 0.12D) {
-                            float bonus = (headslicerLvl == 1 ? 0.15F : (headslicerLvl == 2 ? 0.30F : 0.50F));
-                            event.setAmount(event.getAmount() * (1.0F + bonus));
-                            if (player.world instanceof WorldServer) {
-                                WorldServer ws = (WorldServer) player.world;
-                                ws.spawnParticle(EnumParticleTypes.SWEEP_ATTACK, target.posX, target.posY + target.height * 0.7D, target.posZ, 1, 0.0D, 0.0D, 0.0D, 0.0D);
-                                ws.spawnParticle(EnumParticleTypes.CRIT, target.posX, target.posY + target.height * 0.5D, target.posZ, 10, 0.2D, 0.2D, 0.2D, 0.1D);
-                            }
-                            player.world.playSound(null, target.posX, target.posY, target.posZ, SoundEvents.ENTITY_PLAYER_ATTACK_CRIT, SoundCategory.PLAYERS, 1.0F, 1.3F);
+                        float bonus = (headslicerLvl == 1 ? 0.15F : (headslicerLvl == 2 ? 0.30F : 0.50F));
+                        event.setAmount(event.getAmount() * (1.0F + bonus));
+                        if (player.world instanceof WorldServer) {
+                            WorldServer ws = (WorldServer) player.world;
+                            ws.spawnParticle(EnumParticleTypes.SWEEP_ATTACK, target.posX, target.posY + target.height * 0.7D, target.posZ, 1, 0.0D, 0.0D, 0.0D, 0.0D);
+                            ws.spawnParticle(EnumParticleTypes.CRIT, target.posX, target.posY + target.height * 0.5D, target.posZ, 10, 0.2D, 0.2D, 0.2D, 0.1D);
                         }
+                        player.world.playSound(null, target.posX, target.posY, target.posZ, SoundEvents.ENTITY_PLAYER_ATTACK_CRIT, SoundCategory.PLAYERS, 1.0F, 1.3F);
                     }
                 }
 
@@ -373,7 +372,7 @@ public class MeleeEventHandler {
                 if (dulledLvl > 0) {
                     float reduction = (float) (DivineConfig.dulledImpactReductionPerLevel * dulledLvl);
                     target.getEntityData().setFloat("DE_DulledReduction", reduction);
-                    target.getEntityData().setLong("DE_DulledExpiry", target.world.getTotalWorldTime() + 40L);
+                    target.getEntityData().setLong("DE_DulledExpiry", target.world.getTotalWorldTime() + DivineConfig.dulledImpactDurationTicks);
                     if (target.world instanceof WorldServer) {
                         WorldServer ws = (WorldServer) target.world;
                         ws.spawnParticle(EnumParticleTypes.SMOKE_NORMAL, target.posX, target.posY + target.height * 0.5D, target.posZ, 6, 0.2D, 0.2D, 0.2D, 0.02D);
@@ -393,12 +392,19 @@ public class MeleeEventHandler {
                     }
                 }
 
-                // Stagger: Melee hits pause basic mob attack windup by 0.25s (5 ticks). Bosses and champions immune.
+                // Stagger: pauses attack windup and applies Lycanites paralysis (3s, or 1s if the target wears a helmet).
                 int staggerLvl = ModEnchantments.getLevel(ModEnchantments.STAGGER, held);
                 if (staggerLvl > 0 && !ItemCheckHelper.isBossEntity(target)) {
                     boolean isChamp = target.getEntityData().hasKey("champions:championship");
                     if (!isChamp) {
                         target.getEntityData().setLong("DE_StaggerUntil", target.world.getTotalWorldTime() + 10L);
+                        int paralysisTicks = DivineConfig.staggerParalysisTicks;
+                        if (!target.getItemStackFromSlot(net.minecraft.inventory.EntityEquipmentSlot.HEAD).isEmpty()) {
+                            paralysisTicks = Math.max(20, paralysisTicks / 3);
+                        }
+                        if (Loader.isModLoaded("lycanitesmobs")) {
+                            com.divineenchantments.compat.LycanitesIntegration.applyParalysis(target, paralysisTicks);
+                        }
                         target.motionX *= 0.6D;
                         target.motionZ *= 0.6D;
                         if (target.world instanceof WorldServer) {
@@ -438,45 +444,46 @@ public class MeleeEventHandler {
                     }
                 }
 
-                // Low Sweep: Sweeping strikes prioritize ankle-height hitboxes, applying 0.5s stagger to short/crawling mobs, sweep dmg -30%
+                // Low Sweep: custom radial sweep. Full damage to the struck target, 50% splash to nearby enemies.
                 int lowSweepLvl = ModEnchantments.getLevel(ModEnchantments.LOW_SWEEP, held);
-                if (lowSweepLvl > 0 && ItemCheckHelper.isPolearmOrHalberd(held)) {
-                    event.setAmount(event.getAmount() * 0.70F); // Sweep damage reduced by 30%
-
-                    boolean isTargetShort = target.height <= 0.95F || target instanceof net.minecraft.entity.monster.EntitySilverfish
-                            || target instanceof net.minecraft.entity.monster.EntitySpider
-                            || target.getClass().getName().toLowerCase().contains("hound")
-                            || target.getClass().getName().toLowerCase().contains("crawler")
-                            || target.getClass().getName().toLowerCase().contains("chupacabra");
-
-                    if (isTargetShort && !ItemCheckHelper.isBossEntity(target)) {
-                        target.getEntityData().setLong("DE_StaggerUntil", target.world.getTotalWorldTime() + 10L); // 0.5s stagger
-                        target.motionX *= 0.3D;
-                        target.motionZ *= 0.3D;
+                if (lowSweepLvl > 0) {
+                    long now = target.world.getTotalWorldTime();
+                    target.getEntityData().setLong("DE_StaggerUntil", now + 20L);
+                    if (!ItemCheckHelper.isBossEntity(target)) {
+                        boolean targetShort = isShortMob(target);
+                        if (targetShort) {
+                            if (Loader.isModLoaded("lycanitesmobs")) {
+                                com.divineenchantments.compat.LycanitesIntegration.applyParalysis(target, DivineConfig.lowSweepParalysisTicks);
+                            }
+                        }
                     }
 
-                    // Hit surrounding short/ground mobs around target to clear tangled feet
-                    double sweepRadius = 2.0D + (lowSweepLvl * 0.5D);
-                    java.util.List<EntityLivingBase> sweepList = target.world.getEntitiesWithinAABB(EntityLivingBase.class, target.getEntityBoundingBox().grow(sweepRadius, 0.5D, sweepRadius));
+                    double sweepRadius = 2.8D + lowSweepLvl * 0.6D;
+                    java.util.List<EntityLivingBase> sweepList = target.world.getEntitiesWithinAABB(EntityLivingBase.class,
+                            player.getEntityBoundingBox().grow(sweepRadius, 1.0D, sweepRadius));
                     player.getEntityData().setBoolean("DE_Sweeping", true);
                     try {
                         for (EntityLivingBase other : sweepList) {
-                            if (other != target && other != player && !player.isOnSameTeam(other) && other.isEntityAlive()) {
-                                boolean otherShort = other.height <= 0.95F || other instanceof net.minecraft.entity.monster.EntitySilverfish
-                                        || other instanceof net.minecraft.entity.monster.EntitySpider
-                                        || other.getClass().getName().toLowerCase().contains("hound")
-                                        || other.getClass().getName().toLowerCase().contains("crawler")
-                                        || other.getClass().getName().toLowerCase().contains("chupacabra");
-                                if (otherShort && !ItemCheckHelper.isBossEntity(other)) {
-                                    other.getEntityData().setLong("DE_StaggerUntil", other.world.getTotalWorldTime() + 10L);
-                                    double dx = other.posX - player.posX;
-                                    double dz = other.posZ - player.posZ;
-                                    double dLen = Math.sqrt(dx * dx + dz * dz);
-                                    if (dLen > 0.001D) {
-                                        other.knockBack(player, 0.35F * lowSweepLvl, -dx / dLen, -dz / dLen);
-                                    }
-                                    other.attackEntityFrom(net.minecraft.util.DamageSource.causePlayerDamage(player), event.getAmount() * 0.5F);
+                            if (other == player || other == target || !other.isEntityAlive() || player.isOnSameTeam(other)) {
+                                continue;
+                            }
+                            other.getEntityData().setLong("DE_StaggerUntil", now + 20L);
+                            if (!ItemCheckHelper.isBossEntity(other)) {
+                                if (Loader.isModLoaded("lycanitesmobs")) {
+                                    com.divineenchantments.compat.LycanitesIntegration.applyParalysis(other, DivineConfig.lowSweepParalysisTicks);
                                 }
+                            }
+                            double dx = other.posX - player.posX;
+                            double dz = other.posZ - player.posZ;
+                            double dLen = Math.sqrt(dx * dx + dz * dz);
+                            if (dLen > 0.001D) {
+                                other.knockBack(player, 0.30F + 0.08F * lowSweepLvl, -dx / dLen, -dz / dLen);
+                            }
+                            other.attackEntityFrom(net.minecraft.util.DamageSource.causePlayerDamage(player),
+                                    event.getAmount() * (0.35F + 0.10F * lowSweepLvl));
+                            if (other.world instanceof WorldServer) {
+                                ((WorldServer) other.world).spawnParticle(EnumParticleTypes.SWEEP_ATTACK,
+                                        other.posX, other.posY + 0.35D, other.posZ, 1, 0.0D, 0.0D, 0.0D, 0.0D);
                             }
                         }
                     } finally {
@@ -485,16 +492,16 @@ public class MeleeEventHandler {
 
                     if (player.world instanceof WorldServer) {
                         WorldServer ws = (WorldServer) player.world;
-                        ws.spawnParticle(EnumParticleTypes.SWEEP_ATTACK, target.posX, target.posY + 0.15D, target.posZ, 1, 0.0D, 0.0D, 0.0D, 0.0D);
+                        ws.spawnParticle(EnumParticleTypes.SWEEP_ATTACK, target.posX, target.posY + 0.15D, target.posZ, 3, 0.3D, 0.0D, 0.3D, 0.0D);
                         int dirtId = net.minecraft.block.Block.getStateId(net.minecraft.init.Blocks.DIRT.getDefaultState());
-                        ws.spawnParticle(EnumParticleTypes.BLOCK_DUST, target.posX, target.posY + 0.05D, target.posZ, 8, 0.4D, 0.05D, 0.4D, 0.02D, dirtId);
+                        ws.spawnParticle(EnumParticleTypes.BLOCK_DUST, target.posX, target.posY + 0.05D, target.posZ, 10, 0.5D, 0.05D, 0.5D, 0.02D, dirtId);
                     }
                 }
 
                 // Enlargement: 2 * level% chance to inflate the target by 10 * level% for 20 seconds.
                 int enlargementLevel = ModEnchantments.getLevel(ModEnchantments.ENLARGEMENT, held);
                 if (enlargementLevel > 0 && target.isEntityAlive()) {
-                    if (player.world.rand.nextFloat() < (float) DivineConfig.enlargementChancePerLevel * enlargementLevel) {
+                    if (ChanceHelper.roll(player, "enlargement_" + target.getEntityId(), (float) DivineConfig.enlargementChancePerLevel * enlargementLevel)) {
                         int duration = DivineConfig.enlargementDurationTicks;
                         if (ItemCheckHelper.isBossEntity(target) || target.getMaxHealth() > 150.0F) {
                             duration = Math.max(20, duration / 2);
@@ -518,7 +525,7 @@ public class MeleeEventHandler {
                 if (ModEnchantments.ALLY != null && Loader.isModLoaded("lycanitesmobs")) {
                     int allyLevel = ModEnchantments.getLevel(ModEnchantments.ALLY, held);
                     if (allyLevel > 0) {
-                        if (player.world.rand.nextFloat() < 0.02F) {
+                        if (ChanceHelper.roll(player, "ally_hit", 0.02F)) {
                             LycanitesIntegration.spawnAegis(player, target);
                         }
                     }
@@ -530,7 +537,7 @@ public class MeleeEventHandler {
         if (event.getEntityLiving() instanceof EntityPlayer && ModEnchantments.ALLY != null && Loader.isModLoaded("lycanitesmobs")) {
             EntityPlayer victim = (EntityPlayer) event.getEntityLiving();
             int totalAllyLevel = ModEnchantments.getMaxLevel(ModEnchantments.ALLY, victim);
-            if (totalAllyLevel > 0 && victim.world.rand.nextFloat() < 0.02F) {
+            if (totalAllyLevel > 0 && ChanceHelper.roll(victim, "ally_defense", 0.02F)) {
                 EntityLivingBase attacker = null;
                 if (event.getSource().getTrueSource() instanceof EntityLivingBase) {
                     attacker = (EntityLivingBase) event.getSource().getTrueSource();
@@ -538,5 +545,16 @@ public class MeleeEventHandler {
                 LycanitesIntegration.spawnAegis(victim, attacker);
             }
         }
+    }
+
+    private static boolean isShortMob(EntityLivingBase entity) {
+        if (entity == null) {
+            return false;
+        }
+        String name = entity.getClass().getName().toLowerCase();
+        return entity.height <= 0.95F
+                || entity instanceof net.minecraft.entity.monster.EntitySilverfish
+                || entity instanceof net.minecraft.entity.monster.EntitySpider
+                || name.contains("hound") || name.contains("crawler") || name.contains("chupacabra");
     }
 }

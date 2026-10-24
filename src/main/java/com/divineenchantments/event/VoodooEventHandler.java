@@ -3,6 +3,7 @@ package com.divineenchantments.event;
 import com.divineenchantments.config.DivineConfig;
 import com.divineenchantments.entity.EntityVoodooAlly;
 import com.divineenchantments.init.ModEnchantments;
+import com.divineenchantments.util.ChanceHelper;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
@@ -38,7 +39,7 @@ public class VoodooEventHandler {
         EntityPlayer player = (EntityPlayer) event.getSource().getTrueSource();
         ItemStack held = player.getHeldItemMainhand();
         int level = held.isEmpty() ? 0 : ModEnchantments.getLevel(ModEnchantments.VOODOO, held);
-        if (level <= 0 || player.world.rand.nextFloat() >= (float) DivineConfig.voodooChancePerLevel * level) {
+        if (level <= 0 || !ChanceHelper.roll(player, "voodoo", (float) DivineConfig.voodooChancePerLevel * level)) {
             return;
         }
 

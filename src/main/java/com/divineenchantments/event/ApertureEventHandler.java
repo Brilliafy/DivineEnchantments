@@ -23,6 +23,7 @@ import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 
 @Mod.EventBusSubscriber(modid = "divineenchantments")
 public class ApertureEventHandler {
@@ -153,13 +154,23 @@ public class ApertureEventHandler {
             setFieldIfExists(thr, "thrower", player);
         }
 
-        // Generic reflection support for modded projectiles (e.g. Cacodemon balls, Dragon breath orbs)
+        // Generic reflection support for modded projectiles (e.g. Cacodemon balls, Lycanites projectiles)
         setFieldIfExists(proj, "shootingEntity", player);
         setFieldIfExists(proj, "owner", player);
         setFieldIfExists(proj, "caster", player);
+        setFieldIfExists(proj, "thrower", player);
+        setFieldIfExists(proj, "summoner", player);
+        setFieldIfExists(proj, "throwerId", player.getEntityId());
+        setFieldIfExists(proj, "shootingEntityID", player.getEntityId());
+        setFieldIfExists(proj, "shootingEntityRef", player.getEntityId());
         setFieldIfExists(proj, "target", null);
+        setFieldIfExists(proj, "targetId", -1);
         setFieldIfExists(proj, "attackTarget", null);
         setFieldIfExists(proj, "homingTarget", null);
+        invokeMethodIfExists(proj, "setThrower", player);
+        invokeMethodIfExists(proj, "setTarget", (Object) null);
+        invokeMethodIfExists(proj, "syncThrower");
+        invokeMethodIfExists(proj, "syncShootingEntity");
 
         // Sound and visual feedback
         player.world.playSound(null, eyeX, eyeY, eyeZ, SoundEvents.ITEM_SHIELD_BLOCK, SoundCategory.PLAYERS, 1.2F, 1.8F);
@@ -173,6 +184,34 @@ public class ApertureEventHandler {
 
         // Shield durability
         shield.damageItem(1, player);
+    }
+
+    private static void invokeMethodIfExists(Object obj, String methodName, Object... args) {
+        try {
+            for (Method method : obj.getClass().getMethods()) {
+                if (!method.getName().equals(methodName) || method.getParameterCount() != args.length) {
+                    continue;
+                }
+                method.setAccessible(true);
+                method.invoke(obj, args);
+                return;
+            }
+        } catch (Throwable ignored) {
+        }
+        Class<?> clz = obj.getClass().getSuperclass();
+        while (clz != null && clz != Object.class) {
+            try {
+                for (Method method : clz.getDeclaredMethods()) {
+                    if (method.getName().equals(methodName) && method.getParameterCount() == args.length) {
+                        method.setAccessible(true);
+                        method.invoke(obj, args);
+                        return;
+                    }
+                }
+            } catch (Throwable ignored) {
+            }
+            clz = clz.getSuperclass();
+        }
     }
 
     private static void setFieldIfExists(Object obj, String fieldName, Object value) {

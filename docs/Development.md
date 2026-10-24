@@ -15,7 +15,7 @@
 The reobfuscated mod jar is written to:
 
 ```text
-build/libs/DivineEnchantments-1.12.2-1.0.4.jar
+build/libs/DivineEnchantments-1.12.2-1.0.5.jar
 ```
 
 ## Local server test
