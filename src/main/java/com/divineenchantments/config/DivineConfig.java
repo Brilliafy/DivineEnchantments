@@ -2,9 +2,11 @@ package com.divineenchantments.config;
 
 import com.divineenchantments.DivineEnchantments;
 import com.divineenchantments.init.ModEnchantments;
+import io.netty.buffer.ByteBuf;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.config.Configuration;
+import net.minecraftforge.fml.common.network.ByteBufUtils;
 
 import java.io.File;
 import java.util.HashMap;
@@ -21,37 +23,55 @@ public final class DivineConfig {
 
     // Rune: Carnage
     public static double carnagePenaltyPerLevel = 0.10D;
-    public static double carnageBonusLevel1 = 0.02D;
-    public static double carnageBonusLevel2 = 0.03D;
-    public static double carnageBonusLevel3 = 0.05D;
+    public static double carnageBonusLevel1 = 0.05D;
+    public static double carnageBonusLevel2 = 0.0572D;
+    public static double carnageBonusLevel3 = 0.0715D;
     public static int carnageMaxStacksPerLevel = 7;
     public static int carnageDecayTicks = 100;
     public static int carnageDecayStacks = 5;
-    public static double carnageVulnerabilityPerLevel = 0.01D;
 
     // Enlargement
     public static double enlargementChancePerLevel = 0.02D;
     public static double enlargementSizePerLevel = 0.10D;
+    public static double enlargementMaxSizeMultiplier = 1.30D;
     public static int enlargementDurationTicks = 400;
 
     // Sound stealth
     public static double dampeningStrikeAggroRadius = 4.8D;
     public static double quietChippingAggroRadius = 4.0D;
 
+    // Puncture
+    public static double punctureArmorBypass = 0.10D;
+
+    // Dulled Impact
+    public static double dulledImpactReductionPerLevel = 0.10D;
+
+    // Apex
+    public static double apexMaxBonus = 0.25D;
+
     // Perpetual Crucible
     public static int perpetualCrucibleBaseDurationTicks = 60;
-    public static int perpetualCrucibleDurationPerLevelTicks = 40;
+    public static int perpetualCrucibleDurationPerLevelTicks = 30;
 
     // Feathered Draw
-    public static double featheredDrawSpeedLevel1 = 1.5D;
-    public static double featheredDrawSpeedLevel2 = 2.5D;
-    public static double featheredDrawSpeedLevel3 = 3.5D;
-    public static double featheredDrawSpeedLevel4 = 4.0D;
+    public static double featheredDrawSpeedLevel1 = 0.8D;
+    public static double featheredDrawSpeedLevel2 = 1.6D;
+    public static double featheredDrawSpeedLevel3 = 2.4D;
+    public static double featheredDrawSpeedLevel4 = 3.2D;
 
     // Bullseye
     public static double bullseyeDamagePerLevel = 0.20D;
     public static int bullseyeDurationTicks = 60;
     public static double bullseyeHitRadius = 0.30D;
+
+    // Gambler's Gambit
+    public static String[] gamblersGambitBlacklist = new String[0];
+
+    // Splintering Impact
+    public static double splinteringDamageMultiplier = 0.50D;
+
+    // Autofire
+    public static double autofireDamageMultiplier = 0.60D;
 
     // Hunter
     public static int hunterDurationPerLevelTicks = 400;
@@ -62,7 +82,7 @@ public final class DivineConfig {
     public static double voodooSpeedMultiplier = 1.35D;
     public static double voodooBaseDamage = 3.0D;
     public static double voodooDamagePerLevel = 1.0D;
-    public static int voodooMaxAlliesPerPlayer = 8;
+    public static int voodooMaxAlliesPerPlayer = 6;
 
     // Ancient: Kratos Blades
     public static int kratosDurabilityCost = 1;
@@ -115,25 +135,25 @@ public final class DivineConfig {
 
             carnagePenaltyPerLevel = config.getFloat("carnagePenaltyPerLevel", "balance", 0.10F, 0.0F, 1.0F,
                     "Rune: Carnage attack speed penalty per enchantment level (0.10 = 10%).");
-            carnageBonusLevel1 = config.getFloat("carnageBonusLevel1", "balance", 0.02F, 0.0F, 10.0F,
-                    "Rune: Carnage attack speed gained per stack at level I (0.02 = 2%).");
-            carnageBonusLevel2 = config.getFloat("carnageBonusLevel2", "balance", 0.03F, 0.0F, 10.0F,
-                    "Rune: Carnage attack speed gained per stack at level II.");
-            carnageBonusLevel3 = config.getFloat("carnageBonusLevel3", "balance", 0.05F, 0.0F, 10.0F,
-                    "Rune: Carnage attack speed gained per stack at level III.");
+            carnageBonusLevel1 = config.getFloat("carnageBonusLevel1", "balance", 0.05F, 0.0F, 10.0F,
+                    "Rune: Carnage attack speed gained per stack at level I (0.05 = 5%, multiplicative).");
+            carnageBonusLevel2 = config.getFloat("carnageBonusLevel2", "balance", 0.0572F, 0.0F, 10.0F,
+                    "Rune: Carnage attack speed gained per stack at level II (multiplicative).");
+            carnageBonusLevel3 = config.getFloat("carnageBonusLevel3", "balance", 0.0715F, 0.0F, 10.0F,
+                    "Rune: Carnage attack speed gained per stack at level III (about 2.2x baseline at 21 stacks after the 30% penalty).");
             carnageMaxStacksPerLevel = config.getInt("carnageMaxStacksPerLevel", "balance", 7, 0, 100,
                     "Maximum Rune: Carnage stacks per enchantment level (7 means 7/14/21).");
             carnageDecayTicks = config.getInt("carnageDecayTicks", "balance", 100, 1, 72000,
                     "Ticks without a hit before Rune: Carnage stacks decay.");
             carnageDecayStacks = config.getInt("carnageDecayStacks", "balance", 5, 0, 100,
                     "Stacks lost each decay interval.");
-            carnageVulnerabilityPerLevel = config.getFloat("carnageVulnerabilityPerLevel", "balance", 0.01F, 0.0F, 1.0F,
-                    "Fraction of enemy invulnerability frames removed per level (0.01 = 1%).");
 
             enlargementChancePerLevel = config.getFloat("enlargementChancePerLevel", "balance", 0.02F, 0.0F, 1.0F,
                     "Enlargement proc chance per level (0.02 = 2%).");
             enlargementSizePerLevel = config.getFloat("enlargementSizePerLevel", "balance", 0.10F, 0.0F, 10.0F,
                     "Enlargement size increase per level (0.10 = 10%).");
+            enlargementMaxSizeMultiplier = config.getFloat("enlargementMaxSizeMultiplier", "balance", 1.30F, 1.0F, 10.0F,
+                    "Maximum Enlargement size multiplier (1.30 = 30% larger).");
             enlargementDurationTicks = config.getInt("enlargementDurationTicks", "balance", 400, 1, 72000,
                     "Enlargement effect duration in ticks (400 = 20 seconds).");
 
@@ -142,19 +162,28 @@ public final class DivineConfig {
             quietChippingAggroRadius = config.getFloat("quietChippingAggroRadius", "balance", 4.0F, 0.0F, 64.0F,
                     "Maximum distance at which mobs can target a player holding a Quiet Chipping tool.");
 
+            punctureArmorBypass = config.getFloat("punctureArmorBypass", "balance", 0.10F, 0.0F, 1.0F,
+                    "Puncture natural armor bypass fraction (0.10 = 10%).");
+
+            dulledImpactReductionPerLevel = config.getFloat("dulledImpactReductionPerLevel", "balance", 0.10F, 0.0F, 1.0F,
+                    "Dulled Impact outgoing damage reduction per level (0.10 = 10%).");
+
+            apexMaxBonus = config.getFloat("apexMaxBonus", "balance", 0.25F, 0.0F, 10.0F,
+                    "Maximum Apex high-ground bonus and falling penalty (0.25 = 25%).");
+
             perpetualCrucibleBaseDurationTicks = config.getInt("perpetualCrucibleBaseDurationTicks", "balance", 60, 1, 72000,
                     "Perpetual Crucible Extension duration at level I in ticks (60 = 3 seconds).");
-            perpetualCrucibleDurationPerLevelTicks = config.getInt("perpetualCrucibleDurationPerLevelTicks", "balance", 40, 0, 72000,
-                    "Additional Perpetual Crucible duration per level in ticks (40 = +2 seconds).");
+            perpetualCrucibleDurationPerLevelTicks = config.getInt("perpetualCrucibleDurationPerLevelTicks", "balance", 30, 0, 72000,
+                    "Additional Perpetual Crucible duration per level in ticks (30 = +1.5 seconds).");
 
-            featheredDrawSpeedLevel1 = config.getFloat("featheredDrawSpeedLevel1", "balance", 1.5F, 0.0F, 10.0F,
-                    "Feathered Draw additive movement speed compensation at level I (1.5 = -50% draw slowdown).");
-            featheredDrawSpeedLevel2 = config.getFloat("featheredDrawSpeedLevel2", "balance", 2.5F, 0.0F, 10.0F,
-                    "Feathered Draw additive movement speed compensation at level II (2.5 = -30%).");
-            featheredDrawSpeedLevel3 = config.getFloat("featheredDrawSpeedLevel3", "balance", 3.5F, 0.0F, 10.0F,
-                    "Feathered Draw additive movement speed compensation at level III (3.5 = -10%).");
-            featheredDrawSpeedLevel4 = config.getFloat("featheredDrawSpeedLevel4", "balance", 4.0F, 0.0F, 10.0F,
-                    "Feathered Draw additive movement speed compensation at level IV (4.0 = no draw slowdown).");
+            featheredDrawSpeedLevel1 = config.getFloat("featheredDrawSpeedLevel1", "balance", 0.8F, 0.0F, 10.0F,
+                    "Feathered Draw movement compensation at level I: removes 20% of the draw slowdown (-64% remaining).");
+            featheredDrawSpeedLevel2 = config.getFloat("featheredDrawSpeedLevel2", "balance", 1.6F, 0.0F, 10.0F,
+                    "Feathered Draw movement compensation at level II: removes 40% of the draw slowdown (-48% remaining).");
+            featheredDrawSpeedLevel3 = config.getFloat("featheredDrawSpeedLevel3", "balance", 2.4F, 0.0F, 10.0F,
+                    "Feathered Draw movement compensation at level III: removes 60% of the draw slowdown (-32% remaining).");
+            featheredDrawSpeedLevel4 = config.getFloat("featheredDrawSpeedLevel4", "balance", 3.2F, 0.0F, 10.0F,
+                    "Feathered Draw movement compensation at level IV: removes 80% of the draw slowdown (-16% remaining).");
 
             bullseyeDamagePerLevel = config.getFloat("bullseyeDamagePerLevel", "balance", 0.20F, 0.0F, 10.0F,
                     "Bullseye bonus damage per level (0.20 = 20%).");
@@ -162,6 +191,15 @@ public final class DivineConfig {
                     "Bullseye marker lifetime in ticks (60 = 3 seconds).");
             bullseyeHitRadius = config.getFloat("bullseyeHitRadius", "balance", 0.30F, 0.05F, 5.0F,
                     "Bullseye hit radius in blocks.");
+
+            gamblersGambitBlacklist = config.getStringList("gamblersGambitBlacklist", "balance", new String[0],
+                    "Potion registry names or paths that Gambler's Gambit must never apply. Example: potioncore:flight, potioncore:teleport.");
+
+            splinteringDamageMultiplier = config.getFloat("splinteringDamageMultiplier", "balance", 0.50F, 0.0F, 10.0F,
+                    "Splintering Impact shard damage as a multiple of the original bolt's damage (Power/Advanced Power scales it).");
+
+            autofireDamageMultiplier = config.getFloat("autofireDamageMultiplier", "balance", 0.60F, 0.0F, 10.0F,
+                    "Damage multiplier for Autofire arrows, including the original arrow (0.60 = 60%).");
 
             hunterDurationPerLevelTicks = config.getInt("hunterDurationPerLevelTicks", "balance", 400, 1, 72000,
                     "Hunter glowing duration per level at full draw in ticks (400 = 20 seconds).");
@@ -176,8 +214,8 @@ public final class DivineConfig {
                     "Voodoo ally base attack damage.");
             voodooDamagePerLevel = config.getFloat("voodooDamagePerLevel", "balance", 1.0F, 0.0F, 1000.0F,
                     "Voodoo ally bonus attack damage per level.");
-            voodooMaxAlliesPerPlayer = config.getInt("voodooMaxAlliesPerPlayer", "balance", 8, 0, 100,
-                    "Maximum living Voodoo allies per player (0 disables spawning).");
+            voodooMaxAlliesPerPlayer = Math.min(6, config.getInt("voodooMaxAlliesPerPlayer", "balance", 6, 0, 100,
+                    "Maximum living Voodoo allies per player (capped at 6; 0 disables spawning)."));
 
             kratosDurabilityCost = config.getInt("kratosDurabilityCost", "balance", 1, 0, 100,
                     "Durability consumed by the Kratos chain on hit.");
@@ -198,6 +236,126 @@ public final class DivineConfig {
                 config.save();
             }
         }
+    }
+
+    public static void writeTo(ByteBuf buf) {
+        buf.writeBoolean(enableAllEnchantments);
+        buf.writeBoolean(fixRangeEnchantmentDamage);
+        buf.writeDouble(carnagePenaltyPerLevel);
+        buf.writeDouble(carnageBonusLevel1);
+        buf.writeDouble(carnageBonusLevel2);
+        buf.writeDouble(carnageBonusLevel3);
+        buf.writeInt(carnageMaxStacksPerLevel);
+        buf.writeInt(carnageDecayTicks);
+        buf.writeInt(carnageDecayStacks);
+        buf.writeDouble(enlargementChancePerLevel);
+        buf.writeDouble(enlargementSizePerLevel);
+        buf.writeDouble(enlargementMaxSizeMultiplier);
+        buf.writeInt(enlargementDurationTicks);
+        buf.writeDouble(dampeningStrikeAggroRadius);
+        buf.writeDouble(quietChippingAggroRadius);
+        buf.writeDouble(punctureArmorBypass);
+        buf.writeDouble(dulledImpactReductionPerLevel);
+        buf.writeDouble(apexMaxBonus);
+        buf.writeInt(perpetualCrucibleBaseDurationTicks);
+        buf.writeInt(perpetualCrucibleDurationPerLevelTicks);
+        buf.writeDouble(featheredDrawSpeedLevel1);
+        buf.writeDouble(featheredDrawSpeedLevel2);
+        buf.writeDouble(featheredDrawSpeedLevel3);
+        buf.writeDouble(featheredDrawSpeedLevel4);
+        buf.writeDouble(bullseyeDamagePerLevel);
+        buf.writeInt(bullseyeDurationTicks);
+        buf.writeDouble(bullseyeHitRadius);
+        buf.writeDouble(splinteringDamageMultiplier);
+        buf.writeDouble(autofireDamageMultiplier);
+        buf.writeInt(hunterDurationPerLevelTicks);
+        buf.writeDouble(voodooChancePerLevel);
+        buf.writeDouble(voodooHealthPerLevel);
+        buf.writeDouble(voodooSpeedMultiplier);
+        buf.writeDouble(voodooBaseDamage);
+        buf.writeDouble(voodooDamagePerLevel);
+        buf.writeInt(voodooMaxAlliesPerPlayer);
+        buf.writeInt(kratosDurabilityCost);
+        buf.writeDouble(kratosHookSpeed);
+        buf.writeDouble(kratosPullPower);
+        buf.writeInt(kratosHookLifetimeTicks);
+        buf.writeInt(kratosCooldownTicks);
+
+        buf.writeInt(gamblersGambitBlacklist.length);
+        for (String entry : gamblersGambitBlacklist) {
+            ByteBufUtils.writeUTF8String(buf, entry == null ? "" : entry);
+        }
+
+        buf.writeInt(ENABLED_ENCHANTMENTS.size());
+        for (Map.Entry<String, Boolean> entry : ENABLED_ENCHANTMENTS.entrySet()) {
+            ByteBufUtils.writeUTF8String(buf, entry.getKey());
+            buf.writeBoolean(entry.getValue());
+        }
+    }
+
+    public static void readFrom(ByteBuf buf) {
+        enableAllEnchantments = buf.readBoolean();
+        fixRangeEnchantmentDamage = buf.readBoolean();
+        carnagePenaltyPerLevel = buf.readDouble();
+        carnageBonusLevel1 = buf.readDouble();
+        carnageBonusLevel2 = buf.readDouble();
+        carnageBonusLevel3 = buf.readDouble();
+        carnageMaxStacksPerLevel = buf.readInt();
+        carnageDecayTicks = buf.readInt();
+        carnageDecayStacks = buf.readInt();
+        enlargementChancePerLevel = buf.readDouble();
+        enlargementSizePerLevel = buf.readDouble();
+        enlargementMaxSizeMultiplier = buf.readDouble();
+        enlargementDurationTicks = buf.readInt();
+        dampeningStrikeAggroRadius = buf.readDouble();
+        quietChippingAggroRadius = buf.readDouble();
+        punctureArmorBypass = buf.readDouble();
+        dulledImpactReductionPerLevel = buf.readDouble();
+        apexMaxBonus = buf.readDouble();
+        perpetualCrucibleBaseDurationTicks = buf.readInt();
+        perpetualCrucibleDurationPerLevelTicks = buf.readInt();
+        featheredDrawSpeedLevel1 = buf.readDouble();
+        featheredDrawSpeedLevel2 = buf.readDouble();
+        featheredDrawSpeedLevel3 = buf.readDouble();
+        featheredDrawSpeedLevel4 = buf.readDouble();
+        bullseyeDamagePerLevel = buf.readDouble();
+        bullseyeDurationTicks = buf.readInt();
+        bullseyeHitRadius = buf.readDouble();
+        splinteringDamageMultiplier = buf.readDouble();
+        autofireDamageMultiplier = buf.readDouble();
+        hunterDurationPerLevelTicks = buf.readInt();
+        voodooChancePerLevel = buf.readDouble();
+        voodooHealthPerLevel = buf.readDouble();
+        voodooSpeedMultiplier = buf.readDouble();
+        voodooBaseDamage = buf.readDouble();
+        voodooDamagePerLevel = buf.readDouble();
+        voodooMaxAlliesPerPlayer = buf.readInt();
+        kratosDurabilityCost = buf.readInt();
+        kratosHookSpeed = buf.readDouble();
+        kratosPullPower = buf.readDouble();
+        kratosHookLifetimeTicks = buf.readInt();
+        kratosCooldownTicks = buf.readInt();
+
+        int blacklistSize = buf.readInt();
+        gamblersGambitBlacklist = new String[blacklistSize];
+        for (int i = 0; i < blacklistSize; i++) {
+            gamblersGambitBlacklist[i] = ByteBufUtils.readUTF8String(buf);
+        }
+
+        ENABLED_ENCHANTMENTS.clear();
+        int count = buf.readInt();
+        for (int i = 0; i < count; i++) {
+            String key = ByteBufUtils.readUTF8String(buf);
+            ENABLED_ENCHANTMENTS.put(key, buf.readBoolean());
+        }
+    }
+
+    public static boolean isDisabled(Enchantment enchantment) {
+        if (enchantment == null) {
+            return false;
+        }
+        ResourceLocation name = enchantment.getRegistryName();
+        return name != null && "divineenchantments".equals(name.getNamespace()) && !isEnabled(enchantment);
     }
 
     public static boolean isEnabled(Enchantment enchantment) {

@@ -56,7 +56,7 @@ Every enchantment has **JEI** information and **Enchantment Descriptions** suppo
 **Install**
 
 1. Install Minecraft Forge 1.12.2 or Cleanroom.
-2. Drop `DivineEnchantments-1.12.2-1.0.2.jar` into `mods/`.
+2. Drop `DivineEnchantments-1.12.2-1.0.3.jar` into `mods/`.
 3. Install the same jar on the server for multiplayer.
 4. Launch the game.
 
@@ -71,11 +71,11 @@ Every enchantment has **JEI** information and **Enchantment Descriptions** suppo
 
 | Enchantment | Type | Max | What it does |
 | :-- | :-- | :-- | :-- |
-| **[Rune: Carnage](docs/Enchantments.md#rune-carnage)** | Nunchaku / Saber / Rapier | III | Full-charge hits build attack speed stacks; enemy invulnerability frames shrink. Incompatible with Swifter Slashes. |
-| **[Enlargement](docs/Enchantments.md#enlargement)** | Melee | II | 2% × level chance to grow the target by 10% × level for 20 seconds, including hitbox. |
+| **[Rune: Carnage](docs/Enchantments.md#rune-carnage)** | Nunchaku / Saber / Rapier | III | Full-charge hits build multiplicative attack speed to about 2.2x baseline at III; enemy i-frames end exactly when your weapon recharges. |
+| **[Enlargement](docs/Enchantments.md#enlargement)** | Melee | II | 2% × level chance to grow the target by 10% × level for 20 seconds, capped at 30%; bosses/HP>150 get half duration. |
 | **[Bullseye](docs/Enchantments.md#bullseye)** | Bow | IV | Marks a 3-second bullseye; arrows through it deal +20% × level damage. |
 | **[Hunter](docs/Enchantments.md#hunter)** | Bow | III | Glowing for 20 × level × draw seconds after an arrow hit. |
-| **[Voodoo](docs/Enchantments.md#voodoo)** | Melee | VI | Kills can raise a scaling zombie ally that follows you across dimensions. |
+| **[Voodoo](docs/Enchantments.md#voodoo)** | Melee | VI | Kills can raise a scaling zombie ally that follows you across dimensions; max 6 allies. |
 | **[Ancient: Kratos Blades](docs/Enchantments.md#ancient-kratos-blades)** | Saber | I | Duplicates the blade into the other hand; shared durability and a right-click chain pull. |
 
 </details>
@@ -102,21 +102,21 @@ Every enchantment has **JEI** information and **Enchantment Descriptions** suppo
 | [Chainsaw](docs/Enchantments.md#chainsaw) | Melee | III | Table | Dealing a direct melee hit causes the enemy to bleed for (4 + n)% of weapon damage for 3 + n times (where n is the enchantment level). |
 | [Sacrificial](docs/Enchantments.md#sacrificial) | Melee | I | Table | When held: +10% damage, attack speed, and movement speed; -10% max health and armor. |
 | [Webber](docs/Enchantments.md#webber) | Melee | I | Treasure | Swords instantly break cobwebs on touch with zero delay, and hits have a 0.4% chance to spawn a cobweb on the target. |
-| [Riches](docs/Enchantments.md#riches) | Melee | II | Table · Very rare | Rare kill proc for multiplied XP and loot; Adept boosts chance and XP. Incompatible with Education. |
+| [Riches](docs/Enchantments.md#riches) | Melee | II | Table · Very rare | 0.1% / 0.2% kill proc for 10x loot and boosted XP; Adept increases chance/XP. Incompatible with Education. |
 | [Gambler's Gambit](docs/Enchantments.md#gambler-s-gambit) | Melee | I | Table · Lv 30 · Super rare | Inflicts a random negative potion effect from vanilla, Potion Core, or any installed mod. |
 | [Breach](docs/Enchantments.md#breach) | Melee | IV | Table | Each strike has a (20 * level)% chance to inflict Potion Core Vulnerability on the target for 15 seconds (300 ticks), and a (15 * level)% chance to… |
 | [Demonic Edge](docs/Enchantments.md#demonic-edge) | Melee | V | Table | +2.5 damage per level against any mob that naturally spawns in the Nether, including modded Nether spawns. |
 | [Necrotic Stasis](docs/Enchantments.md#necrotic-stasis) | Melee | II | Table | Melee attacks inflict Decay for 10 seconds (200 ticks). At Level II, also completely purges and strips Regeneration and Absorption potion effects and… |
 | [Volatile Discharge](docs/Enchantments.md#volatile-discharge) | Melee | III | Table | Each strike builds an electric volatile charge of (3 * level)% on the target. Upon reaching 100% charge or higher, the entity violently detonates in… |
 | [Headslicer](docs/Enchantments.md#headslicer) | Melee | III | Table | Airborne hits near jump apex deal +15% / +30% / +50% damage. |
-| [Culling](docs/Enchantments.md#culling) | Melee | I | Table | Deals +15% bonus damage exclusively against weakened targets whose current health is already below 20% of their maximum health. |
-| [Dulled Impact](docs/Enchantments.md#dulled-impact) | Melee | III | Table | Heavy blunt strikes daze the target, reducing their outgoing attack damage by a flat 1 (Level I), 2 (Level II), or 3 (Level III) points (0.5, 1, or… |
-| [Stagger](docs/Enchantments.md#stagger) | Melee | I | Table | Melee strikes briefly pause a basic mob's attack windup animation by 0.25 seconds (5 ticks), interrupting an immediate counter-swing. Bosses and… |
-| [Puncture](docs/Enchantments.md#puncture) | Melee | I | Table | Piercing melee strikes bypass a flat 2 points of natural mob armor (e.g., treating a 10-armor mob as having 8 armor). Flat reduction provides… |
+| [Culling](docs/Enchantments.md#culling) | Melee | I | Table | Deals +25% bonus damage exclusively against targets below 25% of their maximum health. |
+| [Dulled Impact](docs/Enchantments.md#dulled-impact) | Melee | III | Table | Reduces outgoing attack damage by 10% / 20% / 30% for 2 seconds. |
+| [Stagger](docs/Enchantments.md#stagger) | Melee | I | Table | Melee strikes briefly pause a basic mob's attack windup animation by 0.5 seconds (10 ticks), interrupting an immediate counter-swing. Bosses and… |
+| [Puncture](docs/Enchantments.md#puncture) | Melee | I | Table | Bypasses 10% of natural mob armor. |
 | [Low Sweep](docs/Enchantments.md#low-sweep) | Melee | III | Table | Sweeping strikes prioritize ankle-height hitboxes, applying a 0.5-second stagger to ground-crawling or short mobs (Silverfish, small spiders, hounds)… |
-| [Rune: Carnage](docs/Enchantments.md#rune-carnage) | Melee | III | Table · Lv 30 · Super rare | Permanently reduces attack speed by 10 * level%. Every fully charged hit (attack indicator completely full) instead grants +2% / +3% / +5% attack… |
-| [Enlargement](docs/Enchantments.md#enlargement) | Melee | II | Table | Melee hits have a 2 * level% chance to apply the custom Enlargement potion effect for 20 seconds, increasing the target's model size and hitbox by 10… |
-| [Voodoo](docs/Enchantments.md#voodoo) | Melee | VI | Treasure | Kills can raise a scaling zombie ally that follows you across dimensions. |
+| [Rune: Carnage](docs/Enchantments.md#rune-carnage) | Melee | III | Table · Lv 30 · Super rare | Full-charge hits build multiplicative attack speed, reaching about 2.2x baseline at III. Enemy i-frames end exactly when your weapon recharges. |
+| [Enlargement](docs/Enchantments.md#enlargement) | Melee | II | Table | 2%/level chance to grow a target by 10%/level for 20s, capped at 30%. Bosses/HP>150 get half duration. |
+| [Voodoo](docs/Enchantments.md#voodoo) | Melee | VI | Treasure | Kills can raise a scaling zombie ally; max 6 allies per player. |
 | [Ancient: Kratos Blades](docs/Enchantments.md#ancient-kratos-blades) | Melee | I | Treasure | While the original blade is held, the other hand immediately drops whatever it is holding and receives a functional duplicate of the blade.… |
 
 </details>
@@ -128,18 +128,18 @@ Every enchantment has **JEI** information and **Enchantment Descriptions** suppo
 | :-- | :-- | :-- | :-- | :-- |
 | [Gravitational](docs/Enchantments.md#gravitational) | Bow | I | Treasure | When the fired arrow lands (whether on a block or an entity), it pulls all mobs within a 5-block radius 2 blocks towards the landing point with… |
 | [Pierceful](docs/Enchantments.md#pierceful) | Bow | II | Treasure | Arrows pierce 1 / 2 entities before landing. |
-| [Autofire](docs/Enchantments.md#autofire) | Bow | II | Treasure · Super rare | Fires 1 / 2 trailing arrows with matched velocity and draw power. |
+| [Autofire](docs/Enchantments.md#autofire) | Bow | II | Treasure · Super rare | Fires 1 / 2 trailing arrows with matched velocity. Each arrow deals 60% damage. |
 | [Headhunter](docs/Enchantments.md#headhunter) | Bow | I | Treasure | Arrows that hit an enemy's head / topmost hitbox area deal 1.5x critical damage with magic crit particles and audio feedback. |
 | [Slip-Bore](docs/Enchantments.md#slip-bore) | Bow / Crossbow | I | Table · Lv 30 · Very rare | Arrows punch a low-pressure vacuum tunnel (3-block radius) through the air along their flight path. Nearby entities have their velocity yanked inward… |
 | [Muzzle](docs/Enchantments.md#muzzle) | Bow / Crossbow | I | Table · Lv 30 · Super rare | Fired crossbow projectiles afflict targets with Aphagia for 10 seconds (200 ticks), disabling item usage and consumption (eating, potions, active… |
 | [Archery](docs/Enchantments.md#archery) | Bow / Crossbow | III | Table | Bow and crossbow kills grant Trueshot I for 10 seconds. |
 | [Ballistic Overdrive](docs/Enchantments.md#ballistic-overdrive) | Bow / Crossbow | I | Table | Loaded crossbow projectiles completely ignore gravity (noGravity = true), travelling in a laser-straight horizontal vector with infinite… |
-| [Splintering Impact](docs/Enchantments.md#splintering-impact) | Bow / Crossbow | III | Table | Block hits burst into 4 / 9 / 13 radial shrapnel arrows. |
+| [Splintering Impact](docs/Enchantments.md#splintering-impact) | Bow / Crossbow | III | Table | Block hits burst into 4 / 9 / 13 radial shrapnel arrows using the bolt's base damage. |
 | [Longdraw](docs/Enchantments.md#longdraw) | Bow | I | Treasure | Allows bows to be drawn past 100% up to 250% overdraw power (requiring 50 ticks of full hold). Releasing at 250% triggers a concussive muzzle blast… |
 | [Glimmer](docs/Enchantments.md#glimmer) | Bow / Crossbow | I | Table | Fired arrows and bolts leave a shimmering trail of particles and mark struck targets with the Glowing status effect for 5 seconds without inflicting… |
-| [Feathered Draw](docs/Enchantments.md#feathered-draw) | Bow | IV | Table | Draw slowdown: -50% / -30% / -10% / 0% by level. Incompatible with Strafe. |
+| [Feathered Draw](docs/Enchantments.md#feathered-draw) | Bow | IV | Table | Removes 20% / 40% / 60% / 80% of bow draw slowdown (-64% / -48% / -32% / -16% remaining). Incompatible with Strafe. |
 | [Scavenger's Habit](docs/Enchantments.md#scavenger-s-habit) | Bow / Thrown | IV | Table | Killing an enemy with an arrow or thrown weapon has a (25 * level)% chance (up to 100% at Level IV) to refund the projectile directly into the… |
-| [Machine Bow](docs/Enchantments.md#machine-bow) | Bow | IV | Table | Reaching 100% draw power fires the arrow automatically and immediately resets draw for continuous rapid-fire bursts. Higher levels increase draw… |
+| [Machine Bow](docs/Enchantments.md#machine-bow) | Bow | IV | Table | Auto-fires at full draw; draw times 20 / 18 / 16 / 14 ticks at levels I-IV. |
 | [Bullseye](docs/Enchantments.md#bullseye) | Bow | IV | Table | Hitting an enemy with an arrow marks a small bullseye on them for 3 seconds. Arrows whose flight path passes through the bullseye deal an additional… |
 | [Hunter](docs/Enchantments.md#hunter) | Bow | III | Table | Arrows apply Glowing to the struck enemy for 20 * level * draw seconds, where draw is the bow's charge at release (0.0 to 1.0). A fully drawn Level… |
 
@@ -150,12 +150,12 @@ Every enchantment has **JEI** information and **Enchantment Descriptions** suppo
 
 | Enchantment | Type | Max | Source | Effect |
 | :-- | :-- | :-- | :-- | :-- |
-| [Heavyplated](docs/Enchantments.md#heavyplated) | Armor | I | Table | +5% armor and -5% movement speed per piece. |
+| [Heavyplated](docs/Enchantments.md#heavyplated) | Armor | I | Table | +8% armor and -3% movement speed per piece. |
 | [Slowsink](docs/Enchantments.md#slowsink) | Boots | III | Table | Grants feather-like slow falling when submerged in water, preventing rapid drowning or falling into oceanic hazards. Descent becomes progressively… |
-| [Apex](docs/Enchantments.md#apex) | Helmet | I | Treasure | +2% damage per block above the target; +2% damage taken per block below. |
+| [Apex](docs/Enchantments.md#apex) | Helmet | I | Treasure | +2% damage per block above the target, capped at +25%; +2% taken per block below, capped at 25%. |
 | [Aperture](docs/Enchantments.md#aperture) | Shield | I | Treasure | Captures incoming enemy projectiles (Skeleton arrows, Ice and Fire dragon breath orbs, Lycanites Cacodemon balls, Ghast fireballs, etc.) upon contact… |
-| [Gyroscopic Plating](docs/Enchantments.md#gyroscopic-plating) | Chestplate | I | Treasure | Camera stability, immunity to spin/inversion/tilt effects, and fall-momentum slingshot. |
-| [Perpetual Crucible](docs/Enchantments.md#perpetual-crucible) | Chestplate | III | Treasure | Crits and kills grant Extension I/II/III for 3/5/7 seconds. |
+| [Gyroscopic Plating](docs/Enchantments.md#gyroscopic-plating) | Chestplate | I | Treasure | While sneaking: camera immunity to spin/inversion/tilt (effects remain). Fall-momentum slingshot. |
+| [Perpetual Crucible](docs/Enchantments.md#perpetual-crucible) | Chestplate | III | Treasure | Crits and kills grant Extension I/II/III for 3/4.5/6 seconds. |
 | [Grounded Vanguard](docs/Enchantments.md#grounded-vanguard) | Boots | I | Table · Lv 28 · Very rare | Whenever you sneak, the boots immediately grant Solid Core (cancels knockback) and Weight III (heavy downward gravity vector), preventing any entity… |
 | [Arachnid Ascent](docs/Enchantments.md#arachnid-ascent) | Leggings | I | Treasure | Wearing the leggings grants the Climbing status effect, allowing the player to walk directly up vertical walls and cliffs like a spider.… |
 | [Umbral Prowess](docs/Enchantments.md#umbral-prowess) | Helmet | I | Treasure | In deep darkness (light level 4 or below), grants the wearer innate Night Vision, +20% movement speed, and +20% physical melee damage with abyssal… |
@@ -180,7 +180,7 @@ Every enchantment has **JEI** information and **Enchantment Descriptions** suppo
 
 | Enchantment | Type | Max | Source | Effect |
 | :-- | :-- | :-- | :-- | :-- |
-| [Harmonic Anchor](docs/Enchantments.md#harmonic-anchor) | Fishing Rod | I | Treasure | Hooks anchor a mob in place for 8 seconds. |
+| [Harmonic Anchor](docs/Enchantments.md#harmonic-anchor) | Fishing Rod | I | Treasure | Anchors a mob for 8 seconds; bosses, boss-bar mobs, and HP>150 are immune. |
 | [Sober Chisel](docs/Enchantments.md#sober-chisel) | Pickaxe | I | Table | Carefully chisels ores to reduce the chance of triggering aggressive ore-spawn entities (like Lycanites Mobs Geonachs from coal/iron or Tremors from… |
 | [Shimmered](docs/Enchantments.md#shimmered) | Pickaxe | I | Table | Breaking an ore block highlights directly adjacent identical ore blocks within a 2-block radius with a brief 1-second particle shimmer, pinpointing… |
 | [Silt Sifter](docs/Enchantments.md#silt-sifter) | Shovel | I | Table | Digging natural gravel, clay, sand, or dirt has a 5% chance to sift out minor foraging bits (flint, stray string, clay balls, or iron nuggets). |
@@ -249,6 +249,8 @@ Every enchantment has **JEI** information and **Enchantment Descriptions** suppo
 - Damage, durability, AI, inventory changes, attribute modifiers, and projectile hits are handled on the **server**.
 - Bullseye markers, Enlargement scaling, and Rune: Carnage stack/attack-speed state use dedicated sync packets.
 - Mobs, allies, chains, team colors, custom names, and visual effects use vanilla entity/scoreboard synchronization where possible.
+- The server sends its config to clients on login and respawn; the server is authoritative.
+- Disabled enchantments are stripped from existing items, containers, drops, item frames, and villager offers. Empty enchanted books become vanilla books.
 - Install the **same jar on both client and server**. A vanilla client cannot see the custom enchantments.
 
 </details>
@@ -268,9 +270,11 @@ config/divineenchantments.cfg
 
 - `enableAllEnchantments` is a master switch.
 - Every enchantment has its own enable/disable toggle.
-- Balance values cover Rune: Carnage, Enlargement, Bullseye, Hunter, Voodoo, Kratos Blades, Feathered Draw, Perpetual Crucible, and sound-stealth radii.
+- Balance values cover Rune: Carnage, Enlargement, Bullseye, Hunter, Voodoo, Kratos Blades, Feathered Draw, Perpetual Crucible, Autofire, Splintering Impact, Apex, Dulled Impact, Puncture, and sound-stealth radii.
 - Compatibility fixes include Better Survival Range damage correction.
 - Disabled enchantments cannot be applied and their effects stop working.
+- Existing disabled enchantments are stripped from items; empty enchanted books become vanilla books.
+- The server is authoritative and syncs its config to clients on login and respawn.
 - Changes require a game restart.
 
 [Read the full configuration reference](docs/Configuration.md)
@@ -293,7 +297,7 @@ config/divineenchantments.cfg
 The jar is written to:
 
 ```text
-build/libs/DivineEnchantments-1.12.2-1.0.2.jar
+build/libs/DivineEnchantments-1.12.2-1.0.3.jar
 ```
 
 See [docs/Development.md](docs/Development.md) for the project layout and development notes.

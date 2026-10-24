@@ -58,14 +58,14 @@ public class RichesEventHandler {
                     Enchantment adeptEnchantment = getAdept();
                     int adeptLevel = adeptEnchantment == null ? 0 : EnchantmentHelper.getEnchantmentLevel(adeptEnchantment, held);
 
-                    // Base chance is 0.05% / 0.1%; Adept adds a small chance bonus.
-                    float baseChance = (level == 1) ? 0.0005F : 0.001F;
+                    // Base chance is 0.1% / 0.2%; Adept adds a chance bonus and extra XP.
+                    float baseChance = (level == 1) ? 0.001F : 0.002F;
                     float chance = baseChance * (1.0F + 0.25F * adeptLevel);
                     if (player.world.rand.nextFloat() < chance) {
                         EntityLivingBase target = event.getEntityLiving();
                         target.getEntityData().setBoolean("Divine_Riches_Proc", true);
                         target.getEntityData().setInteger("Divine_Riches_XpMultiplier", Math.min(50, 10 + adeptLevel * 2));
-                        target.getEntityData().setInteger("Divine_Riches_LootMultiplier", Math.min(50, 10 + adeptLevel));
+                        target.getEntityData().setInteger("Divine_Riches_LootMultiplier", 10);
 
                         // Grand sound & celebration particles
                         target.world.playSound(null, target.posX, target.posY, target.posZ, SoundEvents.ENTITY_PLAYER_LEVELUP, SoundCategory.PLAYERS, 1.2F, 1.0F);

@@ -57,6 +57,24 @@ public class BullseyeManager {
         TARGETS.remove(entityId);
     }
 
+    public static void clearAndSync(EntityLivingBase target) {
+        if (target == null) {
+            return;
+        }
+        BullseyeTarget removed = TARGETS.remove(target.getEntityId());
+        if (removed != null && !target.world.isRemote) {
+            ModNetwork.sendToAllTracking(new PacketBullseye(target.getEntityId(), 0, 0, 0, 0, true), target);
+        }
+    }
+
+    public static void resend(EntityLivingBase target, BullseyeTarget spot) {
+        if (target == null || spot == null || target.world.isRemote) {
+            return;
+        }
+        ModNetwork.sendToAllTracking(new PacketBullseye(target.getEntityId(),
+                spot.offsetX, spot.offsetY, spot.offsetZ, spot.expiryTime, false), target);
+    }
+
     public static java.util.Collection<BullseyeTarget> getAll() {
         return TARGETS.values();
     }

@@ -4,15 +4,11 @@ import com.divineenchantments.init.ModEnchantments;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.init.MobEffects;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.play.server.SPacketEntityVelocity;
-import net.minecraft.potion.Potion;
-import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.EnumParticleTypes;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.WorldServer;
@@ -22,8 +18,6 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
-import java.util.ArrayList;
-import java.util.List;
 
 @Mod.EventBusSubscriber(modid = "divineenchantments")
 public class GyroscopicPlatingEventHandler {
@@ -87,42 +81,4 @@ public class GyroscopicPlatingEventHandler {
         }
     }
 
-    /**
-     * Immunizes the player against camera-distorting potion effects (Nausea, Lycanites Instability, Spinning, Perplexity).
-     */
-    @SubscribeEvent
-    public static void onLivingUpdate(LivingEvent.LivingUpdateEvent event) {
-        if (!(event.getEntityLiving() instanceof EntityPlayer)) {
-            return;
-        }
-
-        EntityPlayer player = (EntityPlayer) event.getEntityLiving();
-        ItemStack chest = player.getItemStackFromSlot(EntityEquipmentSlot.CHEST);
-
-        if (!chest.isEmpty() && ModEnchantments.getLevel(ModEnchantments.GYROSCOPIC_PLATING, chest) > 0) {
-            // Remove vanilla nausea
-            if (player.isPotionActive(MobEffects.NAUSEA)) {
-                player.removePotionEffect(MobEffects.NAUSEA);
-            }
-
-            // Remove modded camera-distorting effects (Lycanites Instability, Potion Core Spin / Perplexity)
-            List<Potion> toRemove = new ArrayList<>();
-            for (PotionEffect effect : player.getActivePotionEffects()) {
-                Potion pot = effect.getPotion();
-                ResourceLocation reg = pot.getRegistryName();
-                if (reg != null) {
-                    String path = reg.getPath().toLowerCase();
-                    if (path.contains("instability") || path.contains("spin") || path.contains("perplexity")
-                            || path.contains("invert") || path.contains("tilt") || path.contains("confusion")
-                            || path.contains("disorient")) {
-                        toRemove.add(pot);
-                    }
-                }
-            }
-
-            for (Potion p : toRemove) {
-                player.removePotionEffect(p);
-            }
-        }
-    }
 }

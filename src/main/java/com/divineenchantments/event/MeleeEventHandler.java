@@ -159,7 +159,7 @@ public class MeleeEventHandler {
                 long expiry = sourceEntity.getEntityData().getLong("DE_DulledExpiry");
                 if (sourceEntity.world.getTotalWorldTime() <= expiry) {
                     float reduction = sourceEntity.getEntityData().getFloat("DE_DulledReduction");
-                    event.setAmount(Math.max(1.0F, event.getAmount() - reduction));
+                    event.setAmount(Math.max(0.0F, event.getAmount() * (1.0F - reduction)));
                 }
             }
 
@@ -358,8 +358,8 @@ public class MeleeEventHandler {
                 // Culling: +15% damage exclusively to targets below 20% max health
                 int cullingLvl = ModEnchantments.getLevel(ModEnchantments.CULLING, held);
                 if (cullingLvl > 0) {
-                    if (target.getHealth() <= target.getMaxHealth() * 0.20F) {
-                        event.setAmount(event.getAmount() * 1.15F);
+                    if (target.getHealth() <= target.getMaxHealth() * 0.25F) {
+                        event.setAmount(event.getAmount() * 1.25F);
                         if (player.world instanceof WorldServer) {
                             WorldServer ws = (WorldServer) player.world;
                             ws.spawnParticle(EnumParticleTypes.DAMAGE_INDICATOR, target.posX, target.posY + target.height * 0.5D, target.posZ, 5, 0.2D, 0.2D, 0.2D, 0.05D);
@@ -368,11 +368,11 @@ public class MeleeEventHandler {
                     }
                 }
 
-                // Dulled Impact: Reduces target's attack damage by flat 1/2/3 points for 2 seconds
+                // Dulled Impact: Reduces target's outgoing damage by 10/20/30% for 2 seconds
                 int dulledLvl = ModEnchantments.getLevel(ModEnchantments.DULLED_IMPACT, held);
                 if (dulledLvl > 0) {
-                    float flatReduction = (float) dulledLvl;
-                    target.getEntityData().setFloat("DE_DulledReduction", flatReduction);
+                    float reduction = (float) (DivineConfig.dulledImpactReductionPerLevel * dulledLvl);
+                    target.getEntityData().setFloat("DE_DulledReduction", reduction);
                     target.getEntityData().setLong("DE_DulledExpiry", target.world.getTotalWorldTime() + 40L);
                     if (target.world instanceof WorldServer) {
                         WorldServer ws = (WorldServer) target.world;
@@ -398,7 +398,7 @@ public class MeleeEventHandler {
                 if (staggerLvl > 0 && !ItemCheckHelper.isBossEntity(target)) {
                     boolean isChamp = target.getEntityData().hasKey("champions:championship");
                     if (!isChamp) {
-                        target.getEntityData().setLong("DE_StaggerUntil", target.world.getTotalWorldTime() + 5L);
+                        target.getEntityData().setLong("DE_StaggerUntil", target.world.getTotalWorldTime() + 10L);
                         target.motionX *= 0.6D;
                         target.motionZ *= 0.6D;
                         if (target.world instanceof WorldServer) {
@@ -408,7 +408,7 @@ public class MeleeEventHandler {
                     }
                 }
 
-                // Puncture: Bypasses a flat 2 points of natural mob armor
+                // Puncture: Bypasses 10% of natural mob armor
                 int punctureLvl = ModEnchantments.getLevel(ModEnchantments.PUNCTURE, held);
                 if (punctureLvl > 0) {
                     int naturalArmor = target.getTotalArmorValue();
@@ -423,7 +423,7 @@ public class MeleeEventHandler {
                         float fOrig = net.minecraft.util.math.MathHelper.clamp((float) naturalArmor - dmg / f1, (float) naturalArmor * 0.2F, 20.0F);
                         float redOrig = dmg * (1.0F - fOrig / 25.0F);
 
-                        int reducedArmor = Math.max(0, naturalArmor - 2);
+                        int reducedArmor = Math.max(0, (int) Math.floor(naturalArmor * (1.0D - DivineConfig.punctureArmorBypass)));
                         float fNew = net.minecraft.util.math.MathHelper.clamp((float) reducedArmor - dmg / f1, (float) reducedArmor * 0.2F, 20.0F);
                         float redNew = dmg * (1.0F - fNew / 25.0F);
 
@@ -495,7 +495,11 @@ public class MeleeEventHandler {
                 int enlargementLevel = ModEnchantments.getLevel(ModEnchantments.ENLARGEMENT, held);
                 if (enlargementLevel > 0 && target.isEntityAlive()) {
                     if (player.world.rand.nextFloat() < (float) DivineConfig.enlargementChancePerLevel * enlargementLevel) {
-                        target.addPotionEffect(new PotionEffect(ModPotions.ENLARGEMENT, DivineConfig.enlargementDurationTicks, enlargementLevel - 1, false, true));
+                        int duration = DivineConfig.enlargementDurationTicks;
+                        if (ItemCheckHelper.isBossEntity(target) || target.getMaxHealth() > 150.0F) {
+                            duration = Math.max(20, duration / 2);
+                        }
+                        target.addPotionEffect(new PotionEffect(ModPotions.ENLARGEMENT, duration, enlargementLevel - 1, false, true));
                         if (target.world instanceof WorldServer) {
                             WorldServer ws = (WorldServer) target.world;
                             ws.spawnParticle(EnumParticleTypes.SPELL_WITCH,

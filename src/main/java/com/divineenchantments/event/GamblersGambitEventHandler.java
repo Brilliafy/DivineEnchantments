@@ -1,5 +1,6 @@
 package com.divineenchantments.event;
 
+import com.divineenchantments.config.DivineConfig;
 import com.divineenchantments.init.ModEnchantments;
 import com.divineenchantments.util.ItemCheckHelper;
 import net.minecraft.enchantment.EnchantmentHelper;
@@ -29,6 +30,7 @@ import java.util.Set;
 public class GamblersGambitEventHandler {
 
     private static final List<PotionSupplier> NEGATIVE_POTIONS = new ArrayList<>();
+    private static final Set<String> BLACKLIST = new HashSet<>();
     private static boolean INITIALIZED = false;
 
     private static class PotionSupplier {
@@ -48,6 +50,12 @@ public class GamblersGambitEventHandler {
         INITIALIZED = true;
 
         Set<Potion> added = new HashSet<>();
+        BLACKLIST.clear();
+        for (String entry : DivineConfig.gamblersGambitBlacklist) {
+            if (entry != null && !entry.trim().isEmpty()) {
+                BLACKLIST.add(entry.trim().toLowerCase());
+            }
+        }
 
         // Vanilla negative effects with hand-tuned durations.
         addUnique(added, MobEffects.SLOWNESS, 140, 1);
@@ -74,16 +82,25 @@ public class GamblersGambitEventHandler {
 
         // Include every other negative potion registered by Potion Core or any other mod.
         for (Potion potion : Potion.REGISTRY) {
-            if (potion != null && potion.isBadEffect() && !potion.isInstant() && added.add(potion)) {
+            if (potion != null && potion.isBadEffect() && !potion.isInstant() && !isBlacklisted(potion) && added.add(potion)) {
                 NEGATIVE_POTIONS.add(new PotionSupplier(potion, 120, 0));
             }
         }
     }
 
     private static void addUnique(Set<Potion> added, Potion potion, int duration, int amplifier) {
-        if (potion != null && added.add(potion)) {
-            NEGATIVE_POTIONS.add(new PotionSupplier(potion, duration, amplifier));
+        if (potion == null || isBlacklisted(potion) || !added.add(potion)) {
+            return;
         }
+        NEGATIVE_POTIONS.add(new PotionSupplier(potion, duration, amplifier));
+    }
+
+    private static boolean isBlacklisted(Potion potion) {
+        ResourceLocation name = potion.getRegistryName();
+        if (name == null || BLACKLIST.isEmpty()) {
+            return false;
+        }
+        return BLACKLIST.contains(name.toString().toLowerCase()) || BLACKLIST.contains(name.getPath().toLowerCase());
     }
 
     private static void addPotionCoreIfPresent(Set<Potion> added, String name, int duration, int amplifier) {

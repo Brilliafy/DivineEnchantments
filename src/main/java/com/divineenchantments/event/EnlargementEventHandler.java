@@ -31,7 +31,8 @@ public class EnlargementEventHandler {
         NBTTagCompound data = entity.getEntityData();
 
         if (entity.world.isRemote) {
-            float factor = EnlargementClientData.getFactor(entity, entity.world.getTotalWorldTime());
+            float factor = Math.min((float) DivineConfig.enlargementMaxSizeMultiplier,
+                    EnlargementClientData.getFactor(entity, entity.world.getTotalWorldTime()));
             if (factor >= 0.0F) {
                 applyScale(entity, data, factor);
             } else if (data.getBoolean(TAG_ENLARGED)) {
@@ -43,7 +44,8 @@ public class EnlargementEventHandler {
         PotionEffect effect = entity.getActivePotionEffect(ModPotions.ENLARGEMENT);
 
         if (effect != null) {
-            float factor = 1.0F + (float) DivineConfig.enlargementSizePerLevel * (effect.getAmplifier() + 1);
+            float factor = Math.min((float) DivineConfig.enlargementMaxSizeMultiplier,
+                    1.0F + (float) DivineConfig.enlargementSizePerLevel * (effect.getAmplifier() + 1));
             applyScale(entity, data, factor);
             EnlargementSync.sync(entity, effect);
         } else if (data.getBoolean(TAG_ENLARGED)) {

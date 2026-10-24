@@ -30,6 +30,8 @@ enchantments {
 - Disabled enchantments cannot be applied at the enchanting table or anvil.
 - Their effects stop working on existing items.
 - Disabled enchantments are hidden from JEI.
+- Disabled enchantments are stripped from existing items on the server: inventories, open containers, item entities, item frames, mob equipment, drops, and villager trade offers.
+- An enchanted book with no remaining stored enchantments becomes a vanilla book.
 - The `ally` toggle is always present; it only has an effect when Lycanites Mobs is installed.
 
 ## Compatibility
@@ -47,13 +49,12 @@ These live under the `balance` category.
 | Key | Default | Description |
 | :-- | :-- | :-- |
 | `carnagePenaltyPerLevel` | `0.10` | Attack speed penalty per level. |
-| `carnageBonusLevel1` | `0.02` | Attack speed per stack at level I. |
-| `carnageBonusLevel2` | `0.03` | Attack speed per stack at level II. |
-| `carnageBonusLevel3` | `0.05` | Attack speed per stack at level III. |
+| `carnageBonusLevel1` | `0.05` | Multiplicative attack speed per stack at level I. |
+| `carnageBonusLevel2` | `0.0572` | Multiplicative attack speed per stack at level II. |
+| `carnageBonusLevel3` | `0.0715` | Multiplicative attack speed per stack at level III (about 2.2x at 21 stacks after the 30% penalty). |
 | `carnageMaxStacksPerLevel` | `7` | Maximum stacks per level (7 = 7/14/21). |
 | `carnageDecayTicks` | `100` | Ticks without a hit before stacks decay. |
 | `carnageDecayStacks` | `5` | Stacks lost per decay interval. |
-| `carnageVulnerabilityPerLevel` | `0.01` | Fraction of enemy invulnerability frames removed per level. |
 
 ### Enlargement
 
@@ -61,16 +62,31 @@ These live under the `balance` category.
 | :-- | :-- | :-- |
 | `enlargementChancePerLevel` | `0.02` | Proc chance per level. |
 | `enlargementSizePerLevel` | `0.10` | Size increase per level. |
+| `enlargementMaxSizeMultiplier` | `1.30` | Maximum size multiplier (30% larger). |
 | `enlargementDurationTicks` | `400` | Effect duration in ticks. |
 
 ### Feathered Draw
 
 | Key | Default | Description |
 | :-- | :-- | :-- |
-| `featheredDrawSpeedLevel1` | `1.5` | Movement speed compensation at level I (-50% draw slowdown). |
-| `featheredDrawSpeedLevel2` | `2.5` | Movement speed compensation at level II (-30%). |
-| `featheredDrawSpeedLevel3` | `3.5` | Movement speed compensation at level III (-10%). |
-| `featheredDrawSpeedLevel4` | `4.0` | Movement speed compensation at level IV (no slowdown). |
+| `featheredDrawSpeedLevel1` | `0.8` | Removes 20% of draw slowdown (-64% remaining). |
+| `featheredDrawSpeedLevel2` | `1.6` | Removes 40% of draw slowdown (-48% remaining). |
+| `featheredDrawSpeedLevel3` | `2.4` | Removes 60% of draw slowdown (-32% remaining). |
+| `featheredDrawSpeedLevel4` | `3.2` | Removes 80% of draw slowdown (-16% remaining). |
+
+### Splintering Impact / Autofire
+
+| Key | Default | Description |
+| :-- | :-- | :-- |
+| `splinteringDamageMultiplier` | `0.50` | Shard damage as a multiple of the original bolt's damage. Power/Advanced Power scales it. |
+| `autofireDamageMultiplier` | `0.60` | Damage per Autofire arrow, including the original. |
+
+### Dulled Impact / Puncture
+
+| Key | Default | Description |
+| :-- | :-- | :-- |
+| `dulledImpactReductionPerLevel` | `0.10` | Outgoing damage reduction per level. |
+| `punctureArmorBypass` | `0.10` | Fraction of natural armor bypassed. |
 
 ### Bullseye
 
@@ -86,12 +102,24 @@ These live under the `balance` category.
 | :-- | :-- | :-- |
 | `hunterDurationPerLevelTicks` | `400` | Glowing duration per level at full draw. |
 
+### Apex
+
+| Key | Default | Description |
+| :-- | :-- | :-- |
+| `apexMaxBonus` | `0.25` | Maximum high-ground damage bonus and falling penalty. |
+
+### Gambler's Gambit
+
+| Key | Default | Description |
+| :-- | :-- | :-- |
+| `gamblersGambitBlacklist` | empty | Potion registry names or paths to exclude. Example: `potioncore:flight`. |
+
 ### Perpetual Crucible
 
 | Key | Default | Description |
 | :-- | :-- | :-- |
 | `perpetualCrucibleBaseDurationTicks` | `60` | Extension duration at level I in ticks. |
-| `perpetualCrucibleDurationPerLevelTicks` | `40` | Extra Extension duration per level in ticks. |
+| `perpetualCrucibleDurationPerLevelTicks` | `30` | Extra Extension duration per level in ticks. |
 
 ### Sound stealth
 
@@ -109,7 +137,7 @@ These live under the `balance` category.
 | `voodooSpeedMultiplier` | `1.35` | Ally speed multiplier over a normal zombie. |
 | `voodooBaseDamage` | `3.0` | Ally base attack damage. |
 | `voodooDamagePerLevel` | `1.0` | Ally bonus damage per level. |
-| `voodooMaxAlliesPerPlayer` | `8` | Maximum living allies per player. Set to `0` to disable spawning. |
+| `voodooMaxAlliesPerPlayer` | `6` | Maximum living allies per player (capped at 6). Set to `0` to disable spawning. |
 
 ### Ancient: Kratos Blades
 
@@ -123,6 +151,8 @@ These live under the `balance` category.
 
 ## Multiplayer notes
 
-- Gameplay balance is applied by the server.
-- Enlargement scale factors and Rune: Carnage attack speed values are synchronized from server to client.
-- Client configs are used for JEI, tooltips, and local enchanting-table checks. Keep them aligned with the server to avoid display differences.
+- **The server is authoritative.** On login and respawn, the server sends its config snapshot to the client and overwrites the client's runtime values.
+- Enlargement scale factors, Rune: Carnage attack-speed values, and all other gameplay balance are server-controlled.
+- Disabled enchantments are stripped from existing items on the server: player inventories, open containers, item entities, item frames, mob equipment, drops, and villager trade offers.
+- Enchanted books that lose every stored enchantment are converted to vanilla books.
+- JEI may need a game restart to reflect a server's different per-enchantment toggles.
