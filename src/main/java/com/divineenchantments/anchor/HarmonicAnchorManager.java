@@ -45,16 +45,21 @@ public class HarmonicAnchorManager {
 
     private static final Map<UUID, AnchorData> ANCHORS = new ConcurrentHashMap<>();
 
-    public static void applyAnchor(EntityLivingBase target, int durationTicks) {
+    public static boolean applyAnchor(EntityLivingBase target, int durationTicks) {
         if (target == null || target.world.isRemote) {
-            return;
+            return false;
+        }
+
+        // Bosses, boss-bar entities, and very high-health mobs are immune.
+        if (ItemCheckHelper.isBossEntity(target) || target.getMaxHealth() > 150.0F) {
+            return false;
         }
 
         // Only place a new anchor stone if not already anchored
         AnchorData existing = ANCHORS.get(target.getUniqueID());
         if (existing != null && existing.ticksRemaining > 0) {
             existing.ticksRemaining = Math.max(existing.ticksRemaining, durationTicks);
-            return;
+            return true;
         }
 
         double ax = target.posX;
@@ -69,6 +74,7 @@ public class HarmonicAnchorManager {
             ws.spawnParticle(EnumParticleTypes.CRIT_MAGIC, ax, ay + 0.2D, az, 20, 0.3D, 0.1D, 0.3D, 0.05D);
         }
         target.world.playSound(null, ax, ay, az, SoundEvents.BLOCK_ANVIL_PLACE, SoundCategory.PLAYERS, 0.8F, 1.4F);
+        return true;
     }
 
     @SubscribeEvent
@@ -165,13 +171,13 @@ public class HarmonicAnchorManager {
 
             if (!rod.isEmpty() && ModEnchantments.getLevel(ModEnchantments.HARMONIC_ANCHOR, rod) > 0) {
                 EntityLivingBase caught = (EntityLivingBase) player.fishEntity.caughtEntity;
-                applyAnchor(caught, 160); // 8 seconds = 160 ticks
-
-                // Nullify pull velocity so mob does not fly to player
-                caught.motionX = 0.0D;
-                caught.motionY = 0.0D;
-                caught.motionZ = 0.0D;
-                caught.velocityChanged = true;
+                if (applyAnchor(caught, 160)) { // 8 seconds = 160 ticks
+                    // Nullify pull velocity so mob does not fly to player
+                    caught.motionX = 0.0D;
+                    caught.motionY = 0.0D;
+                    caught.motionZ = 0.0D;
+                    caught.velocityChanged = true;
+                }
             }
         }
     }
@@ -190,11 +196,12 @@ public class HarmonicAnchorManager {
         if (ItemCheckHelper.isFishingRod(held) && ModEnchantments.getLevel(ModEnchantments.HARMONIC_ANCHOR, held) > 0) {
             Entity caught = player.fishEntity.caughtEntity;
             if (caught instanceof EntityLivingBase) {
-                applyAnchor((EntityLivingBase) caught, 160);
-                caught.motionX = 0.0D;
-                caught.motionY = 0.0D;
-                caught.motionZ = 0.0D;
-                caught.velocityChanged = true;
+                if (applyAnchor((EntityLivingBase) caught, 160)) {
+                    caught.motionX = 0.0D;
+                    caught.motionY = 0.0D;
+                    caught.motionZ = 0.0D;
+                    caught.velocityChanged = true;
+                }
             }
         }
     }

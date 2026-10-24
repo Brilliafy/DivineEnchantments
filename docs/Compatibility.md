@@ -33,7 +33,7 @@ Divine Enchantments has **no required dependencies**. Everything below is option
 - **Dynamic Surroundings and sound-based targeting:** Dampening Strike and Quiet Chipping shrink the radius at which mobs can acquire the player as a target.
 - **Infernal Mobs:** Suregrip cancels and restores items dropped by Sticky/Thieving affixes.
 - **Spartan Weaponry & Spartan Shields:** weapon, shield, and crossbow classification support across all custom items.
-- **Lycanites Mobs:** ephemeral Aegis summoning (`Ally`), projectile reflection (`Aperture`), anti-lift grounding (`Grounded Vanguard`), instability immunity (`Gyroscopic Plating`), Aphagia silencing (`Muzzle`), Decay infliction (`Necrotic Stasis`), Demon/Shadow detection (`Demonic Edge`), ore-spawn suppression (`Sober Chisel`), and boss classification.
+- **Lycanites Mobs:** ephemeral Aegis summoning (`Ally`), projectile reflection (`Aperture`), anti-lift grounding (`Grounded Vanguard`), sneak-based camera stabilization (`Gyroscopic Plating`, effect remains), Aphagia silencing (`Muzzle`), Decay infliction (`Necrotic Stasis`), Demon/Shadow detection (`Demonic Edge`), ore-spawn suppression (`Sober Chisel`), and boss classification.
 - **Rin's SoManyEnchantments:** Multishot / Splitshot trailing arrows, Advanced Mending mutual exclusion (`Headhunter`), Advanced Looting drop amplification (`Riches`), Strengthened Vitality mutual exclusion (`Gourmand's Vitality`), and Arrow Recovery mutual exclusion (`Scavenger's Habit`).
 - **Tough As Nails & Simple Difficulty:** body-temperature stabilization (`Thermal Foil`), parasite infection reduction from untreated water (`Desalination Mesh`), and hunger/thirst pause during stationary rest (`Metabolic Slumber`).
 - **ItemPhysic Full:** automatic walk-over collision pickup restoration (`Ground Sweep`).
@@ -44,4 +44,11 @@ Crossbow enchantments (Muzzle, Ballistic Overdrive, Splintering Impact, and cros
 
 ## Multiplayer
 
-The mod is designed to be installed on both the client and server. Server-side logic is authoritative for combat, durability, AI, and inventory behavior; client-side code handles rendering, HUD icons, and visual synchronization.
+The mod is designed to be installed on both the client and server. Server-side logic is authoritative for combat, durability, AI, inventory behavior, and configuration; client-side code handles rendering, HUD icons, and visual synchronization.
+
+## Server-authoritative config
+
+- On login and respawn the server sends its config snapshot to the client and overwrites the client runtime values.
+- Disabled enchantments are stripped from existing items on the server: player inventories, open containers, item entities, item frames, mob equipment, drops, and villager trade offers.
+- An enchanted book that loses every stored enchantment becomes a vanilla book.
+- Install the same jar on both sides so both ends understand every config field.

@@ -87,16 +87,15 @@ public class CarnageEventHandler {
                             3, 0.25D, 0.35D, 0.25D, 0.02D);
                 }
             }
-            applyVulnerabilityFrames(event, level);
+            applyAttackCooldownIframes(player, event);
         }
     }
 
-    private static void applyVulnerabilityFrames(LivingHurtEvent event, int level) {
-        int reducedFrames = Math.max(1, (int) (20.0F * (1.0F - (float) DivineConfig.carnageVulnerabilityPerLevel * level)));
-        event.getEntityLiving().maxHurtResistantTime = reducedFrames;
-        if (event.getEntityLiving().hurtResistantTime > reducedFrames) {
-            event.getEntityLiving().hurtResistantTime = reducedFrames;
-        }
+    private static void applyAttackCooldownIframes(EntityPlayer player, LivingHurtEvent event) {
+        // Enemy i-frames last exactly as long as the wielder's next full charge.
+        int cooldownTicks = Math.max(1, Math.round(player.getCooldownPeriod()));
+        event.getEntityLiving().maxHurtResistantTime = cooldownTicks;
+        event.getEntityLiving().hurtResistantTime = cooldownTicks;
     }
 
     @SubscribeEvent
@@ -127,7 +126,7 @@ public class CarnageEventHandler {
                 removeModifier(player, PENALTY_UUID);
             }
             if (syncedBonus > 0.0D) {
-                applyModifier(player, STACKS_UUID, "Rune Carnage Stacks", syncedBonus, 0);
+                applyModifier(player, STACKS_UUID, "Rune Carnage Stacks", syncedBonus, 2);
             } else {
                 removeModifier(player, STACKS_UUID);
             }
@@ -185,7 +184,7 @@ public class CarnageEventHandler {
                     : (level == 2 ? (float) DivineConfig.carnageBonusLevel2 : (float) DivineConfig.carnageBonusLevel3);
         double bonus = perStack * stacks;
         if (bonus > 0.0D) {
-            applyModifier(player, STACKS_UUID, "Rune Carnage Stacks", bonus, 0);
+            applyModifier(player, STACKS_UUID, "Rune Carnage Stacks", bonus, 2);
         } else {
             removeModifier(player, STACKS_UUID);
         }

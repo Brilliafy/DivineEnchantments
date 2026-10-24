@@ -86,7 +86,7 @@ public class AttributeEventHandler {
             entity.setHealth(entity.getMaxHealth());
         }
 
-        // 2. Heavyplated modifier per armor slot (+5% armor, -5% movement speed)
+        // 2. Heavyplated modifier per armor slot (+8% armor, -3% movement speed)
         updateHeavyplatedSlot(entity, EntityEquipmentSlot.HEAD, HEAVYPLATED_ARMOR_HEAD_UUID, HEAVYPLATED_MOVE_HEAD_UUID, "Head");
         updateHeavyplatedSlot(entity, EntityEquipmentSlot.CHEST, HEAVYPLATED_ARMOR_CHEST_UUID, HEAVYPLATED_MOVE_CHEST_UUID, "Chest");
         updateHeavyplatedSlot(entity, EntityEquipmentSlot.LEGS, HEAVYPLATED_ARMOR_LEGS_UUID, HEAVYPLATED_MOVE_LEGS_UUID, "Legs");
@@ -98,8 +98,8 @@ public class AttributeEventHandler {
         boolean hasHeavyplated = !piece.isEmpty()
                 && ModEnchantments.getLevel(ModEnchantments.HEAVYPLATED, piece) > 0;
 
-        applyOrRemove(entity, SharedMonsterAttributes.ARMOR, armorUuid, "Heavyplated Armor " + slotName, 0.05D, 2, hasHeavyplated);
-        applyOrRemove(entity, SharedMonsterAttributes.MOVEMENT_SPEED, moveUuid, "Heavyplated Speed " + slotName, -0.05D, 2, hasHeavyplated);
+        applyOrRemove(entity, SharedMonsterAttributes.ARMOR, armorUuid, "Heavyplated Armor " + slotName, 0.08D, 2, hasHeavyplated);
+        applyOrRemove(entity, SharedMonsterAttributes.MOVEMENT_SPEED, moveUuid, "Heavyplated Speed " + slotName, -0.03D, 2, hasHeavyplated);
     }
 
     private static void applyOrRemove(EntityLivingBase entity, IAttribute attribute, UUID uuid, String name, double amount, int operation, boolean shouldApply) {

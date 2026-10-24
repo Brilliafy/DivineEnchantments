@@ -1,5 +1,6 @@
 package com.divineenchantments.event;
 
+import com.divineenchantments.config.DivineConfig;
 import com.divineenchantments.compat.SimpleDifficultyCompat;
 import com.divineenchantments.compat.TANCompat;
 import com.divineenchantments.init.ModEnchantments;
@@ -276,7 +277,7 @@ public class CurseAndBuffEventHandler {
             if (!attackerHelmet.isEmpty() && ModEnchantments.getLevel(ModEnchantments.APEX, attackerHelmet) > 0) {
                 double dy = attacker.posY - target.posY;
                 if (dy > 0.0D) {
-                    float bonus = (float) (dy * 0.02D);
+                    float bonus = (float) Math.min(DivineConfig.apexMaxBonus, dy * 0.02D);
                     event.setAmount(event.getAmount() * (1.0F + bonus));
                 }
             }
@@ -289,7 +290,7 @@ public class CurseAndBuffEventHandler {
                 EntityLivingBase attacker = (EntityLivingBase) event.getSource().getTrueSource();
                 double dy = attacker.posY - target.posY;
                 if (dy > 0.0D) {
-                    float penalty = (float) (dy * 0.02D);
+                    float penalty = (float) Math.min(DivineConfig.apexMaxBonus, dy * 0.02D);
                     event.setAmount(event.getAmount() * (1.0F + penalty));
                 }
             }

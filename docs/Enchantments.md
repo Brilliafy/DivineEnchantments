@@ -63,9 +63,9 @@ Complete list of all 73 Divine Enchantments, grouped by equipment type. For a qu
 - **Incompatible With**: Education (`mujmajnkraftsbettersurvival:education`).
 - **SoManyEnchantments Integration**: Adept increases the Riches proc chance and the XP payout.
 - **Description**: Killing a mob has a chance to trigger a loot and XP explosion:
-  - Level I: 0.05% base chance; Level II: 0.1% base chance.
+  - Level I: 0.1% base chance; Level II: 0.2% base chance.
   - Adept adds +25% chance per level and adds +2 to the XP multiplier per level.
-  - The loot multiplier also increases by +1 per Adept level.
+  - The loot multiplier is capped at 10x; Adept does not increase it.
   - Stacks additively with vanilla Looting and SoManyEnchantments Advanced Looting.
 
 <a id="gambler-s-gambit"></a>
@@ -136,7 +136,7 @@ Complete list of all 73 Divine Enchantments, grouped by equipment type. For a qu
 - **Type**: Axes and Daggers
 - **Max Level**: I
 - **Acquisition**: Enchanting Table.
-- **Description**: Deals +15% bonus damage exclusively against weakened targets whose current health is already below 20% of their maximum health.
+- **Description**: Deals +25% bonus damage exclusively against weakened targets whose current health is below 25% of their maximum health.
 
 <a id="dulled-impact"></a>
 
@@ -145,7 +145,7 @@ Complete list of all 73 Divine Enchantments, grouped by equipment type. For a qu
 - **Type**: Spartan Weaponry blunt weapons (warhammers, hammers, clubs, maces, flails)
 - **Max Level**: III
 - **Acquisition**: Enchanting Table.
-- **Description**: Heavy blunt strikes daze the target, reducing their outgoing attack damage by a flat 1 (Level I), 2 (Level II), or 3 (Level III) points (0.5, 1, or 1.5 hearts) for 2 seconds (40 ticks). Does not stack.
+- **Description**: Heavy blunt strikes daze the target, reducing their outgoing attack damage by 10% / 20% / 30% for 2 seconds (40 ticks). Does not stack.
 
 <a id="stagger"></a>
 
@@ -154,7 +154,7 @@ Complete list of all 73 Divine Enchantments, grouped by equipment type. For a qu
 - **Type**: Spartan Weaponry maces and axes (blunt weapons & axes)
 - **Max Level**: I
 - **Acquisition**: Enchanting Table.
-- **Description**: Melee strikes briefly pause a basic mob's attack windup animation by 0.25 seconds (5 ticks), interrupting an immediate counter-swing. Bosses and champions are immune. Does not stun or freeze enemies.
+- **Description**: Melee strikes briefly pause a basic mob's attack windup animation by 0.5 seconds (10 ticks), interrupting an immediate counter-swing. Bosses and champions are immune. Does not stun or freeze enemies.
 
 <a id="puncture"></a>
 
@@ -163,7 +163,7 @@ Complete list of all 73 Divine Enchantments, grouped by equipment type. For a qu
 - **Type**: Piercing weapons and Spears (Spartan Weaponry daggers, spears, pikes, lances, rapiers)
 - **Max Level**: I
 - **Acquisition**: Enchanting Table.
-- **Description**: Piercing melee strikes bypass a flat 2 points of natural mob armor (e.g., treating a 10-armor mob as having 8 armor). Flat reduction provides effective chip damage against early armored foes without trivializing end-game boss armor.
+- **Description**: Piercing melee strikes bypass 10% of natural mob armor (e.g., treating a 10-armor mob as having 9 armor). Percentage-based bypass scales with armored targets without trivializing early mobs.
 
 <a id="low-sweep"></a>
 
@@ -182,7 +182,7 @@ Complete list of all 73 Divine Enchantments, grouped by equipment type. For a qu
 - **Max Level**: III
 - **Acquisition**: Super rare Enchanting Table enchantment (Level 30). Costs 8 levels per tier (8/16/24).
 - **Incompatible With**: `somanyenchantments:swifterslashes` (Swifter Slashes).
-- **Description**: Permanently reduces attack speed by `10 * level%`. Every fully charged hit (attack indicator completely full) instead grants `+2%` / `+3%` / `+5%` attack speed per stack, stacking up to `7 * level` times, and shaves `level%` off the victim's invulnerability frames. Going 5 seconds without hitting an enemy removes 5 stacks, repeating until the stacks reach zero. The enchantment name is displayed in green.
+- **Description**: Permanently reduces attack speed by `10 * level%`. Fully charged hits grant multiplicative attack speed per stack (5% / 5.72% / 7.15%), stacking up to `7 * level` times. At level III with 21 stacks this reaches roughly 2.2x baseline attack speed. Enemy invulnerability frames are set to exactly your weapon's recharge time, so they expire when the attack indicator is full again. Going 5 seconds without a hit removes 5 stacks. The enchantment name is displayed in green.
 
 <a id="enlargement"></a>
 
@@ -191,7 +191,7 @@ Complete list of all 73 Divine Enchantments, grouped by equipment type. For a qu
 - **Type**: All melee weapons
 - **Max Level**: II
 - **Acquisition**: Enchanting Table.
-- **Description**: Melee hits have a `2 * level%` chance to apply the custom **Enlargement** potion effect for 20 seconds, increasing the target's model size and hitbox by `10 * level%`. The effect uses a custom pixel-art status icon and is synchronized to nearby clients.
+- **Description**: Melee hits have a `2 * level%` chance to apply **Enlargement** for 20 seconds, increasing the target's model size and hitbox by `10 * level%`, capped at 30%. Bosses and mobs above 150 HP receive half duration. The effect uses a custom pixel-art status icon and is synchronized to nearby clients.
 
 <a id="voodoo"></a>
 
@@ -208,6 +208,7 @@ Complete list of all 73 Divine Enchantments, grouped by equipment type. For a qu
   - Attacks hostile mobs and anything that attacks its owner.
   - Cannot pick up items or armor, cannot hurt or be hurt by its owner, and has a red glowing outline.
   - Displayed name: `[Player]'s Ally`.
+  - Maximum 6 living allies per player.
   - Spawn sound: Zombie Villager curing sound.
 
 <a id="ancient-kratos-blades"></a>
@@ -260,10 +261,10 @@ Complete list of all 73 Divine Enchantments, grouped by equipment type. For a qu
 - **Type**: Bows
 - **Max Level**: II
 - **Acquisition**: Super rare treasure (not available from Enchanting Table).
-- **Description**: When firing a bow, trailing arrows travel immediately behind each arrow with identical velocity, draw power, and trajectory:
+- **Description**: When firing a bow, trailing arrows travel immediately behind each arrow with identical velocity and trajectory. Every arrow in the volley deals 60% damage.
   - Level I: 2 arrows total (original + 1 trailing arrow).
   - Level II: 3 arrows total (original + 2 trailing arrows).
-  - Removes target invincibility frames for all trailing arrows so every arrow deals full damage.
+  - Removes target invincibility frames so every arrow can land.
   - Fully compatible with Multishot / Splitshot from Rin's SoManyEnchantments.
 
 <a id="headhunter"></a>
@@ -325,7 +326,7 @@ Complete list of all 73 Divine Enchantments, grouped by equipment type. For a qu
 - **Type**: Modded crossbows
 - **Max Level**: III
 - **Acquisition**: Enchanting Table.
-- **Description**: When a crossbow arrow or bolt strikes a solid block instead of an entity, it violently shatters into a radial burst of independent shrapnel arrows that fly outward in all directions and damage whatever they collide with.
+- **Description**: When a crossbow arrow or bolt strikes a solid block instead of an entity, it violently shatters into a radial burst of independent shrapnel arrows that fly outward in all directions. Each shard uses half of the original bolt's base damage, so Power and Advanced Power scale the shrapnel.
   - Level I: 4 shrapnel arrows.
   - Level II: 9 shrapnel arrows.
   - Level III: 13 shrapnel arrows.
@@ -357,7 +358,7 @@ Complete list of all 73 Divine Enchantments, grouped by equipment type. For a qu
 - **Max Level**: IV
 - **Acquisition**: Enchanting Table.
 - **Incompatible With**: Strafe (SoManyEnchantments).
-- **Description**: Reduces the movement speed penalty while drawing a bow from vanilla's -80% to -50% / -30% / -10% / 0% at levels I-IV, allowing repositioning while aiming without affecting draw speed, velocity, or arrow damage.
+- **Description**: Removes 20% / 40% / 60% / 80% of the vanilla bow draw slowdown at levels I-IV, leaving -64% / -48% / -32% / -16% movement speed while aiming. Incompatible with Strafe.
 
 <a id="scavenger-s-habit"></a>
 
@@ -375,7 +376,7 @@ Complete list of all 73 Divine Enchantments, grouped by equipment type. For a qu
 - **Type**: Bows
 - **Max Level**: IV
 - **Acquisition**: Enchanting Table.
-- **Description**: Reaching 100% draw power fires the arrow automatically and immediately resets draw for continuous rapid-fire bursts. Higher levels increase draw speed and decrease recoil pitch/yaw pushback and arrow spread. Mutually exclusive with Multishot, Rapid Fire, Strafe, and Infinity.
+- **Description**: Reaching 100% draw power fires the arrow automatically and immediately resets draw for continuous rapid-fire bursts. Draw times are 20 / 18 / 16 / 14 ticks at levels I-IV; higher levels also reduce recoil and spread. Mutually exclusive with Multishot, Rapid Fire, Strafe, and Infinity.
 
 <a id="bullseye"></a>
 
@@ -412,9 +413,9 @@ Complete list of all 73 Divine Enchantments, grouped by equipment type. For a qu
 - **Type**: Any armor piece (Helmet, Chestplate, Leggings, Boots)
 - **Max Level**: I
 - **Description**: Each equipped armor piece with Heavyplated grants:
-  - `+5%` Armor
-  - `-5%` Movement Speed
-  - Stacks up to `+20%` Armor and `-20%` Movement Speed with a full set.
+  - `+8%` Armor
+  - `-3%` Movement Speed
+  - Stacks up to `+32%` Armor and `-12%` Movement Speed with a full set.
 
 <a id="slowsink"></a>
 
@@ -432,8 +433,8 @@ Complete list of all 73 Divine Enchantments, grouped by equipment type. For a qu
 - **Max Level**: I
 - **Acquisition**: Treasure only (not available from Enchanting Table).
 - **Description**: Grants high-ground advantage:
-  - Deals `+2%` damage per block of elevation above the target.
-  - Takes `+2%` damage per block below attackers.
+  - Deals `+2%` damage per block of elevation above the target, capped at +25%.
+  - Takes `+2%` damage per block below attackers, capped at +25%.
 
 <a id="aperture"></a>
 
@@ -451,8 +452,8 @@ Complete list of all 73 Divine Enchantments, grouped by equipment type. For a qu
 - **Type**: Chestplates
 - **Max Level**: I
 - **Acquisition**: Treasure only (not available from Enchanting Table).
-- **Description**: Absolute spatial stability and momentum conversion:
-  - **Camera Stabilization**: Locks camera roll to 0.0° on the client, completely immunizing against screen spin, inversion, and forced camera tilt (Lycanites Instability, Nausea, Potion Core Spin, Perplexity & Inversion).
+- **Description**: Sneak-based spatial stability and momentum conversion:
+  - **Camera Stabilization**: While sneaking, locks camera roll and view, negating screen spin, inversion, and forced camera tilt. The negative potion effects remain on the player; they simply do not affect the camera.
   - **Momentum Slingshot**: If you fall from a height $> 4$ blocks and tap Crouch right before landing, 100% of vertical fall momentum is converted into horizontal forward velocity ($v_{\text{horizontal}} = \sqrt{2 \cdot g \cdot h}$ along your look vector), zeroing out all fall damage and slingshotting you forward.
 
 <a id="perpetual-crucible"></a>
@@ -463,7 +464,7 @@ Complete list of all 73 Divine Enchantments, grouped by equipment type. For a qu
 - **Max Level**: III
 - **Acquisition**: Treasure only (not available from Enchanting Table).
 - **Potion Core Integration**: Directly drives `potioncore:extension`.
-- **Description**: Landing critical hits or killing a mob grants the player Extension I/II/III for 3/5/7 seconds (60/100/140 ticks), scaling with enchantment level. In Potion Core, Extension pauses other potion durations from ticking down, completely freezing active combat buffs (Wine buffs, Battle Burrito buffs, Diamond Skin, Golden Apple Absorption) as long as you stay aggressively engaged in combat.
+- **Description**: Landing critical hits or killing a mob grants the player Extension I/II/III for 3/4.5/6 seconds (60/90/120 ticks), scaling with enchantment level. In Potion Core, Extension pauses other potion durations from ticking down, completely freezing active combat buffs (Wine buffs, Battle Burrito buffs, Diamond Skin, Golden Apple Absorption) as long as you stay aggressively engaged in combat.
 
 <a id="grounded-vanguard"></a>
 
@@ -633,7 +634,7 @@ Complete list of all 73 Divine Enchantments, grouped by equipment type. For a qu
 - **Type**: Fishing Rods
 - **Max Level**: I
 - **Acquisition**: Treasure only (not available from Enchanting Table).
-- **Description**: Hooking a mob does not pull them to you; it drops a spectral anchor stone at the mob's feet. For the next 8 seconds (160 ticks), the mob cannot move more than 5 blocks away from the anchor coordinate. If they attempt to lunge, charge, or fly away, the anchor line pulls taut, slingshotting them backward to the center point. Treasure enchantment (cannot be obtained from the enchanting table).
+- **Description**: Hooking a mob does not pull them to you; it drops a spectral anchor stone at the mob's feet. For the next 8 seconds (160 ticks), the mob cannot move more than 5 blocks away from the anchor coordinate. If they attempt to lunge, charge, or fly away, the anchor line pulls taut, slingshotting them backward to the center point. Bosses, boss-bar mobs, and mobs above 150 HP are immune. Treasure enchantment (cannot be obtained from the enchanting table).
 
 <a id="sober-chisel"></a>
 

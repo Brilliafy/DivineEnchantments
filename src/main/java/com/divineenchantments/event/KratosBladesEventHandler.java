@@ -178,6 +178,16 @@ public class KratosBladesEventHandler {
     }
 
     @SubscribeEvent
+    public static void onContainerOpened(PlayerContainerEvent.Open event) {
+        EntityPlayer player = event.getEntityPlayer();
+        if (player == null || player.world.isRemote) {
+            return;
+        }
+        purgeClones(event.getContainer(), player);
+        clearCursorClone(player);
+    }
+
+    @SubscribeEvent
     public static void onContainerClosed(PlayerContainerEvent.Close event) {
         EntityPlayer player = event.getEntityPlayer();
         if (player == null || player.world.isRemote) {

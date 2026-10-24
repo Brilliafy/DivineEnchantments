@@ -573,6 +573,11 @@ public class BowEventHandler {
         if (event.getSource().getImmediateSource() instanceof EntityArrow) {
             EntityArrow arrow = (EntityArrow) event.getSource().getImmediateSource();
 
+            // Autofire: every arrow in the volley deals reduced damage.
+            if (arrow.getEntityData().getBoolean("Divine_Autofire")) {
+                event.setAmount(event.getAmount() * (float) DivineConfig.autofireDamageMultiplier);
+            }
+
             // Bullseye: +20% damage per level when the arrow strikes the marked spot.
             if (arrow.getEntityData().getBoolean("Divine_BullseyeHit")) {
                 int bullseyeLevel = arrow.getEntityData().getInteger("Divine_Bullseye");
@@ -771,6 +776,7 @@ public class BowEventHandler {
         if (event.getEntityLiving().world.isRemote) {
             return;
         }
+        BullseyeManager.clearAndSync(event.getEntityLiving());
 
         DamageSource source = event.getSource();
         Entity shooter = source.getTrueSource();
@@ -880,8 +886,8 @@ public class BowEventHandler {
                     hitVec.y + 0.25D + world.rand.nextDouble() * 0.2D,
                     hitVec.z + (world.rand.nextDouble() - 0.5D) * 0.15D);
             shard.pickupStatus = EntityArrow.PickupStatus.CREATIVE_ONLY;
-            shard.setDamage(3.0D + level * 0.5D);
-            shard.setIsCritical(true);
+            shard.setDamage(arrow.getDamage() * DivineConfig.splinteringDamageMultiplier);
+            shard.setIsCritical(false);
 
             double angle = baseAngle + angleStep * i + (world.rand.nextDouble() - 0.5D) * 0.45D;
             double pitch = -0.15D + world.rand.nextDouble() * 0.95D;
@@ -920,7 +926,29 @@ public class BowEventHandler {
 
     @SubscribeEvent
     public static void onServerTick(net.minecraftforge.fml.common.gameevent.TickEvent.ServerTickEvent event) {
-        if (event.phase != net.minecraftforge.fml.common.gameevent.TickEvent.Phase.END || GLIMMER_ARROWS.isEmpty()) {
+        if (event.phase != net.minecraftforge.fml.common.gameevent.TickEvent.Phase.END) {
+            return;
+        }
+
+        // Keep bullseye markers visible for players who start tracking the enemy.
+        net.minecraft.server.MinecraftServer server = net.minecraftforge.fml.common.FMLCommonHandler.instance().getMinecraftServerInstance();
+        if (server != null && server.getTickCounter() % 20 == 0) {
+            for (com.divineenchantments.bullseye.BullseyeTarget spot : new java.util.ArrayList<>(BullseyeManager.getAll())) {
+                for (WorldServer world : server.worlds) {
+                    Entity tracked = world.getEntityByID(spot.entityId);
+                    if (tracked instanceof EntityLivingBase && tracked.isEntityAlive()) {
+                        if (!spot.isExpired(world)) {
+                            BullseyeManager.resend((EntityLivingBase) tracked, spot);
+                        } else {
+                            BullseyeManager.clear(spot.entityId);
+                        }
+                        break;
+                    }
+                }
+            }
+        }
+
+        if (GLIMMER_ARROWS.isEmpty()) {
             return;
         }
         java.util.Iterator<EntityArrow> it = GLIMMER_ARROWS.iterator();
@@ -960,7 +988,7 @@ public class BowEventHandler {
                     int maxDuration = bow.getMaxItemUseDuration();
                     int durationUsed = maxDuration - event.getDuration();
                     // Draw time: I: 20 ticks, II: 16 ticks, III: 13 ticks, IV: 10 ticks
-                    int threshold = (machineLevel == 1) ? 20 : (machineLevel == 2 ? 16 : (machineLevel == 3 ? 13 : 10));
+                    int threshold = (machineLevel == 1) ? 20 : (machineLevel == 2 ? 18 : (machineLevel == 3 ? 16 : 14));
                     if (durationUsed >= threshold) {
                         if (!player.world.isRemote) {
                             player.stopActiveHand();

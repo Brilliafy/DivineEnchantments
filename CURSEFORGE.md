@@ -103,7 +103,9 @@ The generated `config/divineenchantments.cfg` includes:
 
 - A master switch for every enchantment.
 - Individual enable/disable toggles for each enchantment.
-- Balance settings for Rune: Carnage, Enlargement, Bullseye, Hunter, Voodoo, Kratos Blades, Feathered Draw, Perpetual Crucible, and sound-stealth radii.
+- Disabled enchantments are removed from existing items, open containers, drops, item frames, and villager offers; empty enchanted books become vanilla books.
+- The server is authoritative and syncs config to clients on login and respawn.
+- Balance settings for Rune: Carnage, Enlargement, Bullseye, Hunter, Voodoo, Kratos Blades, Feathered Draw, Perpetual Crucible, Autofire, Splintering Impact, Apex, Dulled Impact, Puncture, and sound-stealth radii.
 - Compatibility toggles, including the Better Survival Range damage fix.
 
 Config changes require a game restart.
@@ -121,7 +123,7 @@ No mandatory dependencies. JEI, Enchantment Descriptions, and the integration mo
 ## Installation
 
 1. Install Minecraft Forge 1.12.2 or Cleanroom.
-2. Drop `DivineEnchantments-1.12.2-1.0.2.jar` into the `mods` folder.
+2. Drop `DivineEnchantments-1.12.2-1.0.3.jar` into the `mods` folder.
 3. Install the same jar on the server for multiplayer.
 4. Launch the game.
 
