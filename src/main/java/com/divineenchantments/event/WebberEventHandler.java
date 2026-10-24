@@ -1,6 +1,7 @@
 package com.divineenchantments.event;
 
 import com.divineenchantments.init.ModEnchantments;
+import com.divineenchantments.util.ChanceHelper;
 import com.divineenchantments.util.ItemCheckHelper;
 import net.minecraft.block.Block;
 import net.minecraft.enchantment.EnchantmentHelper;
@@ -82,7 +83,7 @@ public class WebberEventHandler {
             if (ItemCheckHelper.isSword(held)) {
                 if (ModEnchantments.getLevel(ModEnchantments.WEBBER, held) > 0) {
                     // 0.4% chance
-                    if (player.world.rand.nextFloat() < 0.004F) {
+                    if (ChanceHelper.roll(player, "webber", 0.004F)) {
                         EntityLivingBase target = event.getEntityLiving();
                         spawnCobwebOn(target);
                     }

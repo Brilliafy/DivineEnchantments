@@ -33,14 +33,14 @@ Divine Enchantments has **no required dependencies**. Everything below is option
 - **Dynamic Surroundings and sound-based targeting:** Dampening Strike and Quiet Chipping shrink the radius at which mobs can acquire the player as a target.
 - **Infernal Mobs:** Suregrip cancels and restores items dropped by Sticky/Thieving affixes.
 - **Spartan Weaponry & Spartan Shields:** weapon, shield, and crossbow classification support across all custom items.
-- **Lycanites Mobs:** ephemeral Aegis summoning (`Ally`), projectile reflection (`Aperture`), anti-lift grounding (`Grounded Vanguard`), sneak-based camera stabilization (`Gyroscopic Plating`, effect remains), Aphagia silencing (`Muzzle`), Decay infliction (`Necrotic Stasis`), Demon/Shadow detection (`Demonic Edge`), ore-spawn suppression (`Sober Chisel`), and boss classification.
+- **Lycanites Mobs:** ephemeral Aegis summoning (`Ally`, max 4 per player), projectile reflection (`Aperture`), anti-lift grounding (`Grounded Vanguard`), effect-only suppression (`Gyroscopic Plating`), Aphagia silencing (`Muzzle`), Decay infliction (`Necrotic Stasis`), Demon/Shadow detection (`Demonic Edge`), Paralysis from `Stagger` and `Low Sweep`, Roa/Loch Ness gravity immunity (`Gargoyle Stance`), ore-spawn suppression (`Sober Chisel`), and boss classification.
 - **Rin's SoManyEnchantments:** Multishot / Splitshot trailing arrows, Advanced Mending mutual exclusion (`Headhunter`), Advanced Looting drop amplification (`Riches`), Strengthened Vitality mutual exclusion (`Gourmand's Vitality`), and Arrow Recovery mutual exclusion (`Scavenger's Habit`).
-- **Tough As Nails & Simple Difficulty:** body-temperature stabilization (`Thermal Foil`), parasite infection reduction from untreated water (`Desalination Mesh`), and hunger/thirst pause during stationary rest (`Metabolic Slumber`).
-- **ItemPhysic Full:** automatic walk-over collision pickup restoration (`Ground Sweep`).
+- **Tough As Nails & Simple Difficulty:** body-temperature stabilization (`Thermal Foil`), parasite and Thirsty effect reduction from untreated water (`Desalination Mesh`), and hunger/thirst pause during stationary rest (`Metabolic Slumber`).
+- **ItemPhysic Full:** automatic walk-over collision pickup restoration with a direct inventory fallback (`Ground Sweep`).
 
 ## Crossbow support
 
-Crossbow enchantments (Muzzle, Ballistic Overdrive, Splintering Impact, and crossbow-compatible bow enchantments) require a **1.12.2 crossbow mod**. Spartan Weaponry and Crossbows Backport are both supported.
+Crossbow enchantments (Muzzle, Ballistic Overdrive, Splintering Impact, and crossbow-compatible bow enchantments) require a **1.12.2 crossbow mod**. Spartan Weaponry and Crossbows Backport are both supported. Spartan iron, diamond, tipped, and spectral bolts are treated as arrow projectiles, so Headhunter, Hunter, Bullseye, Glimmer, Splintering Impact, Ballistic Overdrive, and Scavenger's Habit work with them.
 
 ## Multiplayer
 

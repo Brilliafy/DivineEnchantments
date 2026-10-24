@@ -2,6 +2,9 @@ package com.divineenchantments.event;
 
 import com.divineenchantments.config.DivineConfig;
 import com.divineenchantments.init.ModEnchantments;
+import com.divineenchantments.network.ModNetwork;
+import com.divineenchantments.network.PacketOreGlow;
+import com.divineenchantments.util.ChanceHelper;
 import com.divineenchantments.util.ItemCheckHelper;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
@@ -130,7 +133,7 @@ public class ToolAndMiningEventHandler {
         // Shimmered: highlight adjacent identical ore blocks within 2 blocks
         if (ModEnchantments.getLevel(ModEnchantments.SHIMMERED, held) > 0) {
             if (isOreBlock(block, state)) {
-                triggerShimmer(world, pos, block);
+                triggerShimmer(world, pos, block, player);
             }
         }
 
@@ -222,7 +225,7 @@ public class ToolAndMiningEventHandler {
                 if (nearest != null && nearest.getEntityData().hasKey("DE_SoberTime")) {
                     long time = nearest.getEntityData().getLong("DE_SoberTime");
                     if (world.getTotalWorldTime() - time <= 20L) { // Within 1s of break
-                        if (nearest.world.rand.nextFloat() < 0.75F) { // 75% reduction
+                        if (ChanceHelper.roll(nearest, "sober_chisel", 0.75F)) { // 75% reduction
                             event.setResult(Event.Result.DENY);
                         }
                     }
@@ -258,7 +261,7 @@ public class ToolAndMiningEventHandler {
             Block block = event.getState().getBlock();
             if (block == Blocks.GRAVEL || block == Blocks.DIRT || block == Blocks.GRASS
                     || block == Blocks.CLAY || block == Blocks.SAND || block == Blocks.SOUL_SAND) {
-                if (player.world.rand.nextFloat() < 0.05F) { // 5% chance
+                if (ChanceHelper.roll(player, "silt_sifter", 0.05F)) {
                     float pick = player.world.rand.nextFloat();
                     ItemStack bonus;
                     if (pick < 0.35F) {
@@ -303,13 +306,16 @@ public class ToolAndMiningEventHandler {
         return false;
     }
 
-    private static void triggerShimmer(World world, BlockPos origin, Block targetBlock) {
-        for (int dx = -2; dx <= 2; dx++) {
-            for (int dy = -2; dy <= 2; dy++) {
-                for (int dz = -2; dz <= 2; dz++) {
+    private static void triggerShimmer(World world, BlockPos origin, Block targetBlock, EntityPlayer player) {
+        int radius = Math.max(1, DivineConfig.shimmeredHighlightRadius);
+        java.util.List<BlockPos> highlighted = new java.util.ArrayList<>();
+        for (int dx = -radius; dx <= radius; dx++) {
+            for (int dy = -radius; dy <= radius; dy++) {
+                for (int dz = -radius; dz <= radius; dz++) {
                     if (dx == 0 && dy == 0 && dz == 0) continue;
                     BlockPos p = origin.add(dx, dy, dz);
                     if (world.getBlockState(p).getBlock() == targetBlock) {
+                        highlighted.add(p);
                         if (world instanceof WorldServer) {
                             WorldServer ws = (WorldServer) world;
                             ws.spawnParticle(EnumParticleTypes.TOTEM, p.getX() + 0.5D, p.getY() + 0.5D, p.getZ() + 0.5D, 6, 0.35D, 0.35D, 0.35D, 0.05D);
@@ -320,6 +326,10 @@ public class ToolAndMiningEventHandler {
                     }
                 }
             }
+        }
+        if (!highlighted.isEmpty() && player instanceof net.minecraft.entity.player.EntityPlayerMP) {
+            ModNetwork.INSTANCE.sendTo(new PacketOreGlow(highlighted, DivineConfig.shimmeredHighlightDurationTicks),
+                    (net.minecraft.entity.player.EntityPlayerMP) player);
         }
     }
 

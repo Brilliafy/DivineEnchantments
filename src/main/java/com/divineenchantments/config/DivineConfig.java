@@ -22,10 +22,10 @@ public final class DivineConfig {
     public static boolean fixRangeEnchantmentDamage = true;
 
     // Rune: Carnage
-    public static double carnagePenaltyPerLevel = 0.10D;
-    public static double carnageBonusLevel1 = 0.05D;
-    public static double carnageBonusLevel2 = 0.0572D;
-    public static double carnageBonusLevel3 = 0.0715D;
+    public static double carnagePenaltyPerLevel = 0.0D;
+    public static double carnageBonusLevel1 = 0.0667D;
+    public static double carnageBonusLevel2 = 0.0667D;
+    public static double carnageBonusLevel3 = 0.0667D;
     public static int carnageMaxStacksPerLevel = 7;
     public static int carnageDecayTicks = 100;
     public static int carnageDecayStacks = 5;
@@ -45,6 +45,24 @@ public final class DivineConfig {
 
     // Dulled Impact
     public static double dulledImpactReductionPerLevel = 0.10D;
+    public static int dulledImpactDurationTicks = 100;
+
+    // Braced Pivot
+    public static double bracedPivotCooldownReduction = 0.60D;
+
+    // Volatile Discharge
+    public static double volatileDischargeExplosionPower = 5.0D;
+
+    // Stagger / Low Sweep
+    public static int staggerParalysisTicks = 60;
+    public static int lowSweepParalysisTicks = 30;
+
+    // Ally
+    public static int allyMaxAegisPerPlayer = 4;
+
+    // Shimmered
+    public static int shimmeredHighlightDurationTicks = 100;
+    public static int shimmeredHighlightRadius = 2;
 
     // Apex
     public static double apexMaxBonus = 0.25D;
@@ -65,6 +83,7 @@ public final class DivineConfig {
     public static double bullseyeHitRadius = 0.30D;
 
     // Gambler's Gambit
+    public static double gamblersGambitChance = 0.25D;
     public static String[] gamblersGambitBlacklist = new String[0];
 
     // Splintering Impact
@@ -133,14 +152,27 @@ public final class DivineConfig {
             config.setCategoryComment("balance",
                     "Tuning values for the newer enchantments. Restart required.");
 
-            carnagePenaltyPerLevel = config.getFloat("carnagePenaltyPerLevel", "balance", 0.10F, 0.0F, 1.0F,
-                    "Rune: Carnage attack speed penalty per enchantment level (0.10 = 10%).");
-            carnageBonusLevel1 = config.getFloat("carnageBonusLevel1", "balance", 0.05F, 0.0F, 10.0F,
-                    "Rune: Carnage attack speed gained per stack at level I (0.05 = 5%, multiplicative).");
-            carnageBonusLevel2 = config.getFloat("carnageBonusLevel2", "balance", 0.0572F, 0.0F, 10.0F,
-                    "Rune: Carnage attack speed gained per stack at level II (multiplicative).");
-            carnageBonusLevel3 = config.getFloat("carnageBonusLevel3", "balance", 0.0715F, 0.0F, 10.0F,
-                    "Rune: Carnage attack speed gained per stack at level III (about 2.2x baseline at 21 stacks after the 30% penalty).");
+            carnagePenaltyPerLevel = config.getFloat("carnagePenaltyPerLevel", "balance", 0.0F, 0.0F, 1.0F,
+                    "Rune: Carnage attack speed penalty per enchantment level (0.0 = no penalty).");
+            carnageBonusLevel1 = config.getFloat("carnageBonusLevel1", "balance", 0.0667F, 0.0F, 10.0F,
+                    "Rune: Carnage additive attack speed per stack at level I (0.0667 = +0.0667).");
+            carnageBonusLevel2 = config.getFloat("carnageBonusLevel2", "balance", 0.0667F, 0.0F, 10.0F,
+                    "Rune: Carnage additive attack speed per stack at level II.");
+            carnageBonusLevel3 = config.getFloat("carnageBonusLevel3", "balance", 0.0667F, 0.0F, 10.0F,
+                    "Rune: Carnage additive attack speed per stack at level III (+1.4 at 21 stacks, same as Swifter Slashes VII).");
+            // Migrate the old 1.0.4 defaults to the additive Swifter Slashes VII equivalent.
+            if (carnagePenaltyPerLevel == 0.10D) {
+                carnagePenaltyPerLevel = 0.0D;
+            }
+            if (carnageBonusLevel1 == 0.05D) {
+                carnageBonusLevel1 = 0.0667D;
+            }
+            if (carnageBonusLevel2 == 0.0572D) {
+                carnageBonusLevel2 = 0.0667D;
+            }
+            if (carnageBonusLevel3 == 0.0715D) {
+                carnageBonusLevel3 = 0.0667D;
+            }
             carnageMaxStacksPerLevel = config.getInt("carnageMaxStacksPerLevel", "balance", 7, 0, 100,
                     "Maximum Rune: Carnage stacks per enchantment level (7 means 7/14/21).");
             carnageDecayTicks = config.getInt("carnageDecayTicks", "balance", 100, 1, 72000,
@@ -167,6 +199,27 @@ public final class DivineConfig {
 
             dulledImpactReductionPerLevel = config.getFloat("dulledImpactReductionPerLevel", "balance", 0.10F, 0.0F, 1.0F,
                     "Dulled Impact outgoing damage reduction per level (0.10 = 10%).");
+            dulledImpactDurationTicks = config.getInt("dulledImpactDurationTicks", "balance", 100, 1, 72000,
+                    "Dulled Impact duration in ticks (100 = 5 seconds).");
+
+            bracedPivotCooldownReduction = config.getFloat("bracedPivotCooldownReduction", "balance", 0.60F, 0.0F, 1.0F,
+                    "Fraction of the base 100-tick shield disable cooldown removed by Braced Pivot (0.60 = -60%).");
+
+            volatileDischargeExplosionPower = config.getFloat("volatileDischargeExplosionPower", "balance", 5.0F, 0.0F, 100.0F,
+                    "Volatile Discharge explosion power (vanilla creeper = 3.0).");
+
+            staggerParalysisTicks = config.getInt("staggerParalysisTicks", "balance", 60, 0, 72000,
+                    "Lycanites paralysis duration from Stagger in ticks (60 = 3 seconds).");
+            lowSweepParalysisTicks = config.getInt("lowSweepParalysisTicks", "balance", 30, 0, 72000,
+                    "Lycanites paralysis duration from Low Sweep in ticks (30 = 1.5 seconds).");
+
+            allyMaxAegisPerPlayer = config.getInt("allyMaxAegisPerPlayer", "balance", 4, 0, 100,
+                    "Maximum living Aegis summons per player from the Ally enchantment.");
+
+            shimmeredHighlightDurationTicks = config.getInt("shimmeredHighlightDurationTicks", "balance", 100, 1, 72000,
+                    "Shimmered ore outline duration in ticks (100 = 5 seconds).");
+            shimmeredHighlightRadius = config.getInt("shimmeredHighlightRadius", "balance", 2, 1, 8,
+                    "Shimmered ore scan radius in blocks.");
 
             apexMaxBonus = config.getFloat("apexMaxBonus", "balance", 0.25F, 0.0F, 10.0F,
                     "Maximum Apex high-ground bonus and falling penalty (0.25 = 25%).");
@@ -192,6 +245,8 @@ public final class DivineConfig {
             bullseyeHitRadius = config.getFloat("bullseyeHitRadius", "balance", 0.30F, 0.05F, 5.0F,
                     "Bullseye hit radius in blocks.");
 
+            gamblersGambitChance = config.getFloat("gamblersGambitChance", "balance", 0.25F, 0.0F, 1.0F,
+                    "Chance per hit for Gambler's Gambit to apply a negative effect (0.25 = 25%).");
             gamblersGambitBlacklist = config.getStringList("gamblersGambitBlacklist", "balance", new String[0],
                     "Potion registry names or paths that Gambler's Gambit must never apply. Example: potioncore:flight, potioncore:teleport.");
 
@@ -256,6 +311,14 @@ public final class DivineConfig {
         buf.writeDouble(quietChippingAggroRadius);
         buf.writeDouble(punctureArmorBypass);
         buf.writeDouble(dulledImpactReductionPerLevel);
+        buf.writeInt(dulledImpactDurationTicks);
+        buf.writeDouble(bracedPivotCooldownReduction);
+        buf.writeDouble(volatileDischargeExplosionPower);
+        buf.writeInt(staggerParalysisTicks);
+        buf.writeInt(lowSweepParalysisTicks);
+        buf.writeInt(allyMaxAegisPerPlayer);
+        buf.writeInt(shimmeredHighlightDurationTicks);
+        buf.writeInt(shimmeredHighlightRadius);
         buf.writeDouble(apexMaxBonus);
         buf.writeInt(perpetualCrucibleBaseDurationTicks);
         buf.writeInt(perpetualCrucibleDurationPerLevelTicks);
@@ -268,6 +331,7 @@ public final class DivineConfig {
         buf.writeDouble(bullseyeHitRadius);
         buf.writeDouble(splinteringDamageMultiplier);
         buf.writeDouble(autofireDamageMultiplier);
+        buf.writeDouble(gamblersGambitChance);
         buf.writeInt(hunterDurationPerLevelTicks);
         buf.writeDouble(voodooChancePerLevel);
         buf.writeDouble(voodooHealthPerLevel);
@@ -311,6 +375,14 @@ public final class DivineConfig {
         quietChippingAggroRadius = buf.readDouble();
         punctureArmorBypass = buf.readDouble();
         dulledImpactReductionPerLevel = buf.readDouble();
+        dulledImpactDurationTicks = buf.readInt();
+        bracedPivotCooldownReduction = buf.readDouble();
+        volatileDischargeExplosionPower = buf.readDouble();
+        staggerParalysisTicks = buf.readInt();
+        lowSweepParalysisTicks = buf.readInt();
+        allyMaxAegisPerPlayer = buf.readInt();
+        shimmeredHighlightDurationTicks = buf.readInt();
+        shimmeredHighlightRadius = buf.readInt();
         apexMaxBonus = buf.readDouble();
         perpetualCrucibleBaseDurationTicks = buf.readInt();
         perpetualCrucibleDurationPerLevelTicks = buf.readInt();
@@ -323,6 +395,7 @@ public final class DivineConfig {
         bullseyeHitRadius = buf.readDouble();
         splinteringDamageMultiplier = buf.readDouble();
         autofireDamageMultiplier = buf.readDouble();
+        gamblersGambitChance = buf.readDouble();
         hunterDurationPerLevelTicks = buf.readInt();
         voodooChancePerLevel = buf.readDouble();
         voodooHealthPerLevel = buf.readDouble();

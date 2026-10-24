@@ -2,6 +2,7 @@ package com.divineenchantments.event;
 
 import com.divineenchantments.config.DivineConfig;
 import com.divineenchantments.init.ModEnchantments;
+import com.divineenchantments.util.ChanceHelper;
 import com.divineenchantments.util.ItemCheckHelper;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.EntityLivingBase;
@@ -119,6 +120,9 @@ public class GamblersGambitEventHandler {
             ItemStack held = player.getHeldItemMainhand();
 
             if (ItemCheckHelper.isMeleeWeapon(held) && ModEnchantments.getLevel(ModEnchantments.GAMBLERS_GAMBIT, held) > 0) {
+                if (!ChanceHelper.roll(player, "gamblers_gambit", DivineConfig.gamblersGambitChance)) {
+                    return;
+                }
                 initPotions();
                 if (NEGATIVE_POTIONS.isEmpty()) return;
 

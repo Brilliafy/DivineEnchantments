@@ -188,6 +188,25 @@ public class ItemCheckHelper {
     }
 
     /**
+     * Checks if the given ItemStack is an axe (vanilla or modded).
+     */
+    public static boolean isAxe(ItemStack stack) {
+        if (stack == null || stack.isEmpty()) {
+            return false;
+        }
+        Item item = stack.getItem();
+        if (item instanceof ItemAxe) {
+            return true;
+        }
+        ResourceLocation reg = item.getRegistryName();
+        if (reg != null && reg.getPath().toLowerCase().contains("axe")) {
+            return true;
+        }
+        String className = item.getClass().getName().toLowerCase();
+        return className.contains("axe");
+    }
+
+    /**
      * Checks if the given ItemStack is a dagger.
      */
     public static boolean isDagger(ItemStack stack) {

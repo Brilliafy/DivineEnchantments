@@ -35,4 +35,19 @@ public class EnchantmentSplinteringImpact extends DivineEnchantment {
         if (!com.divineenchantments.config.DivineConfig.isEnabled(this)) { return false; }
         return ItemCheckHelper.isCrossbow(stack);
     }
+
+    @Override
+    public boolean canApplyTogether(Enchantment other) {
+        if (!super.canApplyTogether(other)) {
+            return false;
+        }
+        if (other != null && other.getRegistryName() != null) {
+            String path = other.getRegistryName().getPath().toLowerCase();
+            if (path.contains("multishot") || path.contains("splitshot") || path.contains("split_shot")
+                    || path.contains("spreadshot") || path.contains("spread_shot")) {
+                return false;
+            }
+        }
+        return true;
+    }
 }

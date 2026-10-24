@@ -36,4 +36,13 @@ public class EnchantmentAlly extends DivineEnchantment {
         if (!com.divineenchantments.config.DivineConfig.isEnabled(this)) { return false; }
         return ItemCheckHelper.isMeleeWeapon(stack) || ItemCheckHelper.isBowOrCrossbow(stack);
     }
+
+    @Override
+    public boolean canApplyTogether(Enchantment other) {
+        if (!super.canApplyTogether(other)) {
+            return false;
+        }
+        return other == null || other.getRegistryName() == null
+                || !"voodoo".equals(other.getRegistryName().getPath());
+    }
 }

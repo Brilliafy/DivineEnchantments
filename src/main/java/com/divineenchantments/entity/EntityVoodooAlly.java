@@ -68,14 +68,14 @@ public class EntityVoodooAlly extends EntityZombie {
     protected void initEntityAI() {
         this.tasks.addTask(0, new EntityAISwimming(this));
         this.tasks.addTask(2, new EntityAIAttackMelee(this, 1.2D, true));
+        this.tasks.addTask(3, new AIFollowOwner(this));
         this.tasks.addTask(4, new EntityAIWanderAvoidWater(this, 0.9D));
-        this.tasks.addTask(5, new AIFollowOwner(this));
         this.tasks.addTask(7, new EntityAIWatchClosest(this, EntityPlayer.class, 8.0F));
         this.tasks.addTask(8, new EntityAILookIdle(this));
 
         this.targetTasks.addTask(1, new EntityAIHurtByTarget(this, false));
         this.targetTasks.addTask(2, new EntityAINearestAttackableTarget<>(this, EntityLivingBase.class,
-                10, false, false, this::isHostileTarget));
+                10, true, true, this::isHostileTarget));
     }
 
     @Override
@@ -201,8 +201,17 @@ public class EntityVoodooAlly extends EntityZombie {
             return false;
         }
         if (target instanceof EntityTameable) {
-            EntityLivingBase owner = ((EntityTameable) target).getOwner();
-            if (owner != null && this.isOwner(owner)) {
+            EntityLivingBase tameOwner = ((EntityTameable) target).getOwner();
+            if (tameOwner != null && this.isOwner(tameOwner)) {
+                return false;
+            }
+        }
+        EntityPlayer owner = this.getOwner();
+        if (owner != null) {
+            if (target.getDistanceSq(owner) > 24.0D * 24.0D) {
+                return false;
+            }
+            if (!owner.canEntityBeSeen(target)) {
                 return false;
             }
         }
@@ -280,10 +289,15 @@ public class EntityVoodooAlly extends EntityZombie {
     }
 
     public void orderAttack(EntityLivingBase target) {
-        if (target != null && target.isEntityAlive() && !this.isFriendly(target)) {
-            this.setAttackTarget(target);
-            this.setRevengeTarget(target);
+        if (target == null || !target.isEntityAlive() || this.isFriendly(target)) {
+            return;
         }
+        EntityPlayer owner = this.getOwner();
+        if (owner != null && (!owner.canEntityBeSeen(target) || target.getDistanceSq(owner) > 32.0D * 32.0D)) {
+            return;
+        }
+        this.setAttackTarget(target);
+        this.setRevengeTarget(target);
     }
 
     @Override

@@ -17,11 +17,13 @@ public class ModNetwork {
             INSTANCE.registerMessage(PacketEnlargement.ClientHandler.class, PacketEnlargement.class, 1, Side.CLIENT);
             INSTANCE.registerMessage(PacketCarnage.ClientHandler.class, PacketCarnage.class, 2, Side.CLIENT);
             INSTANCE.registerMessage(PacketConfigSync.ClientHandler.class, PacketConfigSync.class, 3, Side.CLIENT);
+            INSTANCE.registerMessage(PacketOreGlow.ClientHandler.class, PacketOreGlow.class, 4, Side.CLIENT);
         } else {
             INSTANCE.registerMessage(PacketBullseye.ServerHandler.class, PacketBullseye.class, 0, Side.SERVER);
             INSTANCE.registerMessage(PacketEnlargement.ServerHandler.class, PacketEnlargement.class, 1, Side.SERVER);
             INSTANCE.registerMessage(PacketCarnage.ServerHandler.class, PacketCarnage.class, 2, Side.SERVER);
             INSTANCE.registerMessage(PacketConfigSync.ServerHandler.class, PacketConfigSync.class, 3, Side.SERVER);
+            INSTANCE.registerMessage(PacketOreGlow.ServerHandler.class, PacketOreGlow.class, 4, Side.SERVER);
         }
     }
 

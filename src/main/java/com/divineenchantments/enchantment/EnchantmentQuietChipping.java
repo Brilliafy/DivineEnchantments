@@ -27,6 +27,6 @@ public class EnchantmentQuietChipping extends DivineEnchantment {
     @Override
     public boolean canApply(ItemStack stack) {
         if (!com.divineenchantments.config.DivineConfig.isEnabled(this)) { return false; }
-        return ItemCheckHelper.isPickaxeOrHammer(stack);
+        return ItemCheckHelper.isPickaxeOrHammer(stack) || ItemCheckHelper.isAxe(stack);
     }
 }

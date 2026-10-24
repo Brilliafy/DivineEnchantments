@@ -1,15 +1,10 @@
 package com.divineenchantments.client;
 
 import com.divineenchantments.init.ModEnchantments;
-import net.minecraft.client.Minecraft;
-import net.minecraft.enchantment.EnchantmentHelper;
-import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.text.TextFormatting;
-import net.minecraftforge.client.event.EntityViewRenderEvent;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -17,26 +12,6 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 @SideOnly(Side.CLIENT)
 @Mod.EventBusSubscriber(modid = "divineenchantments", value = Side.CLIENT)
 public class ClientCameraHandler {
-
-    /**
-     * Gyroscopic Plating: while sneaking, locks camera roll and view.
-     * The negative potion effects remain, but they cannot distort the camera.
-     */
-    @SubscribeEvent(priority = EventPriority.LOWEST)
-    public static void onCameraSetup(EntityViewRenderEvent.CameraSetup event) {
-        Minecraft mc = Minecraft.getMinecraft();
-        if (mc.player == null || !mc.player.isSneaking()) {
-            return;
-        }
-        ItemStack chest = mc.player.getItemStackFromSlot(EntityEquipmentSlot.CHEST);
-        if (!chest.isEmpty() && ModEnchantments.getLevel(ModEnchantments.GYROSCOPIC_PLATING, chest) > 0) {
-            event.setRoll(0.0F);
-            if (mc.gameSettings.thirdPersonView == 0) {
-                event.setYaw(mc.player.rotationYaw);
-                event.setPitch(mc.player.rotationPitch);
-            }
-        }
-    }
 
     /**
      * Renders informative tooltip stats on clients for Sacrificial and Heavyplated items.
