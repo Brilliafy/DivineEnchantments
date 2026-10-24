@@ -9,7 +9,7 @@ buildscript {
 }
 apply plugin: 'net.minecraftforge.gradle.forge'
 
-version = '1.0.3'
+version = '1.0.4'
 group = 'com.divineenchantments'
 archivesBaseName = 'DivineEnchantments-1.12.2'
 
@@ -36,7 +36,9 @@ repositories {
     flatDir {
         dirs "/run/media/Aelfwif/F6F25B3AF25AFE75/Users/mesno/AppData/Roaming/PrismLauncher/instances/cleanroom-0.6.13-alpha/minecraft/mods",
              "/home/Aelfwif/Downloads/PrismLauncher-Linux-Qt6-Portable-11.0.3/instances/cleanroom-0.7.7-alpha/minecraft/mods",
-             "/home/Aelfwif/Downloads/PrismLauncher-Linux-Qt6-Portable-11.0.3/instances/RLCraft Dregora/minecraft/mods"
+             "/home/Aelfwif/Downloads/PrismLauncher-Linux-Qt6-Portable-11.0.3/instances/RLCraft Dregora/minecraft/mods",
+             "/home/Aelfwif/Downloads/PrismLauncher-Linux-Qt6-Portable-11.0.4/instances/cleanroom-0.7.7-alpha/minecraft/mods",
+             "/home/Aelfwif/Downloads/PrismLauncher-Linux-Qt6-Portable-11.0.4/instances/RLCraft Dregora/minecraft/mods"
     }
 }
 
@@ -45,6 +47,8 @@ dependencies {
     compileOnly fileTree(dir: '/run/media/Aelfwif/F6F25B3AF25AFE75/Users/mesno/AppData/Roaming/PrismLauncher/instances/cleanroom-0.6.13-alpha/minecraft/mods', include: ['*.jar'])
     compileOnly fileTree(dir: '/home/Aelfwif/Downloads/PrismLauncher-Linux-Qt6-Portable-11.0.3/instances/cleanroom-0.7.7-alpha/minecraft/mods', include: ['*.jar'])
     compileOnly fileTree(dir: '/home/Aelfwif/Downloads/PrismLauncher-Linux-Qt6-Portable-11.0.3/instances/RLCraft Dregora/minecraft/mods', include: ['*.jar'])
+    compileOnly fileTree(dir: '/home/Aelfwif/Downloads/PrismLauncher-Linux-Qt6-Portable-11.0.4/instances/cleanroom-0.7.7-alpha/minecraft/mods', include: ['*.jar'])
+    compileOnly fileTree(dir: '/home/Aelfwif/Downloads/PrismLauncher-Linux-Qt6-Portable-11.0.4/instances/RLCraft Dregora/minecraft/mods', include: ['*.jar'])
 }
 
 processResources {

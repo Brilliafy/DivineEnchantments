@@ -25,16 +25,6 @@ public class EnchantmentShadowStalker extends DivineEnchantment {
     }
 
     @Override
-    public int getMinEnchantability(int level) {
-        return 12 + (level - 1) * 12;
-    }
-
-    @Override
-    public int getMaxEnchantability(int level) {
-        return this.getMinEnchantability(level) + 30;
-    }
-
-    @Override
     public boolean canApply(ItemStack stack) {
         if (!com.divineenchantments.config.DivineConfig.isEnabled(this)) { return false; }
         if (stack == null || stack.isEmpty()) return false;

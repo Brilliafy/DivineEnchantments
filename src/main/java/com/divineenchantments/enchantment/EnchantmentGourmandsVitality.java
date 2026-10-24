@@ -26,16 +26,6 @@ public class EnchantmentGourmandsVitality extends DivineEnchantment {
     }
 
     @Override
-    public int getMinEnchantability(int enchantmentLevel) {
-        return 8 + (enchantmentLevel - 1) * 7;
-    }
-
-    @Override
-    public int getMaxEnchantability(int enchantmentLevel) {
-        return this.getMinEnchantability(enchantmentLevel) + 20;
-    }
-
-    @Override
     public boolean canApply(ItemStack stack) {
         if (!com.divineenchantments.config.DivineConfig.isEnabled(this)) { return false; }
         return stack != null && !stack.isEmpty() && stack.getItem() instanceof ItemArmor

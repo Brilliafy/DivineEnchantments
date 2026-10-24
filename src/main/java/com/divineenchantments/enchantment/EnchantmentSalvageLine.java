@@ -25,16 +25,6 @@ public class EnchantmentSalvageLine extends DivineEnchantment {
     }
 
     @Override
-    public int getMinEnchantability(int level) {
-        return 15;
-    }
-
-    @Override
-    public int getMaxEnchantability(int level) {
-        return 45;
-    }
-
-    @Override
     public boolean canApply(ItemStack stack) {
         if (!com.divineenchantments.config.DivineConfig.isEnabled(this)) { return false; }
         return ItemCheckHelper.isFishingRod(stack);

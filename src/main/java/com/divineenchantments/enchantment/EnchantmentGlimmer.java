@@ -25,16 +25,6 @@ public class EnchantmentGlimmer extends DivineEnchantment {
     }
 
     @Override
-    public int getMinEnchantability(int enchantmentLevel) {
-        return 5;
-    }
-
-    @Override
-    public int getMaxEnchantability(int enchantmentLevel) {
-        return 30;
-    }
-
-    @Override
     public boolean canApply(ItemStack stack) {
         if (!com.divineenchantments.config.DivineConfig.isEnabled(this)) { return false; }
         return ItemCheckHelper.isBowOrCrossbow(stack);

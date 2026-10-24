@@ -14,6 +14,7 @@ Every enchantment includes **Enchantment Descriptions** support and a **JEI** in
 
 - **73 enchantments** across weapons, bows, crossbows, armor, shields, tools, fishing rods, and boots.
 - **Treasure and curse enchantments** with distinct acquisition rules.
+- **Fixed enchanting table levels** for every table enchantment, with higher tiers unlocking as table power rises.
 - **Colored ancient/rune enchantments** - green runes, red voodoo, yellow ancients.
 - **Custom potion effect** with a hand-drawn pixel-art icon.
 - **Custom projectile, chain-hook, and bullseye rendering.**
@@ -26,9 +27,9 @@ Every enchantment includes **Enchantment Descriptions** support and a **JEI** in
 ## Featured Enchantments
 
 ### Rune: Carnage
-*Nunchaku, sabers, and rapiers only. Green text. Super rare level 30 enchantment.*
+*Nunchaku, sabers, and rapiers only. Green text. Very rare table enchantment, table level 24-30.*
 
-Permanently reduces attack speed by 10% per level. Every fully charged hit grants stacking attack speed (+2% / +3% / +5% per stack, up to 7 × level stacks) and shortens the victim's invulnerability frames. Stacks decay by 5 every 5 seconds without a hit. Incompatible with **Swifter Slashes** from SoManyEnchantments.
+Permanently reduces attack speed by 10% per level. Every fully charged hit grants multiplicative attack speed (5% / 5.72% / 7.15% per stack, up to 7 × level stacks), reaching about 2.2x baseline at level III with maximum stacks. Enemy invulnerability frames end exactly when your weapon recharges. Stacks decay by 5 every 5 seconds without a hit. Incompatible with **Swifter Slashes** from SoManyEnchantments.
 
 ### Enlargement I-II
 *All melee weapons.*
@@ -107,6 +108,7 @@ The generated `config/divineenchantments.cfg` includes:
 - The server is authoritative and syncs config to clients on login and respawn.
 - Balance settings for Rune: Carnage, Enlargement, Bullseye, Hunter, Voodoo, Kratos Blades, Feathered Draw, Perpetual Crucible, Autofire, Splintering Impact, Apex, Dulled Impact, Puncture, and sound-stealth radii.
 - Compatibility toggles, including the Better Survival Range damage fix.
+- Enchanting table ranges are documented in the project wiki: level 1-30, with treasure enchantments excluded.
 
 Config changes require a game restart.
 
@@ -123,7 +125,7 @@ No mandatory dependencies. JEI, Enchantment Descriptions, and the integration mo
 ## Installation
 
 1. Install Minecraft Forge 1.12.2 or Cleanroom.
-2. Drop `DivineEnchantments-1.12.2-1.0.3.jar` into the `mods` folder.
+2. Drop `DivineEnchantments-1.12.2-1.0.4.jar` into the `mods` folder.
 3. Install the same jar on the server for multiplayer.
 4. Launch the game.
 

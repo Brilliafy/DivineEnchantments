@@ -27,16 +27,6 @@ public class EnchantmentMachineBow extends DivineEnchantment {
     }
 
     @Override
-    public int getMinEnchantability(int enchantmentLevel) {
-        return 15 + (enchantmentLevel - 1) * 12;
-    }
-
-    @Override
-    public int getMaxEnchantability(int enchantmentLevel) {
-        return this.getMinEnchantability(enchantmentLevel) + 25;
-    }
-
-    @Override
     public boolean canApply(ItemStack stack) {
         if (!com.divineenchantments.config.DivineConfig.isEnabled(this)) { return false; }
         return stack != null && !stack.isEmpty() && stack.getItem() instanceof ItemBow;

@@ -25,16 +25,6 @@ public class EnchantmentGamblersGambit extends DivineEnchantment {
     }
 
     @Override
-    public int getMinEnchantability(int enchantmentLevel) {
-        return 30; // Very costly, high-level enchantment
-    }
-
-    @Override
-    public int getMaxEnchantability(int enchantmentLevel) {
-        return 60;
-    }
-
-    @Override
     public boolean canApply(ItemStack stack) {
         if (!com.divineenchantments.config.DivineConfig.isEnabled(this)) { return false; }
         return ItemCheckHelper.isMeleeWeapon(stack);

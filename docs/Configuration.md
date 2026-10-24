@@ -14,6 +14,8 @@ Config changes require a **game restart**. The server is authoritative for gamep
 | :-- | :-- | :-- |
 | `enableAllEnchantments` | `true` | Master switch. When false, every enchantment is inert and cannot be applied. |
 
+Table level ranges are fixed in code. See [Enchanting Table Levels](EnchantingTable.md) for every table enchantment, its first level, and its tier unlock levels.
+
 ## Enchantment toggles
 
 Every enchantment has a boolean entry under the `enchantments` category:

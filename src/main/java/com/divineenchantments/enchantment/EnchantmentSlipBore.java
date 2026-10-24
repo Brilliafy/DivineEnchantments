@@ -25,16 +25,6 @@ public class EnchantmentSlipBore extends DivineEnchantment {
     }
 
     @Override
-    public int getMinEnchantability(int enchantmentLevel) {
-        return 30; // High-level level 30 enchantment
-    }
-
-    @Override
-    public int getMaxEnchantability(int enchantmentLevel) {
-        return 60;
-    }
-
-    @Override
     public boolean canApply(ItemStack stack) {
         if (!com.divineenchantments.config.DivineConfig.isEnabled(this)) { return false; }
         return ItemCheckHelper.isBowOrCrossbow(stack);

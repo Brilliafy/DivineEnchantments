@@ -15,7 +15,7 @@
 The reobfuscated mod jar is written to:
 
 ```text
-build/libs/DivineEnchantments-1.12.2-1.0.3.jar
+build/libs/DivineEnchantments-1.12.2-1.0.4.jar
 ```
 
 ## Local server test
@@ -30,7 +30,7 @@ The `run/` directory is a disposable development server and is ignored by Git.
 
 ```text
 src/main/java/com/divineenchantments/
-├── enchantment/   Enchantment classes
+├── enchantment/   Enchantment classes, including EnchantingTableTiers.java
 ├── event/         Forge event handlers
 ├── entity/        Custom entities (Voodoo ally, Kratos chain)
 ├── network/       SimpleNetworkWrapper packets
@@ -51,11 +51,13 @@ src/main/resources/
 
 ## Adding an enchantment
 
-1. Create a class extending `net.minecraft.enchantment.Enchantment`.
+1. Create a class extending `DivineEnchantment`.
 2. Register it in `init/ModEnchantments.java`.
-3. Add the name and `.desc` keys to both language files.
-4. Add the gameplay hook in the relevant event handler.
-5. JEI and Enchantment Descriptions pick it up automatically.
+3. If it is table-available, add its registry path and first table level to `EnchantingTableTiers.java`.
+4. Add the name and `.desc` keys to both language files.
+5. Add the gameplay hook in the relevant event handler.
+6. Update `docs/EnchantingTable.md` with the new table range and tier unlocks.
+7. JEI and Enchantment Descriptions pick it up automatically.
 
 ## Notes
 

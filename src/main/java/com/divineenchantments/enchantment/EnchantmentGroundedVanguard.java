@@ -25,16 +25,6 @@ public class EnchantmentGroundedVanguard extends DivineEnchantment {
     }
 
     @Override
-    public int getMinEnchantability(int enchantmentLevel) {
-        return 28;
-    }
-
-    @Override
-    public int getMaxEnchantability(int enchantmentLevel) {
-        return 58;
-    }
-
-    @Override
     public boolean canApply(ItemStack stack) {
         if (!com.divineenchantments.config.DivineConfig.isEnabled(this)) { return false; }
         return stack != null && !stack.isEmpty() && stack.getItem() instanceof ItemArmor

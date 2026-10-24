@@ -26,4 +26,16 @@ public abstract class DivineEnchantment extends Enchantment {
     public boolean isAllowedOnBooks() {
         return DivineConfig.isEnabled(this) && super.isAllowedOnBooks();
     }
+
+    @Override
+    public int getMinEnchantability(int enchantmentLevel) {
+        int min = EnchantingTableTiers.getMinEnchantability(this, enchantmentLevel);
+        return min >= 0 ? min : super.getMinEnchantability(enchantmentLevel);
+    }
+
+    @Override
+    public int getMaxEnchantability(int enchantmentLevel) {
+        int max = EnchantingTableTiers.getMaxEnchantability(this, enchantmentLevel);
+        return max >= 0 ? max : super.getMaxEnchantability(enchantmentLevel);
+    }
 }
