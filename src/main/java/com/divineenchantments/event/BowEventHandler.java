@@ -10,9 +10,6 @@ import com.divineenchantments.util.ItemCheckHelper;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.SharedMonsterAttributes;
-import net.minecraft.entity.ai.attributes.AttributeModifier;
-import net.minecraft.entity.ai.attributes.IAttributeInstance;
 import net.minecraft.entity.monster.EntityEnderman;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -58,7 +55,6 @@ import java.util.concurrent.ConcurrentHashMap;
 @Mod.EventBusSubscriber(modid = "divineenchantments")
 public class BowEventHandler {
 
-    public static final UUID FEATHERED_DRAW_SPEED_UUID = UUID.fromString("c7821649-74e2-4ea5-a249-183027b140fa");
     private static final Map<UUID, BowData> PENDING_BOW_DATA = new ConcurrentHashMap<>();
     private static final java.util.Set<EntityArrow> GLIMMER_ARROWS = java.util.Collections.newSetFromMap(new ConcurrentHashMap<>());
     private static final java.util.Set<EntityArrow> BALLISTIC_ARROWS = java.util.Collections.newSetFromMap(new ConcurrentHashMap<>());
@@ -1123,17 +1119,6 @@ public class BowEventHandler {
             EntityPlayer player = (EntityPlayer) event.getEntityLiving();
             ItemStack bow = event.getItem();
             if (!bow.isEmpty() && bow.getItem() instanceof ItemBow) {
-                // Feathered Draw: reduce movement speed penalty while drawing bow from -80% down to -50%
-                int feathered = ModEnchantments.getLevel(ModEnchantments.FEATHERED_DRAW, bow);
-                if (feathered > 0) {
-                    double speedBonus = feathered == 1 ? DivineConfig.featheredDrawSpeedLevel1
-                            : (feathered == 2 ? DivineConfig.featheredDrawSpeedLevel2
-                            : (feathered == 3 ? DivineConfig.featheredDrawSpeedLevel3 : DivineConfig.featheredDrawSpeedLevel4));
-                    applySpeedModifier(player, FEATHERED_DRAW_SPEED_UUID, "Feathered Draw Speed", speedBonus);
-                } else {
-                    removeSpeedModifier(player, FEATHERED_DRAW_SPEED_UUID);
-                }
-
                 // Machine Bow: auto-fire at full charge with recoil and spread
                 int machineLevel = ModEnchantments.getLevel(ModEnchantments.MACHINE_BOW, bow);
                 if (machineLevel > 0) {
@@ -1171,66 +1156,6 @@ public class BowEventHandler {
                     }
                 }
             }
-        }
-    }
-
-    @SubscribeEvent
-    public static void onPlayerTick(TickEvent.PlayerTickEvent event) {
-        if (event.phase != TickEvent.Phase.END) {
-            return;
-        }
-        EntityPlayer player = event.player;
-        boolean drawingFeathered = false;
-        if (player.isHandActive()) {
-            ItemStack active = player.getActiveItemStack();
-            if (!active.isEmpty() && active.getItem() instanceof ItemBow
-                    && ModEnchantments.getLevel(ModEnchantments.FEATHERED_DRAW, active) > 0) {
-                drawingFeathered = true;
-            }
-        }
-        if (!drawingFeathered) {
-            removeSpeedModifier(player, FEATHERED_DRAW_SPEED_UUID);
-        }
-    }
-
-    @SubscribeEvent
-    public static void onBowUseStop(LivingEntityUseItemEvent.Stop event) {
-        if (event.getEntityLiving() instanceof EntityPlayer) {
-            removeSpeedModifier((EntityPlayer) event.getEntityLiving(), FEATHERED_DRAW_SPEED_UUID);
-        }
-    }
-
-    @SubscribeEvent
-    public static void onBowUseFinish(LivingEntityUseItemEvent.Finish event) {
-        if (event.getEntityLiving() instanceof EntityPlayer) {
-            removeSpeedModifier((EntityPlayer) event.getEntityLiving(), FEATHERED_DRAW_SPEED_UUID);
-        }
-    }
-
-    private static void applySpeedModifier(EntityPlayer player, UUID uuid, String name, double amount) {
-        try {
-            IAttributeInstance inst = player.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED);
-            if (inst == null) return;
-            AttributeModifier mod = inst.getModifier(uuid);
-            if (mod == null || Math.abs(mod.getAmount() - amount) > 0.005D) {
-                if (mod != null) {
-                    inst.removeModifier(uuid);
-                }
-                AttributeModifier newMod = new AttributeModifier(uuid, name, amount, 2);
-                newMod.setSaved(false);
-                inst.applyModifier(newMod);
-            }
-        } catch (Throwable ignored) {
-        }
-    }
-
-    private static void removeSpeedModifier(EntityPlayer player, UUID uuid) {
-        try {
-            IAttributeInstance inst = player.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED);
-            if (inst != null && inst.getModifier(uuid) != null) {
-                inst.removeModifier(uuid);
-            }
-        } catch (Throwable ignored) {
         }
     }
 }
