@@ -7,6 +7,7 @@ import com.divineenchantments.init.ModEnchantments;
 import com.divineenchantments.slipbore.SlipBoreManager;
 import com.divineenchantments.util.ChanceHelper;
 import com.divineenchantments.util.ItemCheckHelper;
+import com.divineenchantments.util.LongdrawHelper;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
@@ -131,14 +132,20 @@ public class BowEventHandler {
         int glimmer = ModEnchantments.getLevel(ModEnchantments.GLIMMER, bow);
         int bullseye = ModEnchantments.getLevel(ModEnchantments.BULLSEYE, bow);
         int hunter = ModEnchantments.getLevel(ModEnchantments.HUNTER, bow);
-        float drawFraction = MathHelper.clamp((float) event.getCharge() / 20.0F, 0.0F, 1.0F);
+        float drawTicks = LongdrawHelper.drawTicks(longdraw);
+        float drawFraction = MathHelper.clamp((float) event.getCharge() / drawTicks, 0.0F, 1.0F);
 
         float longdrawCharge = 1.0F;
         if (longdraw > 0) {
             int charge = event.getCharge();
-            // Longdraw overdrawing up to 250% (50 ticks)
-            if (charge >= 30) {
-                longdrawCharge = Math.min(2.5F, (float) charge / 20.0F);
+            // Longdraw stretches the draw itself: full power now needs 30 ticks instead of 20.
+            float vanillaProgress = MathHelper.clamp(charge / 20.0F, 0.0F, 1.0F);
+            longdrawCharge = vanillaProgress > 0.0F ? drawFraction / vanillaProgress : 1.0F;
+
+            // Past full draw the bow overdraws up to 250% at 50 ticks.
+            if (charge > drawTicks) {
+                float overdraw = Math.min(1.0F, (charge - drawTicks) / Math.max(1.0F, 50.0F - drawTicks));
+                longdrawCharge = 1.0F + 1.5F * overdraw;
 
                 // Recoil: flings the player backward 6 blocks
                 Vec3d look = player.getLookVec();
@@ -273,12 +280,19 @@ public class BowEventHandler {
                 if (data.splinteringImpact > 0) {
                     arrow.getEntityData().setInteger("Divine_SplinteringImpact", data.splinteringImpact);
                 }
-                if (data.longdraw > 0 && data.longdrawCharge > 1.0F) {
-                    arrow.getEntityData().setInteger("Divine_LongdrawPierce", 5);
-                    arrow.setDamage(arrow.getDamage() * data.longdrawCharge);
-                    arrow.motionX *= 1.35D;
-                    arrow.motionY *= 1.35D;
-                    arrow.motionZ *= 1.35D;
+                if (data.longdraw > 0 && data.longdrawCharge != 1.0F) {
+                    if (data.longdrawCharge < 1.0F) {
+                        // Underdrawn shot: slower arrow, and speed-based damage drops with it.
+                        arrow.motionX *= data.longdrawCharge;
+                        arrow.motionY *= data.longdrawCharge;
+                        arrow.motionZ *= data.longdrawCharge;
+                    } else {
+                        arrow.getEntityData().setInteger("Divine_LongdrawPierce", 5);
+                        arrow.setDamage(arrow.getDamage() * data.longdrawCharge);
+                        arrow.motionX *= 1.35D;
+                        arrow.motionY *= 1.35D;
+                        arrow.motionZ *= 1.35D;
+                    }
                 }
                 if (data.glimmer > 0) {
                     arrow.getEntityData().setBoolean("Divine_Glimmer", true);
