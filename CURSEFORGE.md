@@ -71,7 +71,7 @@ While the original blade is held, the other hand drops its item and receives a s
 ## More Enchantment Themes
 
 - **Combat momentum:** Chainsaw, Headslicer, Culling, Dulled Impact, Stagger, Puncture.
-- **Ranged play:** Autofire, Pierceful, Headhunter, Longdraw, Machine Bow, Ballistic Overdrive, Splintering Impact, Slip-Bore, Glimmer.
+- **Ranged play:** Autofire (60% draw minimum), Pierceful, Headhunter, Longdraw, Machine Bow, Ballistic Overdrive, Splintering Impact, Slip-Bore, Glimmer.
 - **Defense and mobility:** Apex, Royal Guard, Cushioned Heel/Shirt, Mudstrider, Gargoyle Stance, Gyroscopic Plating, Grounded Vanguard.
 - **Curses:** Curse of the Tether, Curse of Inertia, Curse of the Volatile Soul, Curse of the Debt of the Void, Curse of Berserker's Bloodlust.
 - **Utility:** Riches, Magnetic Clasp, Thermal Foil, Desalination Mesh, Metabolic Slumber, Salvage Line, Webber.
@@ -128,7 +128,7 @@ No mandatory dependencies. JEI, Enchantment Descriptions, and the integration mo
 ## Installation
 
 1. Install Minecraft Forge 1.12.2 or Cleanroom.
-2. Drop `DivineEnchantments-1.12.2-1.0.9.jar` into the `mods` folder.
+2. Drop `DivineEnchantments-1.12.2-1.0.10.jar` into the `mods` folder.
 3. Install the same jar on the server for multiplayer.
 4. Launch the game.
 

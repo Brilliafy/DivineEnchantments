@@ -293,8 +293,10 @@ public class BowEventHandler {
                 }
 
                 // Autofire logic: Spawns 1 (level I) or 2 (level II) trailing arrows right behind this arrow.
+                // Requires at least 60% bow draw; weaker taps fire a normal single arrow.
                 // Works for original arrow and any multishot/splitshot arrows that join world.
-                if (data.autofire > 0 && !arrow.getEntityData().getBoolean("Divine_IsAutofireCopy")) {
+                if (data.autofire > 0 && data.drawFraction >= 0.60F
+                        && !arrow.getEntityData().getBoolean("Divine_IsAutofireCopy")) {
                     arrow.getEntityData().setBoolean("Divine_Autofire", true);
 
                     double speed = MathHelper.sqrt(arrow.motionX * arrow.motionX + arrow.motionY * arrow.motionY + arrow.motionZ * arrow.motionZ);
