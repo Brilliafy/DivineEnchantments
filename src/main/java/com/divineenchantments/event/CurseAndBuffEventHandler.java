@@ -577,7 +577,7 @@ public class CurseAndBuffEventHandler {
 
     private static void clearTetherDuplicates(EntityPlayer player, ItemStack keep) {
         ItemStack cursor = player.inventory.getItemStack();
-        if (isTetherChest(cursor) && !ItemStack.areItemStacksEqual(cursor, keep)) {
+        if (isTetherChest(cursor) && cursor != player.getItemStackFromSlot(EntityEquipmentSlot.CHEST)) {
             player.inventory.setItemStack(ItemStack.EMPTY);
         }
 

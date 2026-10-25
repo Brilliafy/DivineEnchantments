@@ -42,7 +42,13 @@ public class EnchantmentVoodoo extends DivineEnchantment {
     @Override
     public boolean canApply(ItemStack stack) {
         if (!com.divineenchantments.config.DivineConfig.isEnabled(this)) { return false; }
-        return ItemCheckHelper.isMeleeWeapon(stack);
+        if (stack == null || stack.isEmpty()) {
+            return false;
+        }
+        return ItemCheckHelper.isSword(stack)
+                || ItemCheckHelper.isAxe(stack)
+                || ItemCheckHelper.isPolearmOrHalberd(stack)
+                || ItemCheckHelper.isBluntWeapon(stack);
     }
 
     @Override

@@ -177,7 +177,7 @@ Complete list of all 71 Divine Enchantments, grouped by equipment type. For a qu
 - **Max Level**: III
 - **Acquisition**: Enchanting Table (table level 24-30; tier unlocks: I at 24, II at 27, III at 30).
 - **Incompatible With**: `somanyenchantments:swifterslashes` (Swifter Slashes).
-- **Description**: Fully charged hits grant immediate **multiplicative** attack speed (`+10%` per enchantment level) plus `+4.29%` per stack, stacking up to `7 * level` times. At level III with 21 stacks this reaches roughly `2.2x` the weapon's base attack speed. There is no permanent attack speed penalty. Enemy invulnerability frames are set to exactly your weapon's recharge time, so they expire when the attack indicator is full again. Going 5 seconds without a hit removes 5 stacks. The enchantment name is displayed in green.
+- **Description**: Fully charged hits grant immediate **multiplicative** attack speed (`+10%` per enchantment level) plus `+4.52%` per stack, stacking up to `7 * level` times. At level III with 21 stacks this reaches roughly `2.25x` the weapon's base attack speed. There is no permanent attack speed penalty. Enemy invulnerability frames are set to exactly your weapon's recharge time, so they expire when the attack indicator is full again. Going 5 seconds without a hit removes 5 stacks. The enchantment name is displayed in green.
 
 <a id="enlargement"></a>
 
@@ -192,7 +192,7 @@ Complete list of all 71 Divine Enchantments, grouped by equipment type. For a qu
 
 ### Voodoo
 
-- **Type**: All melee weapons
+- **Type**: Swords, axes, polearms, and blunt weapons (shovels and pickaxes excluded)
 - **Max Level**: VI
 - **Acquisition**: Treasure only (not available from Enchanting Table). Red enchantment name.
 - **Description**: Slaying an enemy with the weapon has a `2 * level%` chance to raise a loyal zombie ally from the ground at the corpse. The ally lasts `30 * level` seconds:
@@ -374,7 +374,7 @@ Complete list of all 71 Divine Enchantments, grouped by equipment type. For a qu
 - **Type**: Bows
 - **Max Level**: IV
 - **Acquisition**: Enchanting Table (table level 10-30; tier unlocks: I at 10, II at 16, III at 22, IV at 28).
-- **Description**: Each arrow hit has a `25% * level` chance to place a bullseye on the enemy for 3 seconds. Level IV always places it. Any arrow hit on a marked enemy deals an additional `20 * level%` damage, regardless of exactly where on the hitbox it lands. Further hits refresh the marker. The bullseye is rendered as a camera-facing pixel-art target attached to the enemy.
+- **Description**: Each arrow hit has a `25% * level` chance to place a bullseye on the enemy for 3 seconds. Level IV always places it. An arrow whose travel ray passes through the marked area deals an additional `20 * level%` damage. Hitting a different body part does not count. Further hits refresh the marker. The bullseye is rendered as a camera-facing pixel-art target attached to the enemy.
 
 <a id="hunter"></a>
 

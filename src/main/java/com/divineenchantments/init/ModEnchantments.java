@@ -73,7 +73,6 @@ public class ModEnchantments {
     public static final EnchantmentStagger STAGGER = new EnchantmentStagger();
     public static final EnchantmentPuncture PUNCTURE = new EnchantmentPuncture();
     public static final EnchantmentTemperedCore TEMPERED_CORE = new EnchantmentTemperedCore();
-    public static final EnchantmentScavengersHabit SCAVENGERS_HABIT = new EnchantmentScavengersHabit();
     public static final EnchantmentThermalFoil THERMAL_FOIL = new EnchantmentThermalFoil();
     public static final EnchantmentMachineBow MACHINE_BOW = new EnchantmentMachineBow();
     public static final EnchantmentDesalinationMesh DESALINATION_MESH = new EnchantmentDesalinationMesh();
@@ -88,7 +87,6 @@ public class ModEnchantments {
 
     public static final EnchantmentShadowStalker SHADOW_STALKER = new EnchantmentShadowStalker();
     public static final EnchantmentChallengersMark CHALLENGERS_MARK = new EnchantmentChallengersMark();
-    public static final EnchantmentLowSweep LOW_SWEEP = new EnchantmentLowSweep();
     public static final EnchantmentGargoyleStance GARGOYLE_STANCE = new EnchantmentGargoyleStance();
     public static final EnchantmentQuietChipping QUIET_CHIPPING = new EnchantmentQuietChipping();
     public static final EnchantmentSalvageLine SALVAGE_LINE = new EnchantmentSalvageLine();
@@ -158,7 +156,6 @@ public class ModEnchantments {
         ENCHANTMENTS.add(STAGGER);
         ENCHANTMENTS.add(PUNCTURE);
         ENCHANTMENTS.add(TEMPERED_CORE);
-        ENCHANTMENTS.add(SCAVENGERS_HABIT);
         ENCHANTMENTS.add(THERMAL_FOIL);
         ENCHANTMENTS.add(MACHINE_BOW);
         ENCHANTMENTS.add(DESALINATION_MESH);
@@ -173,7 +170,6 @@ public class ModEnchantments {
 
         ENCHANTMENTS.add(SHADOW_STALKER);
         ENCHANTMENTS.add(CHALLENGERS_MARK);
-        ENCHANTMENTS.add(LOW_SWEEP);
         ENCHANTMENTS.add(GARGOYLE_STANCE);
         ENCHANTMENTS.add(QUIET_CHIPPING);
         ENCHANTMENTS.add(SALVAGE_LINE);

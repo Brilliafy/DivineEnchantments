@@ -9,18 +9,12 @@ import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.fml.common.network.ByteBufUtils;
 
 import java.io.File;
-import java.util.Arrays;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
-import java.util.Set;
 
 public final class DivineConfig {
 
     private static final Map<String, Boolean> ENABLED_ENCHANTMENTS = new HashMap<>();
-    private static final Set<String> REMOVED_ENCHANTMENTS = new HashSet<>(Arrays.asList(
-            "scavengers_habit",
-            "low_sweep"));
 
     public static boolean enableAllEnchantments = true;
 
@@ -30,9 +24,9 @@ public final class DivineConfig {
     // Rune: Carnage
     public static double carnagePenaltyPerLevel = 0.0D;
     public static double carnageBaseBonusPerLevel = 0.10D;
-    public static double carnageBonusLevel1 = 0.042857D;
-    public static double carnageBonusLevel2 = 0.042857D;
-    public static double carnageBonusLevel3 = 0.042857D;
+    public static double carnageBonusLevel1 = 0.045238D;
+    public static double carnageBonusLevel2 = 0.045238D;
+    public static double carnageBonusLevel3 = 0.045238D;
     public static int carnageMaxStacksPerLevel = 7;
     public static int carnageDecayTicks = 100;
     public static int carnageDecayStacks = 5;
@@ -140,7 +134,7 @@ public final class DivineConfig {
 
             ENABLED_ENCHANTMENTS.clear();
             for (Enchantment enchantment : ModEnchantments.ENCHANTMENTS) {
-                if (enchantment == null || enchantment.getRegistryName() == null || isRemoved(enchantment)) {
+                if (enchantment == null || enchantment.getRegistryName() == null) {
                     continue;
                 }
                 String key = enchantment.getRegistryName().getPath();
@@ -162,24 +156,24 @@ public final class DivineConfig {
                     "Rune: Carnage attack speed penalty per enchantment level (0.0 = no penalty).");
             carnageBaseBonusPerLevel = config.getFloat("carnageBaseBonusPerLevel", "balance", 0.10F, 0.0F, 10.0F,
                     "Rune: Carnage immediate multiplicative attack speed per enchantment level (0.10 = 10 percent per level).");
-            carnageBonusLevel1 = config.getFloat("carnageBonusLevel1", "balance", 0.042857F, 0.0F, 10.0F,
+            carnageBonusLevel1 = config.getFloat("carnageBonusLevel1", "balance", 0.045238F, 0.0F, 10.0F,
                     "Rune: Carnage multiplicative attack speed per stack at level I (0.042857 = 4.29%).");
-            carnageBonusLevel2 = config.getFloat("carnageBonusLevel2", "balance", 0.042857F, 0.0F, 10.0F,
+            carnageBonusLevel2 = config.getFloat("carnageBonusLevel2", "balance", 0.045238F, 0.0F, 10.0F,
                     "Rune: Carnage multiplicative attack speed per stack at level II.");
-            carnageBonusLevel3 = config.getFloat("carnageBonusLevel3", "balance", 0.042857F, 0.0F, 10.0F,
-                    "Rune: Carnage multiplicative attack speed per stack at level III (2.2x at 21 stacks with the base bonus).");
+            carnageBonusLevel3 = config.getFloat("carnageBonusLevel3", "balance", 0.045238F, 0.0F, 10.0F,
+                    "Rune: Carnage multiplicative attack speed per stack at level III (2.25x at 21 stacks with the base bonus).");
             // Migrate the old 1.0.4 defaults to the additive Swifter Slashes VII equivalent.
             if (carnagePenaltyPerLevel == 0.10D) {
                 carnagePenaltyPerLevel = 0.0D;
             }
-            if (carnageBonusLevel1 == 0.05D || carnageBonusLevel1 == 0.0667D || carnageBonusLevel1 == 0.0524D) {
-                carnageBonusLevel1 = 0.042857D;
+            if (carnageBonusLevel1 == 0.05D || carnageBonusLevel1 == 0.0667D || carnageBonusLevel1 == 0.0524D || carnageBonusLevel1 == 0.042857D) {
+                carnageBonusLevel1 = 0.045238D;
             }
-            if (carnageBonusLevel2 == 0.0572D || carnageBonusLevel2 == 0.0667D || carnageBonusLevel2 == 0.0524D) {
-                carnageBonusLevel2 = 0.042857D;
+            if (carnageBonusLevel2 == 0.0572D || carnageBonusLevel2 == 0.0667D || carnageBonusLevel2 == 0.0524D || carnageBonusLevel2 == 0.042857D) {
+                carnageBonusLevel2 = 0.045238D;
             }
-            if (carnageBonusLevel3 == 0.0715D || carnageBonusLevel3 == 0.0667D || carnageBonusLevel3 == 0.0524D) {
-                carnageBonusLevel3 = 0.042857D;
+            if (carnageBonusLevel3 == 0.0715D || carnageBonusLevel3 == 0.0667D || carnageBonusLevel3 == 0.0524D || carnageBonusLevel3 == 0.042857D) {
+                carnageBonusLevel3 = 0.045238D;
             }
             carnageMaxStacksPerLevel = config.getInt("carnageMaxStacksPerLevel", "balance", 7, 0, 100,
                     "Maximum Rune: Carnage stacks per enchantment level (7 means 7/14/21).");
@@ -432,15 +426,6 @@ public final class DivineConfig {
         }
     }
 
-    public static boolean isRemoved(Enchantment enchantment) {
-        if (enchantment == null) {
-            return false;
-        }
-        ResourceLocation name = enchantment.getRegistryName();
-        return name != null && "divineenchantments".equals(name.getNamespace())
-                && REMOVED_ENCHANTMENTS.contains(name.getPath());
-    }
-
     public static boolean isDisabled(Enchantment enchantment) {
         if (enchantment == null) {
             return false;
@@ -456,9 +441,6 @@ public final class DivineConfig {
         ResourceLocation name = enchantment.getRegistryName();
         if (name == null) {
             return true;
-        }
-        if (REMOVED_ENCHANTMENTS.contains(name.getPath())) {
-            return false;
         }
         Boolean enabled = ENABLED_ENCHANTMENTS.get(name.getPath());
         return enabled == null || enabled;
