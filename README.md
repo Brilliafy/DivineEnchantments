@@ -56,7 +56,7 @@ Every enchantment has **JEI** information and **Enchantment Descriptions** suppo
 **Install**
 
 1. Install Minecraft Forge 1.12.2 or Cleanroom.
-2. Drop `DivineEnchantments-1.12.2-1.0.11.jar` into `mods/`.
+2. Drop `DivineEnchantments-1.12.2-1.0.12.jar` into `mods/`.
 3. Install the same jar on the server for multiplayer.
 4. Launch the game.
 
@@ -71,7 +71,7 @@ Every enchantment has **JEI** information and **Enchantment Descriptions** suppo
 
 | Enchantment | Type | Max | What it does |
 | :-- | :-- | :-- | :-- |
-| **[Rune: Carnage](docs/Enchantments.md#rune-carnage)** | Nunchaku / Saber / Rapier | III | Full-charge hits add +20% attack speed per level plus +13.34% per stack, reaching 4.4x at III; enemy i-frames end exactly when your weapon recharges. |
+| **[Rune: Carnage](docs/Enchantments.md#rune-carnage)** | Nunchaku / Saber / Rapier | III | Full-charge hits add +10% attack speed per level plus +2.74% per stack, reaching 1.875x at III; enemy i-frames end exactly when your weapon recharges. |
 | **[Enlargement](docs/Enchantments.md#enlargement)** | Melee | II | 2% × level chance to grow the target by 10% × level for 20 seconds, capped at 30%; bosses/HP>150 get half duration. |
 | **[Bullseye](docs/Enchantments.md#bullseye)** | Bow | IV | Marks a 3-second bullseye; arrows through it deal +20% × level damage. |
 | **[Hunter](docs/Enchantments.md#hunter)** | Bow | III | Glowing for 20 × level × draw seconds after an arrow hit. |
@@ -114,7 +114,7 @@ Every enchantment has **JEI** information and **Enchantment Descriptions** suppo
 | [Dulled Impact](docs/Enchantments.md#dulled-impact) | Melee | III | Table · Lv 5-30 | Reduces outgoing attack damage by 10% / 20% / 30% for 5 seconds. |
 | [Stagger](docs/Enchantments.md#stagger) | Melee | I | Table · Lv 10-30 | Full-charge hits have a 65% chance to interrupt windup and apply Lycanites Paralysis for 3s, or 1s with a helmet. |
 | [Puncture](docs/Enchantments.md#puncture) | Melee | I | Table · Lv 8-30 | Bypasses 10% of natural mob armor. |
-| [Rune: Carnage](docs/Enchantments.md#rune-carnage) | Melee | III | Table · Lv 24-30 | Full-charge hits add +20% attack speed per level plus +13.34% per stack, reaching 4.4x at III. |
+| [Rune: Carnage](docs/Enchantments.md#rune-carnage) | Melee | III | Table · Lv 24-30 | Full-charge hits add +10% attack speed per level plus +2.74% per stack, reaching 1.875x at III. |
 | [Enlargement](docs/Enchantments.md#enlargement) | Melee | II | Table · Lv 10-30 | 2%/level chance to grow a target by 10%/level for 20s, capped at 30%. Bosses/HP>150 get half duration. |
 | [Voodoo](docs/Enchantments.md#voodoo) | Sword / Axe / Polearm | VI | Treasure | Kills can raise a scaling zombie ally for 30s/level; max 6 per player, visible enemies near you only. Incompatible with Ally. |
 | [Ancient: Kratos Blades](docs/Enchantments.md#ancient-kratos-blades) | Melee | I | Treasure | While the original blade is held, the other hand immediately drops whatever it is holding and receives a functional duplicate of the blade.… |
@@ -296,7 +296,7 @@ config/divineenchantments.cfg
 The jar is written to:
 
 ```text
-build/libs/DivineEnchantments-1.12.2-1.0.11.jar
+build/libs/DivineEnchantments-1.12.2-1.0.12.jar
 ```
 
 See [docs/Development.md](docs/Development.md) for the project layout and development notes.

@@ -177,7 +177,7 @@ Complete list of all 71 Divine Enchantments, grouped by equipment type. For a qu
 - **Max Level**: III
 - **Acquisition**: Enchanting Table (table level 24-30; tier unlocks: I at 24, II at 27, III at 30).
 - **Incompatible With**: `somanyenchantments:swifterslashes` (Swifter Slashes).
-- **Description**: Fully charged hits grant immediate **multiplicative** attack speed (`+20%` per enchantment level) plus `+13.34%` per stack, stacking up to `7 * level` times. At level III with 21 stacks this reaches roughly `4.4x` the weapon's base attack speed. There is no permanent attack speed penalty. Enemy invulnerability frames are set to exactly your weapon's recharge time, so they expire when the attack indicator is full again. Going 5 seconds without a hit removes 5 stacks. The enchantment name is displayed in green.
+- **Description**: Fully charged hits grant immediate **multiplicative** attack speed (`+10%` per enchantment level) plus `+2.74%` per stack, stacking up to `7 * level` times. At level III with 21 stacks this reaches roughly `1.875x` the weapon's base attack speed, the same speed as Swifter Slashes VII on a sword. There is no permanent attack speed penalty. Enemy invulnerability frames are set to exactly your weapon's recharge time, so they expire when the attack indicator is full again. Going 5 seconds without a hit removes 5 stacks. The enchantment name is displayed in green.
 
 <a id="enlargement"></a>
 
