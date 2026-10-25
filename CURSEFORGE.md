@@ -32,7 +32,7 @@ Every enchantment includes **Enchantment Descriptions** support and a **JEI** in
 ### Rune: Carnage
 *Nunchaku, sabers, and rapiers only. Green text. Very rare table enchantment, table level 24-30.*
 
-Every fully charged hit grants +10% attack speed per level plus +4.52% per stack, up to 7 × level stacks. At level III with 21 stacks this reaches about 2.25x the weapon base attack speed. Enemy invulnerability frames end exactly when your weapon recharges. Stacks decay by 5 every 5 seconds without a hit. Incompatible with **Swifter Slashes** from SoManyEnchantments.
+Every fully charged hit grants +20% attack speed per level plus +13.34% per stack, up to 7 × level stacks. At level III with 21 stacks this reaches about 4.4x the weapon base attack speed. Enemy invulnerability frames end exactly when your weapon recharges. Stacks decay by 5 every 5 seconds without a hit. Incompatible with **Swifter Slashes** from SoManyEnchantments.
 
 ### Enlargement I-II
 *All melee weapons.*
@@ -128,7 +128,7 @@ No mandatory dependencies. JEI, Enchantment Descriptions, and the integration mo
 ## Installation
 
 1. Install Minecraft Forge 1.12.2 or Cleanroom.
-2. Drop `DivineEnchantments-1.12.2-1.0.8.jar` into the `mods` folder.
+2. Drop `DivineEnchantments-1.12.2-1.0.9.jar` into the `mods` folder.
 3. Install the same jar on the server for multiplayer.
 4. Launch the game.
 
