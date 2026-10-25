@@ -258,7 +258,7 @@ Complete list of all 71 Divine Enchantments, grouped by equipment type. For a qu
 - **Type**: Bows
 - **Max Level**: II
 - **Acquisition**: Super rare treasure (not available from Enchanting Table).
-- **Description**: When firing a bow, trailing arrows travel immediately behind each arrow with identical velocity and trajectory. Every arrow in the volley deals 60% damage.
+- **Description**: Requires at least **60% draw** (12 of 20 ticks). Weaker taps fire a single normal arrow. At 60% draw or higher, trailing arrows travel immediately behind each arrow with identical velocity and trajectory. Every arrow in the volley deals 60% damage.
   - Level I: 2 arrows total (original + 1 trailing arrow).
   - Level II: 3 arrows total (original + 2 trailing arrows).
   - Removes target invincibility frames so every arrow can land.

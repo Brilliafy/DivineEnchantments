@@ -56,7 +56,7 @@ Every enchantment has **JEI** information and **Enchantment Descriptions** suppo
 **Install**
 
 1. Install Minecraft Forge 1.12.2 or Cleanroom.
-2. Drop `DivineEnchantments-1.12.2-1.0.9.jar` into `mods/`.
+2. Drop `DivineEnchantments-1.12.2-1.0.10.jar` into `mods/`.
 3. Install the same jar on the server for multiplayer.
 4. Launch the game.
 
@@ -128,7 +128,7 @@ Every enchantment has **JEI** information and **Enchantment Descriptions** suppo
 | :-- | :-- | :-- | :-- | :-- |
 | [Gravitational](docs/Enchantments.md#gravitational) | Bow | I | Treasure | When the fired arrow lands (whether on a block or an entity), it pulls all mobs within a 5-block radius 2 blocks towards the landing point with… |
 | [Pierceful](docs/Enchantments.md#pierceful) | Bow | II | Treasure | Arrows pierce 1 / 2 entities before landing. |
-| [Autofire](docs/Enchantments.md#autofire) | Bow | II | Treasure · Super rare | Fires 1 / 2 trailing arrows with matched velocity. Each arrow deals 60% damage. |
+| [Autofire](docs/Enchantments.md#autofire) | Bow | II | Treasure · Super rare | Requires at least 60% draw. Then fires 1 / 2 trailing arrows with matched velocity. Each arrow deals 60% damage. |
 | [Headhunter](docs/Enchantments.md#headhunter) | Bow | I | Treasure | Arrows that hit an enemy's head / topmost hitbox area deal 1.5x critical damage with magic crit particles and audio feedback. |
 | [Slip-Bore](docs/Enchantments.md#slip-bore) | Bow / Crossbow | I | Table · Lv 30 | Arrows punch a vacuum tunnel that drags entities toward the path. Incompatible with Multishot/Splitshot. |
 | [Muzzle](docs/Enchantments.md#muzzle) | Bow / Crossbow | I | Table · Lv 30 | Bolts and arrows inflict Aphagia for 10s. Works with Spartan iron/diamond/tipped/spectral bolts. |
@@ -296,7 +296,7 @@ config/divineenchantments.cfg
 The jar is written to:
 
 ```text
-build/libs/DivineEnchantments-1.12.2-1.0.9.jar
+build/libs/DivineEnchantments-1.12.2-1.0.10.jar
 ```
 
 See [docs/Development.md](docs/Development.md) for the project layout and development notes.
