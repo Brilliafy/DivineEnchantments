@@ -1,6 +1,6 @@
 # Divine Enchantments
 
-**73 handcrafted enchantments for Minecraft 1.12.2 - built for Forge and Cleanroom.**
+**71 handcrafted enchantments for Minecraft 1.12.2 - built for Forge and Cleanroom.**
 
 > **1.12.2 note:** Maces, sabers, rapiers, spears, pikes, lances, glaives, halberds, nunchaku, and crossbows come from 1.12.2 weapon mods such as Spartan Weaponry, Better Survival, and Crossbows Backport. They are not vanilla 1.12.2 items.
 
@@ -12,13 +12,15 @@ Every enchantment includes **Enchantment Descriptions** support and a **JEI** in
 
 ## Highlights
 
-- **73 enchantments** across weapons, bows, crossbows, armor, shields, tools, fishing rods, and boots.
+- **71 enchantments** across weapons, bows, crossbows, armor, shields, tools, fishing rods, and boots.
 - **Treasure and curse enchantments** with distinct acquisition rules.
 - **Fixed enchanting table levels** for every table enchantment, with higher tiers unlocking as table power rises.
 - **Average-accurate chance rolls:** a 0.4% proc is guaranteed within 250 attempts instead of relying on short random streaks.
 - **Colored ancient/rune enchantments** - green runes, red voodoo, yellow ancients.
 - **Custom potion effect** with a hand-drawn pixel-art icon.
 - **Custom projectile, chain-hook, and bullseye rendering.**
+- **Crossbow bolt support:** Spartan iron, diamond, tipped, and spectral bolts work with all crossbow enchantments.
+- **Aperture only triggers while actively blocking**, not while merely holding a shield.
 - **No required dependencies.** Optional integrations activate automatically when the matching mod is installed.
 - **Fully configurable:** master switch, per-enchantment toggles, and balance tuning.
 - **Multiplayer-aware:** inventory, durability, attributes, projectiles, status effects, and visuals are synchronized between client and server.
@@ -30,7 +32,7 @@ Every enchantment includes **Enchantment Descriptions** support and a **JEI** in
 ### Rune: Carnage
 *Nunchaku, sabers, and rapiers only. Green text. Very rare table enchantment, table level 24-30.*
 
-Every fully charged hit grants additive attack speed (+0.0667 per stack, up to 7 × level stacks). At level III with 21 stacks this adds +1.4 attack speed, matching **Swifter Slashes VII**. Enemy invulnerability frames end exactly when your weapon recharges. Stacks decay by 5 every 5 seconds without a hit. Incompatible with **Swifter Slashes** from SoManyEnchantments.
+Every fully charged hit grants immediate additive attack speed (+0.1 per level) plus +0.0524 per stack, up to 7 × level stacks. At level III with 21 stacks this totals +1.4 attack speed, matching **Swifter Slashes VII**. Enemy invulnerability frames end exactly when your weapon recharges. Stacks decay by 5 every 5 seconds without a hit. Incompatible with **Swifter Slashes** from SoManyEnchantments.
 
 ### Enlargement I-II
 *All melee weapons.*
@@ -68,11 +70,11 @@ While the original blade is held, the other hand drops its item and receives a s
 
 ## More Enchantment Themes
 
-- **Combat momentum:** Chainsaw, Headslicer, Culling, Dulled Impact, Stagger, Puncture, Low Sweep.
+- **Combat momentum:** Chainsaw, Headslicer, Culling, Dulled Impact, Stagger, Puncture.
 - **Ranged play:** Autofire, Pierceful, Headhunter, Longdraw, Machine Bow, Ballistic Overdrive, Splintering Impact, Slip-Bore, Glimmer.
 - **Defense and mobility:** Apex, Royal Guard, Cushioned Heel/Shirt, Mudstrider, Gargoyle Stance, Gyroscopic Plating, Grounded Vanguard.
 - **Curses:** Curse of the Tether, Curse of Inertia, Curse of the Volatile Soul, Curse of the Debt of the Void, Curse of Berserker's Bloodlust.
-- **Utility:** Riches, Scavenger's Habit, Magnetic Clasp, Thermal Foil, Desalination Mesh, Metabolic Slumber, Salvage Line, Webber.
+- **Utility:** Riches, Magnetic Clasp, Thermal Foil, Desalination Mesh, Metabolic Slumber, Salvage Line, Webber.
 - **Treasure hunting:** Gravitational, Aperture, Harmonic Anchor, Perpetual Crucible, Gambler's Gambit, Umbral Prowess, and more.
 
 A full enchantment list is included in the project README.
@@ -126,7 +128,7 @@ No mandatory dependencies. JEI, Enchantment Descriptions, and the integration mo
 ## Installation
 
 1. Install Minecraft Forge 1.12.2 or Cleanroom.
-2. Drop `DivineEnchantments-1.12.2-1.0.5.jar` into the `mods` folder.
+2. Drop `DivineEnchantments-1.12.2-1.0.6.jar` into the `mods` folder.
 3. Install the same jar on the server for multiplayer.
 4. Launch the game.
 

@@ -38,6 +38,7 @@ import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.event.entity.ProjectileImpactEvent;
+import net.minecraftforge.event.entity.living.LivingAttackEvent;
 import net.minecraftforge.event.entity.living.LivingDamageEvent;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.entity.living.LivingEntityUseItemEvent;
@@ -272,6 +273,7 @@ public class BowEventHandler {
                 }
                 if (data.ballisticOverdrive > 0) {
                     arrow.getEntityData().setBoolean("Divine_BallisticOverdrive", true);
+                    arrow.getEntityData().setDouble("Divine_BallisticMotionY", arrow.motionY);
                     arrow.setNoGravity(true);
                     BALLISTIC_ARROWS.add(arrow);
                 }
@@ -288,9 +290,6 @@ public class BowEventHandler {
                 if (data.glimmer > 0) {
                     arrow.getEntityData().setBoolean("Divine_Glimmer", true);
                     GLIMMER_ARROWS.add(arrow);
-                }
-                if (data.scavengersHabit > 0) {
-                    arrow.getEntityData().setInteger("Divine_ScavengersHabit", data.scavengersHabit);
                 }
                 if (data.bullseye > 0) {
                     arrow.getEntityData().setInteger("Divine_Bullseye", data.bullseye);
@@ -365,6 +364,7 @@ public class BowEventHandler {
                         }
                         if (arrow.getEntityData().getBoolean("Divine_BallisticOverdrive")) {
                             trailing.getEntityData().setBoolean("Divine_BallisticOverdrive", true);
+                            trailing.getEntityData().setDouble("Divine_BallisticMotionY", trailing.motionY);
                             trailing.setNoGravity(true);
                             BALLISTIC_ARROWS.add(trailing);
                         }
@@ -399,6 +399,7 @@ public class BowEventHandler {
         if (arrow == null || arrow.world.isRemote) {
             return;
         }
+        ensureArrowTags(arrow);
 
         RayTraceResult ray = event.getRayTraceResult();
         if (ray == null) {
@@ -417,16 +418,17 @@ public class BowEventHandler {
             if (hit instanceof EntityLivingBase) {
                 EntityLivingBase livingHit = (EntityLivingBase) hit;
 
-                // Bullseye: reward hitting the small moving bullseye, then place a fresh one.
+                // Bullseye: any hit on the marked target counts, then roll to place or refresh the marker.
                 int bullseyeLevel = arrow.getEntityData().getInteger("Divine_Bullseye");
                 if (bullseyeLevel > 0) {
-                    Vec3d hitPos = ray.hitVec != null ? ray.hitVec : new Vec3d(arrow.posX, arrow.posY, arrow.posZ);
-                    Vec3d rayStart = new Vec3d(arrow.prevPosX, arrow.prevPosY, arrow.prevPosZ);
-                    arrow.getEntityData().setBoolean("Divine_BullseyeHit", false);
-                    if (BullseyeManager.matches(livingHit, rayStart, hitPos)) {
-                        arrow.getEntityData().setBoolean("Divine_BullseyeHit", true);
+                    boolean marked = BullseyeManager.get(livingHit) != null;
+                    arrow.getEntityData().setBoolean("Divine_BullseyeHit", marked);
+                    if (arrow.shootingEntity instanceof EntityPlayer) {
+                        EntityPlayer shooter = (EntityPlayer) arrow.shootingEntity;
+                        if (ChanceHelper.roll(shooter, "bullseye_place", 0.25F * bullseyeLevel)) {
+                            BullseyeManager.place(livingHit);
+                        }
                     }
-                    BullseyeManager.place(livingHit);
                 }
 
                 // Hunter: glowing duration scales with bow draw strength at release.
@@ -593,6 +595,20 @@ public class BowEventHandler {
         }
     }
 
+    @SubscribeEvent(priority = net.minecraftforge.fml.common.eventhandler.EventPriority.HIGHEST)
+    public static void onLivingAttack(LivingAttackEvent event) {
+        if (event.getEntityLiving().world.isRemote) {
+            return;
+        }
+        if (event.getSource().getImmediateSource() instanceof EntityArrow) {
+            EntityArrow arrow = (EntityArrow) event.getSource().getImmediateSource();
+            if (arrow.getEntityData().getBoolean("Divine_Autofire")) {
+                event.getEntityLiving().hurtResistantTime = 0;
+                event.getEntityLiving().maxHurtResistantTime = Math.max(1, event.getEntityLiving().maxHurtResistantTime);
+            }
+        }
+    }
+
     @SubscribeEvent
     public static void onLivingHurt(LivingHurtEvent event) {
         if (event.getEntityLiving().world.isRemote) {
@@ -601,6 +617,7 @@ public class BowEventHandler {
 
         if (event.getSource().getImmediateSource() instanceof EntityArrow) {
             EntityArrow arrow = (EntityArrow) event.getSource().getImmediateSource();
+            ensureArrowTags(arrow);
 
             // Autofire: every arrow in the volley deals reduced damage.
             if (arrow.getEntityData().getBoolean("Divine_Autofire")) {
@@ -623,6 +640,18 @@ public class BowEventHandler {
                             SoundEvents.ENTITY_ARROW_HIT_PLAYER, SoundCategory.PLAYERS, 1.2F, 1.45F);
                     target.world.playSound(null, target.posX, target.posY + target.height * 0.5D, target.posZ,
                             SoundEvents.BLOCK_NOTE_PLING, SoundCategory.PLAYERS, 1.1F, 1.9F);
+                }
+            }
+
+            // Muzzle fallback: guarantee Aphagia even if the impact hook was skipped for a modded bolt.
+            if (arrow.getEntityData().hasKey("Divine_Muzzle")) {
+                EntityLivingBase muzzleTarget = event.getEntityLiving();
+                Potion aphagia = LycanitesIntegration.getAphagiaPotion();
+                if (aphagia != null) {
+                    muzzleTarget.addPotionEffect(new PotionEffect(aphagia, 200, 0));
+                } else {
+                    muzzleTarget.addPotionEffect(new PotionEffect(MobEffects.MINING_FATIGUE, 200, 2));
+                    muzzleTarget.addPotionEffect(new PotionEffect(MobEffects.WEAKNESS, 200, 1));
                 }
             }
 
@@ -761,6 +790,77 @@ public class BowEventHandler {
         arrow.world.playSound(null, lx, ly, lz, SoundEvents.BLOCK_ENDERCHEST_OPEN, SoundCategory.PLAYERS, 1.0F, 0.7F);
     }
 
+    private static void ensureArrowTags(EntityArrow arrow) {
+        if (arrow.getEntityData().getBoolean("Divine_TagsEnsured")) {
+            return;
+        }
+        if (arrow.getEntityData().getBoolean("Divine_IsShrapnelShard")) {
+            arrow.getEntityData().setBoolean("Divine_TagsEnsured", true);
+            return;
+        }
+        if (!(arrow.shootingEntity instanceof EntityPlayer)) {
+            return;
+        }
+        EntityPlayer player = (EntityPlayer) arrow.shootingEntity;
+        ItemStack held = player.getHeldItemMainhand();
+        if (!ItemCheckHelper.isBowOrCrossbow(held)) {
+            held = player.getHeldItemOffhand();
+        }
+        if (held.isEmpty() || !ItemCheckHelper.isBowOrCrossbow(held)) {
+            return;
+        }
+
+        int val;
+        if ((val = ModEnchantments.getLevel(ModEnchantments.MUZZLE, held)) > 0) {
+            arrow.getEntityData().setInteger("Divine_Muzzle", val);
+        }
+        if ((val = ModEnchantments.getLevel(ModEnchantments.HEADHUNTER, held)) > 0) {
+            arrow.getEntityData().setInteger("Divine_Headhunter", val);
+        }
+        if ((val = ModEnchantments.getLevel(ModEnchantments.HUNTER, held)) > 0) {
+            arrow.getEntityData().setInteger("Divine_Hunter", val);
+            if (!arrow.getEntityData().hasKey("Divine_HunterDraw")) {
+                arrow.getEntityData().setFloat("Divine_HunterDraw", 1.0F);
+            }
+        }
+        if ((val = ModEnchantments.getLevel(ModEnchantments.BULLSEYE, held)) > 0) {
+            arrow.getEntityData().setInteger("Divine_Bullseye", val);
+        }
+        if (ModEnchantments.getLevel(ModEnchantments.GLIMMER, held) > 0) {
+            arrow.getEntityData().setBoolean("Divine_Glimmer", true);
+            GLIMMER_ARROWS.add(arrow);
+        }
+        if ((val = ModEnchantments.getLevel(ModEnchantments.SPLINTERING_IMPACT, held)) > 0) {
+            arrow.getEntityData().setInteger("Divine_SplinteringImpact", val);
+        }
+        if (ModEnchantments.getLevel(ModEnchantments.BALLISTIC_OVERDRIVE, held) > 0) {
+            arrow.getEntityData().setBoolean("Divine_BallisticOverdrive", true);
+            if (!arrow.getEntityData().hasKey("Divine_BallisticMotionY")) {
+                arrow.getEntityData().setDouble("Divine_BallisticMotionY", arrow.motionY);
+            }
+            arrow.setNoGravity(true);
+            BALLISTIC_ARROWS.add(arrow);
+        }
+        if ((val = ModEnchantments.getLevel(ModEnchantments.ARCHERY, held)) > 0) {
+            arrow.getEntityData().setInteger("Divine_Archery", val);
+        }
+        if ((val = ModEnchantments.getLevel(ModEnchantments.GRAVITATIONAL, held)) > 0) {
+            arrow.getEntityData().setInteger("Divine_Gravitational", val);
+        }
+        if ((val = ModEnchantments.getLevel(ModEnchantments.PIERCEFUL, held)) > 0) {
+            arrow.getEntityData().setInteger("Divine_Pierceful", val);
+        }
+        if (ModEnchantments.getLevel(ModEnchantments.SLIP_BORE, held) > 0) {
+            arrow.getEntityData().setBoolean("Divine_SlipBore", true);
+            SlipBoreManager.trackArrow(arrow);
+        }
+        if (ModEnchantments.ALLY != null && Loader.isModLoaded("lycanitesmobs")
+                && ModEnchantments.getLevel(ModEnchantments.ALLY, held) > 0) {
+            arrow.getEntityData().setInteger("Divine_Ally", 1);
+        }
+        arrow.getEntityData().setBoolean("Divine_TagsEnsured", true);
+    }
+
     private static void checkAllyProc(EntityArrow arrow, Entity hit) {
         if (arrow.getEntityData().hasKey("Divine_Ally") && ModEnchantments.ALLY != null && Loader.isModLoaded("lycanitesmobs")) {
             if (arrow.shootingEntity instanceof EntityPlayer && ChanceHelper.roll((EntityPlayer) arrow.shootingEntity, "ally_bow", 0.02F)) {
@@ -778,36 +878,6 @@ public class BowEventHandler {
             player.getEntityData().setLong("DE_LastShotId", shotId);
         }
         return shotId;
-    }
-
-    private static ItemStack getProjectileStack(EntityArrow arrow) {
-        try {
-            Method method = null;
-            for (String methodName : new String[]{"getArrowStack", "func_184550_j"}) {
-                Class<?> clazz = arrow.getClass();
-                while (clazz != null && clazz != Object.class && method == null) {
-                    try {
-                        method = clazz.getDeclaredMethod(methodName);
-                    } catch (NoSuchMethodException ignored) {
-                    }
-                    clazz = clazz.getSuperclass();
-                }
-                if (method != null) {
-                    break;
-                }
-            }
-            if (method != null) {
-                method.setAccessible(true);
-                Object result = method.invoke(arrow);
-                if (result instanceof ItemStack) {
-                    ItemStack stack = ((ItemStack) result).copy();
-                    stack.setCount(1);
-                    return stack;
-                }
-            }
-        } catch (Throwable ignored) {
-        }
-        return new ItemStack(Items.ARROW);
     }
 
     private static boolean arrayContains(int[] array, int val) {
@@ -858,19 +928,6 @@ public class BowEventHandler {
             EntityArrow arrow = (EntityArrow) source.getImmediateSource();
             archeryLvl = arrow.getEntityData().getInteger("Divine_Archery");
 
-            // Scavenger's Habit: 25% * level chance to refund arrow on kill (only for initial arrow)
-            if (arrow.getEntityData().hasKey("Divine_ScavengersHabit") && !arrow.getEntityData().getBoolean("Divine_ScavengerUsed")) {
-                arrow.getEntityData().setBoolean("Divine_ScavengerUsed", true);
-                int scavLvl = arrow.getEntityData().getInteger("Divine_ScavengersHabit");
-                float chance = 0.25F * scavLvl;
-                if (player.world.rand.nextFloat() < chance) {
-                    player.inventory.addItemStackToInventory(new ItemStack(Items.ARROW));
-                    player.world.playSound(null, player.posX, player.posY, player.posZ, SoundEvents.ENTITY_ITEM_PICKUP, SoundCategory.PLAYERS, 0.7F, 1.4F);
-                    if (player.world instanceof WorldServer) {
-                        ((WorldServer) player.world).spawnParticle(EnumParticleTypes.VILLAGER_HAPPY, player.posX, player.posY + 1.0D, player.posZ, 8, 0.3D, 0.3D, 0.3D, 0.05D);
-                    }
-                }
-            }
         }
 
         // If not found on arrow, check held bow/crossbow
@@ -1002,6 +1059,18 @@ public class BowEventHandler {
 
         // Keep bullseye markers visible for players who start tracking the enemy.
         net.minecraft.server.MinecraftServer server = net.minecraftforge.fml.common.FMLCommonHandler.instance().getMinecraftServerInstance();
+        if (server != null && server.getTickCounter() % 5 == 0) {
+            for (WorldServer world : server.worlds) {
+                for (Entity loaded : world.loadedEntityList) {
+                    if (loaded instanceof EntityArrow && loaded.ticksExisted <= 5) {
+                        EntityArrow freshArrow = (EntityArrow) loaded;
+                        if (!freshArrow.getEntityData().getBoolean("Divine_TagsEnsured")) {
+                            ensureArrowTags(freshArrow);
+                        }
+                    }
+                }
+            }
+        }
         if (server != null && server.getTickCounter() % 20 == 0) {
             for (com.divineenchantments.bullseye.BullseyeTarget spot : new java.util.ArrayList<>(BullseyeManager.getAll())) {
                 for (WorldServer world : server.worlds) {
@@ -1026,7 +1095,8 @@ public class BowEventHandler {
                     ballisticIt.remove();
                     continue;
                 }
-                arr.motionY += 0.05D;
+                double ballisticMotionY = arr.getEntityData().getDouble("Divine_BallisticMotionY");
+                arr.motionY = ballisticMotionY;
             }
         }
 
@@ -1101,6 +1171,25 @@ public class BowEventHandler {
                     }
                 }
             }
+        }
+    }
+
+    @SubscribeEvent
+    public static void onPlayerTick(TickEvent.PlayerTickEvent event) {
+        if (event.phase != TickEvent.Phase.END) {
+            return;
+        }
+        EntityPlayer player = event.player;
+        boolean drawingFeathered = false;
+        if (player.isHandActive()) {
+            ItemStack active = player.getActiveItemStack();
+            if (!active.isEmpty() && active.getItem() instanceof ItemBow
+                    && ModEnchantments.getLevel(ModEnchantments.FEATHERED_DRAW, active) > 0) {
+                drawingFeathered = true;
+            }
+        }
+        if (!drawingFeathered) {
+            removeSpeedModifier(player, FEATHERED_DRAW_SPEED_UUID);
         }
     }
 

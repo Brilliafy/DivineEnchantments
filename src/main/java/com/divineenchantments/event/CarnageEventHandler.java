@@ -182,7 +182,7 @@ public class CarnageEventHandler {
         // Full-hit momentum: configurable attack speed bonus per stack.
         float perStack = level == 1 ? (float) DivineConfig.carnageBonusLevel1
                     : (level == 2 ? (float) DivineConfig.carnageBonusLevel2 : (float) DivineConfig.carnageBonusLevel3);
-        double bonus = perStack * stacks;
+        double bonus = DivineConfig.carnageBaseBonusPerLevel * level + perStack * stacks;
         if (bonus > 0.0D) {
             applyModifier(player, STACKS_UUID, "Rune Carnage Stacks", bonus, 1);
         } else {

@@ -43,6 +43,7 @@ public class EntityVoodooAlly extends EntityZombie {
 
     private static final String TAG_OWNER = "DE_VoodooOwner";
     private static final String TAG_LEVEL = "DE_VoodooLevel";
+    private static final String TAG_LIFETIME = "DE_VoodooLifetime";
     private static final String TEAM_NAME = "de_voodoo";
 
     private static final DataParameter<String> OWNER_NAME =
@@ -50,6 +51,7 @@ public class EntityVoodooAlly extends EntityZombie {
 
     private UUID ownerUUID;
     private int allyLevel = 1;
+    private int lifetimeTicks = 0;
 
     public EntityVoodooAlly(World world) {
         super(world);
@@ -111,6 +113,7 @@ public class EntityVoodooAlly extends EntityZombie {
     public void setOwner(EntityPlayer owner, int level) {
         this.ownerUUID = owner.getUniqueID();
         this.allyLevel = Math.max(1, level);
+        this.lifetimeTicks = this.allyLevel * 600;
         this.getDataManager().set(OWNER_NAME, owner.getName());
         this.setCustomNameTag(owner.getName() + "'s Ally");
         this.setAlwaysRenderNameTag(true);
@@ -253,7 +256,14 @@ public class EntityVoodooAlly extends EntityZombie {
                 EntityPlayer owner = this.getOwner();
                 if (owner == null || !owner.isEntityAlive()) {
                     this.vanish();
+                    return;
                 }
+            }
+            if (this.lifetimeTicks <= 0) {
+                this.lifetimeTicks = this.allyLevel * 600;
+            }
+            if (--this.lifetimeTicks <= 0) {
+                this.vanish();
             }
         }
     }
@@ -304,6 +314,7 @@ public class EntityVoodooAlly extends EntityZombie {
     public void writeEntityToNBT(NBTTagCompound compound) {
         super.writeEntityToNBT(compound);
         compound.setInteger(TAG_LEVEL, this.allyLevel);
+        compound.setInteger(TAG_LIFETIME, this.lifetimeTicks);
         if (this.ownerUUID != null) {
             compound.setString(TAG_OWNER, this.ownerUUID.toString());
         }
@@ -314,6 +325,7 @@ public class EntityVoodooAlly extends EntityZombie {
     public void readEntityFromNBT(NBTTagCompound compound) {
         super.readEntityFromNBT(compound);
         this.allyLevel = Math.max(1, compound.getInteger(TAG_LEVEL));
+        this.lifetimeTicks = compound.hasKey(TAG_LIFETIME) ? compound.getInteger(TAG_LIFETIME) : this.allyLevel * 600;
         if (compound.hasKey(TAG_OWNER)) {
             try {
                 this.ownerUUID = UUID.fromString(compound.getString(TAG_OWNER));

@@ -130,6 +130,9 @@ public class GamblersGambitEventHandler {
                 PotionSupplier chosen = NEGATIVE_POTIONS.get(rand.nextInt(NEGATIVE_POTIONS.size()));
 
                 EntityLivingBase victim = event.getEntityLiving();
+                if (ItemCheckHelper.isBossEntity(victim) || !victim.isNonBoss()) {
+                    return;
+                }
                 victim.addPotionEffect(new PotionEffect(chosen.potion, chosen.duration, chosen.amplifier, false, true));
 
                 // Visual and audio feedback

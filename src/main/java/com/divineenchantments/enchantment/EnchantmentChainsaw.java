@@ -33,6 +33,9 @@ public class EnchantmentChainsaw extends DivineEnchantment {
     @Override
     public boolean canApplyAtEnchantingTable(ItemStack stack) {
         if (!com.divineenchantments.config.DivineConfig.isEnabled(this)) { return false; }
-        return ItemCheckHelper.isMeleeWeapon(stack);
+        return ItemCheckHelper.isSword(stack)
+                || ItemCheckHelper.isAxe(stack)
+                || ItemCheckHelper.isPolearmOrHalberd(stack)
+                || ItemCheckHelper.isBluntWeapon(stack);
     }
 }

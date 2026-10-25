@@ -1,11 +1,11 @@
 # Enchantment Reference
 
-Complete list of all 73 Divine Enchantments, grouped by equipment type. For a quick scannable index, see the [README](../README.md#enchantment-library). For table unlock levels, see [Enchanting Table Levels](EnchantingTable.md).
+Complete list of all 71 Divine Enchantments, grouped by equipment type. For a quick scannable index, see the [README](../README.md#enchantment-library). For table unlock levels, see [Enchanting Table Levels](EnchantingTable.md).
 
 ## Contents
 
-- [Melee Weapons](#melee-weapons) - 19 enchantments
-- [Ranged](#ranged) - 16 enchantments
+- [Melee Weapons](#melee-weapons) - 18 enchantments
+- [Ranged](#ranged) - 15 enchantments
 - [Armor & Shields](#armor-shields) - 22 enchantments
 - [Tools & Utility](#tools-utility) - 7 enchantments
 - [Hybrid & Universal](#hybrid-universal) - 4 enchantments
@@ -17,13 +17,13 @@ Complete list of all 73 Divine Enchantments, grouped by equipment type. For a qu
 
 <a id="melee-weapons"></a>
 
-**19 enchantments.**
+**18 enchantments.**
 
 <a id="chainsaw"></a>
 
 ### Chainsaw
 
-- **Type**: Melee weapons (Swords, Axes, and Spartan Weaponry melee weapons)
+- **Type**: Swords, axes, polearms, and blunt weapons (shovels and pickaxes are excluded)
 - **Max Level**: III
 - **Acquisition**: Enchanting Table (table level 5-30; tier unlocks: I at 5, II at 17, III at 29).
 - **Description**: Dealing a direct melee hit causes the enemy to bleed for `(4 + n)%` of weapon damage for `3 + n` times (where `n` is the enchantment level).
@@ -36,7 +36,7 @@ Complete list of all 73 Divine Enchantments, grouped by equipment type. For a qu
 
 ### Sacrificial
 
-- **Type**: Melee weapons (Swords, Axes, and Spartan Weaponry melee weapons)
+- **Type**: Swords, axes, polearms, and blunt weapons (shovels and pickaxes are excluded)
 - **Max Level**: I
 - **Acquisition**: Enchanting Table (table level 10-30).
 - **Description**: When held in the main hand:
@@ -51,9 +51,9 @@ Complete list of all 73 Divine Enchantments, grouped by equipment type. For a qu
 ### Webber
 
 - **Type**: Swords only
-- **Max Level**: I
+- **Max Level**: II
 - **Acquisition**: Treasure only (not available from Enchanting Table).
-- **Description**: Swords instantly break cobwebs on touch with zero delay, and hits have a `0.4%` chance to spawn a cobweb on the target.
+- **Description**: Swords instantly break cobwebs on touch with zero delay. Hits have a `0.4% * level` chance to spawn a cobweb on the target and play a spider sound. Level II doubles the chance to `0.8%`.
 
 <a id="riches"></a>
 
@@ -65,7 +65,8 @@ Complete list of all 73 Divine Enchantments, grouped by equipment type. For a qu
 - **Incompatible With**: Education (`mujmajnkraftsbettersurvival:education`).
 - **SoManyEnchantments Integration**: Adept increases the Riches proc chance and the XP payout.
 - **Description**: Killing a mob has a chance to trigger a loot and XP explosion:
-  - Level I: 0.1% base chance; Level II: 0.2% base chance.
+  - Level I: 10% base chance; Level II: 20% base chance.
+  - Bosses and boss-bar mobs are immune.
   - Adept adds +25% chance per level and adds +2 to the XP multiplier per level.
   - The loot multiplier is capped at 10x; Adept does not increase it.
   - Stacks additively with vanilla Looting and SoManyEnchantments Advanced Looting.
@@ -77,7 +78,7 @@ Complete list of all 73 Divine Enchantments, grouped by equipment type. For a qu
 - **Type**: Melee weapons (Swords, Axes, Spartan Weaponry)
 - **Max Level**: I
 - **Acquisition**: Enchanting Table (table level 30).
-- **Description**: Melee hits have a 25% chance to inflict a random negative potion effect selected from vanilla, Potion Core, and any other installed mod. The chance uses an average-accurate accumulator, so it guarantees a proc within 4 hits.
+- **Description**: Melee hits have a 25% chance to inflict a random negative potion effect selected from vanilla, Potion Core, and any other installed mod. Bosses and boss-bar mobs are immune. The chance uses an average-accurate accumulator, so it guarantees a proc within 4 hits.
 
 <a id="breach"></a>
 
@@ -156,7 +157,7 @@ Complete list of all 73 Divine Enchantments, grouped by equipment type. For a qu
 - **Type**: Spartan Weaponry maces and axes (blunt weapons & axes)
 - **Max Level**: I
 - **Acquisition**: Enchanting Table (table level 10-30).
-- **Description**: Melee strikes briefly pause a basic mob's attack windup and inflict Lycanites Paralysis for 3 seconds (60 ticks), or 1 second (20 ticks) if the target wears a helmet. Bosses and champions are immune.
+- **Description**: Fully charged melee hits have a 65% chance to pause a basic mob's attack windup and inflict Lycanites Paralysis for 3 seconds (60 ticks), or 1 second (20 ticks) if the target wears a helmet. Bosses and champions are immune.
 
 <a id="puncture"></a>
 
@@ -167,14 +168,6 @@ Complete list of all 73 Divine Enchantments, grouped by equipment type. For a qu
 - **Acquisition**: Enchanting Table (table level 8-30).
 - **Description**: Piercing melee strikes bypass 10% of natural mob armor (e.g., treating a 10-armor mob as having 9 armor). Percentage-based bypass scales with armored targets without trivializing early mobs.
 
-<a id="low-sweep"></a>
-
-### Low Sweep
-
-- **Type**: All melee weapons
-- **Max Level**: III
-- **Acquisition**: Enchanting Table (table level 5-30; tier unlocks: I at 5, II at 17, III at 29).
-- **Description**: Every melee hit triggers a custom radial sweep that damages nearby enemies for 45% / 55% / 65% of the hit and applies Lycanites Paralysis for 1.5 seconds. It also staggers short or crawling mobs such as Silverfish, small spiders, and hounds. Works with swords, axes, polearms, and other melee weapons.
 
 <a id="rune-carnage"></a>
 
@@ -184,7 +177,7 @@ Complete list of all 73 Divine Enchantments, grouped by equipment type. For a qu
 - **Max Level**: III
 - **Acquisition**: Enchanting Table (table level 24-30; tier unlocks: I at 24, II at 27, III at 30).
 - **Incompatible With**: `somanyenchantments:swifterslashes` (Swifter Slashes).
-- **Description**: Fully charged hits grant additive attack speed (`+0.0667` per stack), stacking up to `7 * level` times. At level III with 21 stacks this adds `+1.4` attack speed, matching SoManyEnchantments Swifter Slashes VII. There is no permanent attack speed penalty. Enemy invulnerability frames are set to exactly your weapon's recharge time, so they expire when the attack indicator is full again. Going 5 seconds without a hit removes 5 stacks. The enchantment name is displayed in green.
+- **Description**: Fully charged hits grant immediate additive attack speed (`+0.10` per enchantment level) plus `+0.0524` per stack, stacking up to `7 * level` times. At level III with 21 stacks this totals `+1.4` attack speed, matching SoManyEnchantments Swifter Slashes VII. There is no permanent attack speed penalty. Enemy invulnerability frames are set to exactly your weapon's recharge time, so they expire when the attack indicator is full again. Going 5 seconds without a hit removes 5 stacks. The enchantment name is displayed in green.
 
 <a id="enlargement"></a>
 
@@ -202,7 +195,7 @@ Complete list of all 73 Divine Enchantments, grouped by equipment type. For a qu
 - **Type**: All melee weapons
 - **Max Level**: VI
 - **Acquisition**: Treasure only (not available from Enchanting Table). Red enchantment name.
-- **Description**: Slaying an enemy with the weapon has a `2 * level%` chance to raise a loyal zombie ally from the ground at the corpse:
+- **Description**: Slaying an enemy with the weapon has a `2 * level%` chance to raise a loyal zombie ally from the ground at the corpse. The ally lasts `30 * level` seconds:
   - Health: `4 * level`.
   - Movement speed: 35% faster than a normal zombie.
   - Attack damage: `3 + level`.
@@ -234,7 +227,7 @@ Complete list of all 73 Divine Enchantments, grouped by equipment type. For a qu
 
 <a id="ranged"></a>
 
-**16 enchantments.**
+**15 enchantments.**
 
 <a id="gravitational"></a>
 
@@ -288,7 +281,7 @@ Complete list of all 73 Divine Enchantments, grouped by equipment type. For a qu
 - **Type**: Bows and modded crossbows
 - **Max Level**: I
 - **Acquisition**: Enchanting Table (table level 30).
-- **Description**: Arrows punch a low-pressure vacuum tunnel (3-block radius) through the air along their flight path. Nearby entities have their velocity yanked inward toward the trajectory centerline, dragging flying modded mobs (Cacodemons, Raikos, etc.) crashing down to the ground and pulling ground mobs into a tight line behind the arrow.
+- **Description**: Arrows punch a low-pressure vacuum tunnel (3-block radius) through the air along their flight path. Nearby entities have their velocity yanked inward toward the trajectory centerline, dragging flying modded mobs (Cacodemons, Raikos, etc.) crashing down to the ground and pulling ground mobs into a tight line behind the arrow. Incompatible with Multishot and Splitshot.
 
 <a id="muzzle"></a>
 
@@ -298,7 +291,7 @@ Complete list of all 73 Divine Enchantments, grouped by equipment type. For a qu
 - **Max Level**: I
 - **Acquisition**: Enchanting Table (table level 30).
 - **Lycanites Mobs Integration**: Applies `lycanitesmobs:aphagia`.
-- **Description**: Fired crossbow projectiles afflict targets with Aphagia for 10 seconds (200 ticks), disabling item usage and consumption (eating, potions, active items).
+- **Description**: Fired crossbow projectiles afflict targets with Aphagia for 10 seconds (200 ticks), disabling item usage and consumption (eating, potions, active items). Works with Spartan iron, diamond, tipped, and spectral bolts.
 
 <a id="archery"></a>
 
@@ -321,7 +314,7 @@ Complete list of all 73 Divine Enchantments, grouped by equipment type. For a qu
 - **Max Level**: I
 - **Acquisition**: Enchanting Table (table level 25-30).
 - **Incompatible With**: Rapid Load, Strafe, and rapid-firing crossbow enchantments.
-- **Description**: Loaded crossbow projectiles completely ignore gravity (`noGravity = true`), travelling in a laser-straight horizontal vector with infinite punch-through piercing through non-boss entities until colliding with solid terrain or a boss monster.
+- **Description**: Loaded crossbow projectiles completely ignore gravity, travelling in a laser-straight vector with infinite punch-through piercing through non-boss entities until colliding with solid terrain or a boss monster. Applies to Spartan iron, diamond, tipped, and spectral bolts by resetting their vertical motion every tick.
 
 <a id="splintering-impact"></a>
 
@@ -362,16 +355,8 @@ Complete list of all 73 Divine Enchantments, grouped by equipment type. For a qu
 - **Max Level**: IV
 - **Acquisition**: Enchanting Table (table level 8-30; tier unlocks: I at 8, II at 15, III at 22, IV at 29).
 - **Incompatible With**: Strafe (SoManyEnchantments).
-- **Description**: Removes 20% / 40% / 60% / 80% of the vanilla bow draw slowdown at levels I-IV, leaving -64% / -48% / -32% / -16% movement speed while aiming. Incompatible with Strafe.
+- **Description**: Removes 20% / 40% / 60% / 80% of the vanilla bow draw slowdown at levels I-IV, leaving -64% / -48% / -32% / -16% movement speed while aiming. The speed modifier is removed immediately when you stop charging or swap items. Incompatible with Strafe.
 
-<a id="scavenger-s-habit"></a>
-
-### Scavenger's Habit
-
-- **Type**: Bows, Crossbows, and Thrown Weapons
-- **Max Level**: IV
-- **Acquisition**: Enchanting Table (table level 8-30; tier unlocks: I at 8, II at 15, III at 22, IV at 29).
-- **Description**: Killing an enemy with an arrow, bolt, or thrown weapon refunds one matching projectile directly into the player's inventory. Only one refund can happen per shot, even if Multishot or Splitshot kills several enemies with the same volley. Compatible with Multishot and Splitshot. Mutually exclusive with `somanyenchantments:arrowrecovery`.
 
 <a id="machine-bow"></a>
 
@@ -389,7 +374,7 @@ Complete list of all 73 Divine Enchantments, grouped by equipment type. For a qu
 - **Type**: Bows
 - **Max Level**: IV
 - **Acquisition**: Enchanting Table (table level 10-30; tier unlocks: I at 10, II at 16, III at 22, IV at 28).
-- **Description**: Hitting an enemy with an arrow marks a small bullseye on them for 3 seconds. Arrows whose flight path passes through the bullseye deal an additional `20 * level%` damage. Any further bow hit refreshes and repositions the bullseye. The bullseye is rendered as a camera-facing pixel-art target attached to the enemy.
+- **Description**: Each arrow hit has a `25% * level` chance to place a bullseye on the enemy for 3 seconds. Level IV always places it. Any arrow hit on a marked enemy deals an additional `20 * level%` damage, regardless of exactly where on the hitbox it lands. Further hits refresh the marker. The bullseye is rendered as a camera-facing pixel-art target attached to the enemy.
 
 <a id="hunter"></a>
 
@@ -449,7 +434,7 @@ Complete list of all 73 Divine Enchantments, grouped by equipment type. For a qu
 - **Type**: Shields (Vanilla and Spartan Shields)
 - **Max Level**: I
 - **Acquisition**: Treasure only (not available from Enchanting Table).
-- **Description**: Captures incoming enemy projectiles (Skeleton arrows, Ice and Fire dragon breath orbs, Lycanites Cacodemon balls, Ghast fireballs, etc.) upon contact with your shield. The projectile does not trigger hit logic; its entity instance is captured, ownership is fully transferred to you (including modded thrower and target fields), it is re-aimed along your `player.getLookVec()` trajectory, given a `+50%` speed boost, and re-fired from eye height as an allied projectile. It can damage its original owner.
+- **Description**: Only works while actively blocking with the shield. Captures incoming enemy projectiles (Skeleton arrows, Spartan bolts, Ice and Fire dragon breath orbs, Lycanites Cacodemon balls, Reaper spectral bolts, Ghast fireballs, etc.) upon contact. The projectile does not trigger hit logic; its entity instance is captured, ownership is fully transferred to you (including SRG thrower/shooter fields and modded target fields), it is re-aimed along your `player.getLookVec()` trajectory, given a `+50%` speed boost, and re-fired from eye height as an allied projectile. It can damage its original owner.
 
 <a id="gyroscopic-plating"></a>
 
@@ -558,7 +543,7 @@ Complete list of all 73 Divine Enchantments, grouped by equipment type. For a qu
 - **Type**: Helmets
 - **Max Level**: I
 - **Acquisition**: Enchanting Table (table level 8-30).
-- **Description**: Reduces infection and Thirsty effects from drinking dirty or salt water (Tough As Nails or Simple Difficulty) by 85% when drinking directly from a water source with an empty hand.
+- **Description**: Immediately suppresses Parasites and Thirsty effects from dirty or salt water (Tough As Nails or Simple Difficulty) while the helmet is worn.
 
 <a id="metabolic-slumber"></a>
 
@@ -658,7 +643,7 @@ Complete list of all 73 Divine Enchantments, grouped by equipment type. For a qu
 - **Type**: Pickaxes
 - **Max Level**: I
 - **Acquisition**: Enchanting Table (table level 3-30).
-- **Description**: Breaking an ore block draws a glowing through-wall box outline around identical ore blocks within 2 blocks for 5 seconds, revealing hidden adjacent veins.
+- **Description**: Breaking an ore block draws a glowing through-wall box outline around identical ore blocks within 2 blocks for 1 second, revealing hidden adjacent veins.
 
 <a id="silt-sifter"></a>
 
@@ -764,7 +749,7 @@ Complete list of all 73 Divine Enchantments, grouped by equipment type. For a qu
 - **Type**: Chestplates
 - **Max Level**: I (Curse)
 - **Acquisition**: Treasure only (not available from Enchanting Table).
-- **Description**: You take `10%` less damage from all attacks and `20%` less durability damage to your chestplate, but the chestplate cannot be removed or dropped from your chest in Survival mode.
+- **Description**: You take `10%` less damage from all attacks and `20%` less durability damage to your chestplate, but the chestplate cannot be removed or dropped from your chest in Survival mode. Inventory removal attempts are rejected and duplicate cursor/container copies are forcibly purged.
 
 <a id="curse-of-inertia"></a>
 
@@ -807,7 +792,7 @@ Complete list of all 73 Divine Enchantments, grouped by equipment type. For a qu
 - **Max Level**: I
 - **Curse**: Yes.
 - **Acquisition**: Treasure only (not available from Enchanting Table).
-- **Description**: Base attack damage scales up to +150% higher as the wielder's health drops toward death. In exchange, incoming healing from natural regeneration, healing potions, and lifesteal is reduced by 75%.
+- **Description**: Base attack damage scales up to +150% higher as the wielder's health drops toward death. In exchange, all incoming healing is reduced by 75%, including natural regeneration, potions, lifesteal, and direct health restoration.
 
 [Back to top](#contents)
 
