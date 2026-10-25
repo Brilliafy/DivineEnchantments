@@ -64,6 +64,12 @@ public class CarnageEventHandler {
             data.setInteger(TAG_STACKS, 0);
         }
 
+        // Vanilla resets ticksSinceLastSwing BEFORE attackEntityFrom runs, so
+        // getCooledAttackStrength() is always ~0 inside the hurt event. Measure the
+        // full charge from the time elapsed since the previous landed hit instead.
+        long previousHit = data.getLong(TAG_LAST_HIT);
+        int cooldownTicks = Math.max(1, Math.round(player.getCooldownPeriod()));
+        boolean fullyCharged = previousHit == 0L || now - previousHit >= cooldownTicks - 1;
         data.setLong(TAG_LAST_HIT, now);
 
         // Only one stack gain per swing tick (sweeping can fire several hurt events in a tick).
@@ -71,8 +77,7 @@ public class CarnageEventHandler {
             return;
         }
 
-        // "Full hit": the attack indicator must be completely recharged.
-        if (player.getCooledAttackStrength(0.5F) >= 0.99F) {
+        if (fullyCharged) {
             int stacks = data.getInteger(TAG_STACKS);
             int maxStacks = DivineConfig.carnageMaxStacksPerLevel * level;
             if (stacks < maxStacks) {

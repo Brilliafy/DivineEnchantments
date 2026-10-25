@@ -52,9 +52,9 @@ These live under the `balance` category.
 | :-- | :-- | :-- |
 | `carnagePenaltyPerLevel` | `0.0` | Attack speed penalty per level. The default is no penalty. |
 | `carnageBaseBonusPerLevel` | `0.10` | Immediate multiplicative attack speed per enchantment level. |
-| `carnageBonusLevel1` | `0.045238` | Multiplicative attack speed per stack at level I (4.52%). |
-| `carnageBonusLevel2` | `0.045238` | Multiplicative attack speed per stack at level II. |
-| `carnageBonusLevel3` | `0.045238` | Multiplicative attack speed per stack at level III (about 2.25x at 21 stacks). |
+| `carnageBonusLevel1` | `0.1334` | Multiplicative attack speed per stack at level I (13.34%). |
+| `carnageBonusLevel2` | `0.1334` | Multiplicative attack speed per stack at level II. |
+| `carnageBonusLevel3` | `0.1334` | Multiplicative attack speed per stack at level III (about 4.4x at 21 stacks). |
 | `carnageMaxStacksPerLevel` | `7` | Maximum stacks per level (7 = 7/14/21). |
 | `carnageDecayTicks` | `100` | Ticks without a hit before stacks decay. |
 | `carnageDecayStacks` | `5` | Stacks lost per decay interval. |

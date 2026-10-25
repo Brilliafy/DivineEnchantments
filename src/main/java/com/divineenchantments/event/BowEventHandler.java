@@ -20,6 +20,7 @@ import net.minecraft.init.MobEffects;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.item.ItemBow;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.play.server.SPacketEntityVelocity;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
@@ -417,7 +418,9 @@ public class BowEventHandler {
                     Vec3d rayEnd = rayStart.add(new Vec3d(arrow.motionX, arrow.motionY, arrow.motionZ));
                     boolean marked = BullseyeManager.matches(livingHit, rayStart, rayEnd);
                     arrow.getEntityData().setBoolean("Divine_BullseyeHit", marked);
-                    if (arrow.shootingEntity instanceof EntityPlayer) {
+                    if (marked) {
+                        BullseyeManager.clearAndSync(livingHit);
+                    } else if (arrow.shootingEntity instanceof EntityPlayer) {
                         EntityPlayer shooter = (EntityPlayer) arrow.shootingEntity;
                         if (ChanceHelper.roll(shooter, "bullseye_place", 0.25F * bullseyeLevel)) {
                             BullseyeManager.place(livingHit);
@@ -451,9 +454,10 @@ public class BowEventHandler {
                 }
             }
 
-            // Autofire: reset hurt resistance so subsequent trailing arrows will deal full damage
+            // Autofire: reset hurt resistance and PotionCore's separate projectile invulnerability timer
+            // so every arrow in the volley can land.
             if (arrow.getEntityData().getBoolean("Divine_Autofire") && hit instanceof EntityLivingBase) {
-                ((EntityLivingBase) hit).hurtResistantTime = 0;
+                clearAutofireInvulnerability((EntityLivingBase) hit);
             }
 
             // Muzzle: inflicts aphagia for 10s (200 ticks) preventing item use and eating
@@ -485,10 +489,10 @@ public class BowEventHandler {
                     && !arrow.getEntityData().getBoolean("Divine_BallisticOverdrive")) {
                 if (!arrow.getEntityData().getBoolean("Divine_AutofireApplied")) {
                     arrow.getEntityData().setBoolean("Divine_AutofireApplied", true);
-                    ((EntityLivingBase) hit).hurtResistantTime = 0;
+                    clearAutofireInvulnerability((EntityLivingBase) hit);
                     applyArrowDamage(arrow, hit);
                     checkAllyProc(arrow, hit);
-                    ((EntityLivingBase) hit).hurtResistantTime = 0;
+                    clearAutofireInvulnerability((EntityLivingBase) hit);
                 }
                 event.setCanceled(true);
                 arrow.setDead();
@@ -711,7 +715,21 @@ public class BowEventHandler {
         }
     }
 
-    private static void applyArrowDamage(EntityArrow arrow, Entity hit) {
+    /**
+     * PotionCore keeps a separate projectile invulnerability counter in entity NBT
+     * ("Potion Core - Projectile Invulnerability"). It cancels LivingAttackEvent for
+     * projectile damage even when vanilla hurtResistantTime is zero, which silently
+     * swallowed every Autofire arrow after the first. Clear it before each volley hit.
+     */
+    private static void clearAutofireInvulnerability(EntityLivingBase target) {
+        target.hurtResistantTime = 0;
+        NBTTagCompound data = target.getEntityData();
+        if (data.hasKey("Potion Core - Projectile Invulnerability")) {
+            data.setInteger("Potion Core - Projectile Invulnerability", 0);
+        }
+    }
+
+    private static boolean applyArrowDamage(EntityArrow arrow, Entity hit) {
         float speed = MathHelper.sqrt(arrow.motionX * arrow.motionX + arrow.motionY * arrow.motionY + arrow.motionZ * arrow.motionZ);
         int damage = MathHelper.ceil((double) speed * arrow.getDamage());
         if (arrow.getIsCritical()) {
@@ -734,7 +752,18 @@ public class BowEventHandler {
             hit.setFire(5);
         }
 
-        if (hit.attackEntityFrom(damagesource, (float) damage)) {
+        // Multi-hit divine arrows must not be swallowed by PotionCore's separate
+        // projectile invulnerability timer between hits in the same volley/pierce.
+        if (hit instanceof EntityLivingBase
+                && (arrow.getEntityData().getBoolean("Divine_Autofire")
+                || arrow.getEntityData().hasKey("Divine_Pierceful")
+                || arrow.getEntityData().hasKey("Divine_LongdrawPierce")
+                || arrow.getEntityData().getBoolean("Divine_BallisticOverdrive"))) {
+            clearAutofireInvulnerability((EntityLivingBase) hit);
+        }
+
+        boolean damaged = hit.attackEntityFrom(damagesource, (float) damage);
+        if (damaged) {
             if (hit instanceof EntityLivingBase) {
                 EntityLivingBase living = (EntityLivingBase) hit;
                 if (!arrow.world.isRemote) {
@@ -750,6 +779,7 @@ public class BowEventHandler {
             }
             arrow.playSound(SoundEvents.ENTITY_ARROW_HIT, 1.0F, 1.2F / (arrow.world.rand.nextFloat() * 0.2F + 0.9F));
         }
+        return damaged;
     }
 
     private static void triggerGravitational(EntityArrow arrow, Vec3d hitVec) {
@@ -809,6 +839,9 @@ public class BowEventHandler {
         if (arrow.getEntityData().getBoolean("Divine_IsShrapnelShard")) {
             arrow.getEntityData().setBoolean("Divine_TagsEnsured", true);
             return;
+        }
+        if (arrow.getEntityData().getBoolean("Divine_IsAutofireCopy")) {
+            arrow.getEntityData().setBoolean("Divine_Autofire", true);
         }
         if (!(arrow.shootingEntity instanceof EntityPlayer)) {
             return;
