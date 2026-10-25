@@ -9,12 +9,18 @@ import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.fml.common.network.ByteBufUtils;
 
 import java.io.File;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 public final class DivineConfig {
 
     private static final Map<String, Boolean> ENABLED_ENCHANTMENTS = new HashMap<>();
+    private static final Set<String> REMOVED_ENCHANTMENTS = new HashSet<>(Arrays.asList(
+            "scavengers_habit",
+            "low_sweep"));
 
     public static boolean enableAllEnchantments = true;
 
@@ -23,9 +29,10 @@ public final class DivineConfig {
 
     // Rune: Carnage
     public static double carnagePenaltyPerLevel = 0.0D;
-    public static double carnageBonusLevel1 = 0.0667D;
-    public static double carnageBonusLevel2 = 0.0667D;
-    public static double carnageBonusLevel3 = 0.0667D;
+    public static double carnageBaseBonusPerLevel = 0.10D;
+    public static double carnageBonusLevel1 = 0.0524D;
+    public static double carnageBonusLevel2 = 0.0524D;
+    public static double carnageBonusLevel3 = 0.0524D;
     public static int carnageMaxStacksPerLevel = 7;
     public static int carnageDecayTicks = 100;
     public static int carnageDecayStacks = 5;
@@ -53,15 +60,14 @@ public final class DivineConfig {
     // Volatile Discharge
     public static double volatileDischargeExplosionPower = 5.0D;
 
-    // Stagger / Low Sweep
+    // Stagger
     public static int staggerParalysisTicks = 60;
-    public static int lowSweepParalysisTicks = 30;
 
     // Ally
     public static int allyMaxAegisPerPlayer = 4;
 
     // Shimmered
-    public static int shimmeredHighlightDurationTicks = 100;
+    public static int shimmeredHighlightDurationTicks = 20;
     public static int shimmeredHighlightRadius = 2;
 
     // Apex
@@ -134,7 +140,7 @@ public final class DivineConfig {
 
             ENABLED_ENCHANTMENTS.clear();
             for (Enchantment enchantment : ModEnchantments.ENCHANTMENTS) {
-                if (enchantment == null || enchantment.getRegistryName() == null) {
+                if (enchantment == null || enchantment.getRegistryName() == null || isRemoved(enchantment)) {
                     continue;
                 }
                 String key = enchantment.getRegistryName().getPath();
@@ -154,24 +160,26 @@ public final class DivineConfig {
 
             carnagePenaltyPerLevel = config.getFloat("carnagePenaltyPerLevel", "balance", 0.0F, 0.0F, 1.0F,
                     "Rune: Carnage attack speed penalty per enchantment level (0.0 = no penalty).");
-            carnageBonusLevel1 = config.getFloat("carnageBonusLevel1", "balance", 0.0667F, 0.0F, 10.0F,
-                    "Rune: Carnage additive attack speed per stack at level I (0.0667 = +0.0667).");
-            carnageBonusLevel2 = config.getFloat("carnageBonusLevel2", "balance", 0.0667F, 0.0F, 10.0F,
+            carnageBaseBonusPerLevel = config.getFloat("carnageBaseBonusPerLevel", "balance", 0.10F, 0.0F, 10.0F,
+                    "Rune: Carnage immediate additive attack speed per enchantment level (0.10 = +0.3 at level III).");
+            carnageBonusLevel1 = config.getFloat("carnageBonusLevel1", "balance", 0.0524F, 0.0F, 10.0F,
+                    "Rune: Carnage additive attack speed per stack at level I.");
+            carnageBonusLevel2 = config.getFloat("carnageBonusLevel2", "balance", 0.0524F, 0.0F, 10.0F,
                     "Rune: Carnage additive attack speed per stack at level II.");
-            carnageBonusLevel3 = config.getFloat("carnageBonusLevel3", "balance", 0.0667F, 0.0F, 10.0F,
-                    "Rune: Carnage additive attack speed per stack at level III (+1.4 at 21 stacks, same as Swifter Slashes VII).");
+            carnageBonusLevel3 = config.getFloat("carnageBonusLevel3", "balance", 0.0524F, 0.0F, 10.0F,
+                    "Rune: Carnage additive attack speed per stack at level III (+1.4 total at 21 stacks).");
             // Migrate the old 1.0.4 defaults to the additive Swifter Slashes VII equivalent.
             if (carnagePenaltyPerLevel == 0.10D) {
                 carnagePenaltyPerLevel = 0.0D;
             }
-            if (carnageBonusLevel1 == 0.05D) {
-                carnageBonusLevel1 = 0.0667D;
+            if (carnageBonusLevel1 == 0.05D || carnageBonusLevel1 == 0.0667D) {
+                carnageBonusLevel1 = 0.0524D;
             }
-            if (carnageBonusLevel2 == 0.0572D) {
-                carnageBonusLevel2 = 0.0667D;
+            if (carnageBonusLevel2 == 0.0572D || carnageBonusLevel2 == 0.0667D) {
+                carnageBonusLevel2 = 0.0524D;
             }
-            if (carnageBonusLevel3 == 0.0715D) {
-                carnageBonusLevel3 = 0.0667D;
+            if (carnageBonusLevel3 == 0.0715D || carnageBonusLevel3 == 0.0667D) {
+                carnageBonusLevel3 = 0.0524D;
             }
             carnageMaxStacksPerLevel = config.getInt("carnageMaxStacksPerLevel", "balance", 7, 0, 100,
                     "Maximum Rune: Carnage stacks per enchantment level (7 means 7/14/21).");
@@ -210,14 +218,15 @@ public final class DivineConfig {
 
             staggerParalysisTicks = config.getInt("staggerParalysisTicks", "balance", 60, 0, 72000,
                     "Lycanites paralysis duration from Stagger in ticks (60 = 3 seconds).");
-            lowSweepParalysisTicks = config.getInt("lowSweepParalysisTicks", "balance", 30, 0, 72000,
-                    "Lycanites paralysis duration from Low Sweep in ticks (30 = 1.5 seconds).");
 
             allyMaxAegisPerPlayer = config.getInt("allyMaxAegisPerPlayer", "balance", 4, 0, 100,
                     "Maximum living Aegis summons per player from the Ally enchantment.");
 
-            shimmeredHighlightDurationTicks = config.getInt("shimmeredHighlightDurationTicks", "balance", 100, 1, 72000,
-                    "Shimmered ore outline duration in ticks (100 = 5 seconds).");
+            shimmeredHighlightDurationTicks = config.getInt("shimmeredHighlightDurationTicks", "balance", 20, 1, 72000,
+                    "Shimmered ore outline duration in ticks (20 = 1 second).");
+            if (shimmeredHighlightDurationTicks == 100) {
+                shimmeredHighlightDurationTicks = 20;
+            }
             shimmeredHighlightRadius = config.getInt("shimmeredHighlightRadius", "balance", 2, 1, 8,
                     "Shimmered ore scan radius in blocks.");
 
@@ -297,6 +306,7 @@ public final class DivineConfig {
         buf.writeBoolean(enableAllEnchantments);
         buf.writeBoolean(fixRangeEnchantmentDamage);
         buf.writeDouble(carnagePenaltyPerLevel);
+        buf.writeDouble(carnageBaseBonusPerLevel);
         buf.writeDouble(carnageBonusLevel1);
         buf.writeDouble(carnageBonusLevel2);
         buf.writeDouble(carnageBonusLevel3);
@@ -315,7 +325,6 @@ public final class DivineConfig {
         buf.writeDouble(bracedPivotCooldownReduction);
         buf.writeDouble(volatileDischargeExplosionPower);
         buf.writeInt(staggerParalysisTicks);
-        buf.writeInt(lowSweepParalysisTicks);
         buf.writeInt(allyMaxAegisPerPlayer);
         buf.writeInt(shimmeredHighlightDurationTicks);
         buf.writeInt(shimmeredHighlightRadius);
@@ -361,6 +370,7 @@ public final class DivineConfig {
         enableAllEnchantments = buf.readBoolean();
         fixRangeEnchantmentDamage = buf.readBoolean();
         carnagePenaltyPerLevel = buf.readDouble();
+        carnageBaseBonusPerLevel = buf.readDouble();
         carnageBonusLevel1 = buf.readDouble();
         carnageBonusLevel2 = buf.readDouble();
         carnageBonusLevel3 = buf.readDouble();
@@ -379,7 +389,6 @@ public final class DivineConfig {
         bracedPivotCooldownReduction = buf.readDouble();
         volatileDischargeExplosionPower = buf.readDouble();
         staggerParalysisTicks = buf.readInt();
-        lowSweepParalysisTicks = buf.readInt();
         allyMaxAegisPerPlayer = buf.readInt();
         shimmeredHighlightDurationTicks = buf.readInt();
         shimmeredHighlightRadius = buf.readInt();
@@ -423,6 +432,15 @@ public final class DivineConfig {
         }
     }
 
+    public static boolean isRemoved(Enchantment enchantment) {
+        if (enchantment == null) {
+            return false;
+        }
+        ResourceLocation name = enchantment.getRegistryName();
+        return name != null && "divineenchantments".equals(name.getNamespace())
+                && REMOVED_ENCHANTMENTS.contains(name.getPath());
+    }
+
     public static boolean isDisabled(Enchantment enchantment) {
         if (enchantment == null) {
             return false;
@@ -438,6 +456,9 @@ public final class DivineConfig {
         ResourceLocation name = enchantment.getRegistryName();
         if (name == null) {
             return true;
+        }
+        if (REMOVED_ENCHANTMENTS.contains(name.getPath())) {
+            return false;
         }
         Boolean enabled = ENABLED_ENCHANTMENTS.get(name.getPath());
         return enabled == null || enabled;

@@ -26,8 +26,6 @@ public class EnchantmentLowSweep extends DivineEnchantment {
 
     @Override
     public boolean canApply(ItemStack stack) {
-        if (!com.divineenchantments.config.DivineConfig.isEnabled(this)) { return false; }
-        if (stack == null || stack.isEmpty()) return false;
-        return ItemCheckHelper.isPolearmOrHalberd(stack) || ItemCheckHelper.isMeleeWeapon(stack);
+        return false;
     }
 }

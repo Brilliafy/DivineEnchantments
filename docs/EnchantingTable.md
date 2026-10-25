@@ -17,7 +17,7 @@ Divine Enchantments uses a fixed enchanting table schedule for every enchantment
 | :-- | :-- | :-- |
 | Common | 1 | Glimmer, Silt Sifter, Tempered Core |
 | Early uncommon | 5 | Chainsaw, Demonic Edge, Hunter |
-| Utility uncommon | 8 | Feathered Draw, Puncture, Scavenger's Habit |
+| Utility uncommon | 8 | Feathered Draw, Puncture, Stagger |
 | Rare | 10 | Breach, Bullseye, Machine Bow, Stagger |
 | Very rare | 20 | Ally, Riches, Rune: Carnage |
 | Pinnacle | 25-30 | Ballistic Overdrive, Grounded Vanguard, Gambler's Gambit, Muzzle, Slip-Bore |
@@ -36,7 +36,6 @@ Divine Enchantments uses a fixed enchanting table schedule for every enchantment
 | [Gourmand’s Vitality](Enchantments.md#gourmand-s-vitality) | Uncommon | V | 5-30 | I at 5 · II at 11 · III at 17 · IV at 23 · V at 29 |
 | [Heavyplated](Enchantments.md#heavyplated) | Uncommon | I | 5-30 | I at 5 |
 | [Hunter](Enchantments.md#hunter) | Uncommon | III | 5-30 | I at 5 · II at 17 · III at 29 |
-| [Low Sweep](Enchantments.md#low-sweep) | Uncommon | III | 5-30 | I at 5 · II at 17 · III at 29 |
 | [Slowsink](Enchantments.md#slowsink) | Uncommon | III | 5-30 | I at 5 · II at 17 · III at 29 |
 | [Archery](Enchantments.md#archery) | Uncommon | III | 8-30 | I at 8 · II at 19 · III at 30 |
 | [Cushioned Heel](Enchantments.md#cushioned-heel) | Uncommon | I | 8-30 | I at 8 |
@@ -47,7 +46,6 @@ Divine Enchantments uses a fixed enchanting table schedule for every enchantment
 | [Necrotic Stasis](Enchantments.md#necrotic-stasis) | Rare | II | 8-30 | I at 8 · II at 30 |
 | [Puncture](Enchantments.md#puncture) | Uncommon | I | 8-30 | I at 8 |
 | [Quiet Chipping](Enchantments.md#quiet-chipping) | Uncommon | I | 8-30 | I at 8 |
-| [Scavenger's Habit](Enchantments.md#scavenger-s-habit) | Uncommon | IV | 8-30 | I at 8 · II at 15 · III at 22 · IV at 29 |
 | [Sober Chisel](Enchantments.md#sober-chisel) | Uncommon | I | 8-30 | I at 8 |
 | [Thermal Foil](Enchantments.md#thermal-foil) | Uncommon | I | 8-30 | I at 8 |
 | [Braced Pivot](Enchantments.md#braced-pivot) | Rare | I | 10-30 | I at 10 |

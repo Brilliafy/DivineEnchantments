@@ -394,7 +394,9 @@ public class MeleeEventHandler {
 
                 // Stagger: pauses attack windup and applies Lycanites paralysis (3s, or 1s if the target wears a helmet).
                 int staggerLvl = ModEnchantments.getLevel(ModEnchantments.STAGGER, held);
-                if (staggerLvl > 0 && !ItemCheckHelper.isBossEntity(target)) {
+                if (staggerLvl > 0 && !ItemCheckHelper.isBossEntity(target)
+                        && player.getCooledAttackStrength(0.5F) >= 0.99F
+                        && ChanceHelper.roll(player, "stagger", 0.65F)) {
                     boolean isChamp = target.getEntityData().hasKey("champions:championship");
                     if (!isChamp) {
                         target.getEntityData().setLong("DE_StaggerUntil", target.world.getTotalWorldTime() + 10L);
@@ -441,60 +443,6 @@ public class MeleeEventHandler {
                                 ws.spawnParticle(EnumParticleTypes.SWEEP_ATTACK, target.posX, target.posY + target.height * 0.5D, target.posZ, 1, 0.0D, 0.0D, 0.0D, 0.0D);
                             }
                         }
-                    }
-                }
-
-                // Low Sweep: custom radial sweep. Full damage to the struck target, 50% splash to nearby enemies.
-                int lowSweepLvl = ModEnchantments.getLevel(ModEnchantments.LOW_SWEEP, held);
-                if (lowSweepLvl > 0) {
-                    long now = target.world.getTotalWorldTime();
-                    target.getEntityData().setLong("DE_StaggerUntil", now + 20L);
-                    if (!ItemCheckHelper.isBossEntity(target)) {
-                        boolean targetShort = isShortMob(target);
-                        if (targetShort) {
-                            if (Loader.isModLoaded("lycanitesmobs")) {
-                                com.divineenchantments.compat.LycanitesIntegration.applyParalysis(target, DivineConfig.lowSweepParalysisTicks);
-                            }
-                        }
-                    }
-
-                    double sweepRadius = 2.8D + lowSweepLvl * 0.6D;
-                    java.util.List<EntityLivingBase> sweepList = target.world.getEntitiesWithinAABB(EntityLivingBase.class,
-                            player.getEntityBoundingBox().grow(sweepRadius, 1.0D, sweepRadius));
-                    player.getEntityData().setBoolean("DE_Sweeping", true);
-                    try {
-                        for (EntityLivingBase other : sweepList) {
-                            if (other == player || other == target || !other.isEntityAlive() || player.isOnSameTeam(other)) {
-                                continue;
-                            }
-                            other.getEntityData().setLong("DE_StaggerUntil", now + 20L);
-                            if (!ItemCheckHelper.isBossEntity(other)) {
-                                if (Loader.isModLoaded("lycanitesmobs")) {
-                                    com.divineenchantments.compat.LycanitesIntegration.applyParalysis(other, DivineConfig.lowSweepParalysisTicks);
-                                }
-                            }
-                            double dx = other.posX - player.posX;
-                            double dz = other.posZ - player.posZ;
-                            double dLen = Math.sqrt(dx * dx + dz * dz);
-                            if (dLen > 0.001D) {
-                                other.knockBack(player, 0.30F + 0.08F * lowSweepLvl, -dx / dLen, -dz / dLen);
-                            }
-                            other.attackEntityFrom(net.minecraft.util.DamageSource.causePlayerDamage(player),
-                                    event.getAmount() * (0.35F + 0.10F * lowSweepLvl));
-                            if (other.world instanceof WorldServer) {
-                                ((WorldServer) other.world).spawnParticle(EnumParticleTypes.SWEEP_ATTACK,
-                                        other.posX, other.posY + 0.35D, other.posZ, 1, 0.0D, 0.0D, 0.0D, 0.0D);
-                            }
-                        }
-                    } finally {
-                        player.getEntityData().removeTag("DE_Sweeping");
-                    }
-
-                    if (player.world instanceof WorldServer) {
-                        WorldServer ws = (WorldServer) player.world;
-                        ws.spawnParticle(EnumParticleTypes.SWEEP_ATTACK, target.posX, target.posY + 0.15D, target.posZ, 3, 0.3D, 0.0D, 0.3D, 0.0D);
-                        int dirtId = net.minecraft.block.Block.getStateId(net.minecraft.init.Blocks.DIRT.getDefaultState());
-                        ws.spawnParticle(EnumParticleTypes.BLOCK_DUST, target.posX, target.posY + 0.05D, target.posZ, 10, 0.5D, 0.05D, 0.5D, 0.02D, dirtId);
                     }
                 }
 
@@ -547,14 +495,5 @@ public class MeleeEventHandler {
         }
     }
 
-    private static boolean isShortMob(EntityLivingBase entity) {
-        if (entity == null) {
-            return false;
-        }
-        String name = entity.getClass().getName().toLowerCase();
-        return entity.height <= 0.95F
-                || entity instanceof net.minecraft.entity.monster.EntitySilverfish
-                || entity instanceof net.minecraft.entity.monster.EntitySpider
-                || name.contains("hound") || name.contains("crawler") || name.contains("chupacabra");
-    }
+
 }

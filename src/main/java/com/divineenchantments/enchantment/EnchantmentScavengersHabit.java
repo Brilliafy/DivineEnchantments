@@ -28,14 +28,12 @@ public class EnchantmentScavengersHabit extends DivineEnchantment {
 
     @Override
     public boolean canApply(ItemStack stack) {
-        if (!com.divineenchantments.config.DivineConfig.isEnabled(this)) { return false; }
-        return stack != null && !stack.isEmpty() && (stack.getItem() instanceof ItemBow || ItemCheckHelper.isBowOrCrossbow(stack));
+        return false;
     }
 
     @Override
     public boolean canApplyAtEnchantingTable(ItemStack stack) {
-        if (!com.divineenchantments.config.DivineConfig.isEnabled(this)) { return false; }
-        return canApply(stack);
+        return false;
     }
 
     @Override

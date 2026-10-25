@@ -30,7 +30,7 @@ public class QuietChippingClientHandler {
             return;
         }
         String lower = name.toLowerCase();
-        if (!(lower.contains(".break") || lower.contains("dig.") || lower.startsWith("dig."))) {
+        if (!(lower.contains(".break") || lower.contains(".hit") || lower.contains("dig.") || lower.startsWith("dig."))) {
             return;
         }
         ISound sound = event.getSound();
@@ -40,8 +40,8 @@ public class QuietChippingClientHandler {
         event.setResultSound(new PositionedSoundRecord(
                 sound.getSoundLocation(),
                 sound.getCategory(),
-                sound.getVolume() * 0.25F,
-                sound.getPitch(),
+                0.25F,
+                1.0F,
                 sound.canRepeat(),
                 sound.getRepeatDelay(),
                 sound.getAttenuationType(),

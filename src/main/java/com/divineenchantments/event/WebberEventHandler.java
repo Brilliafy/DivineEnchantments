@@ -82,8 +82,8 @@ public class WebberEventHandler {
 
             if (ItemCheckHelper.isSword(held)) {
                 if (ModEnchantments.getLevel(ModEnchantments.WEBBER, held) > 0) {
-                    // 0.4% chance
-                    if (ChanceHelper.roll(player, "webber", 0.004F)) {
+                    int level = ModEnchantments.getLevel(ModEnchantments.WEBBER, held);
+                    if (ChanceHelper.roll(player, "webber", 0.004F * level)) {
                         EntityLivingBase target = event.getEntityLiving();
                         spawnCobwebOn(target);
                     }
@@ -107,6 +107,7 @@ public class WebberEventHandler {
         if (world.isAirBlock(pos) || world.getBlockState(pos).getBlock().isReplaceable(world, pos)) {
             world.setBlockState(pos, Blocks.WEB.getDefaultState());
             world.playSound(null, pos, SoundEvents.BLOCK_CLOTH_PLACE, SoundCategory.BLOCKS, 1.0F, 0.8F);
+            world.playSound(null, pos, SoundEvents.ENTITY_SPIDER_AMBIENT, SoundCategory.HOSTILE, 0.8F, 0.8F);
 
             if (world instanceof WorldServer) {
                 WorldServer ws = (WorldServer) world;

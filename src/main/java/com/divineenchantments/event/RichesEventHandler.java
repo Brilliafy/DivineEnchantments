@@ -2,6 +2,7 @@ package com.divineenchantments.event;
 
 import com.divineenchantments.init.ModEnchantments;
 import com.divineenchantments.util.ChanceHelper;
+import com.divineenchantments.util.ItemCheckHelper;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.EntityLivingBase;
@@ -56,14 +57,17 @@ public class RichesEventHandler {
             if (!held.isEmpty()) {
                 int level = ModEnchantments.getLevel(ModEnchantments.RICHES, held);
                 if (level > 0) {
+                    EntityLivingBase target = event.getEntityLiving();
+                    if (ItemCheckHelper.isBossEntity(target) || !target.isNonBoss()) {
+                        return;
+                    }
                     Enchantment adeptEnchantment = getAdept();
                     int adeptLevel = adeptEnchantment == null ? 0 : EnchantmentHelper.getEnchantmentLevel(adeptEnchantment, held);
 
-                    // Base chance is 0.1% / 0.2%; Adept adds a chance bonus and extra XP.
-                    float baseChance = (level == 1) ? 0.001F : 0.002F;
+                    // Base chance is 10% / 20%; Adept adds a chance bonus and extra XP.
+                    float baseChance = (level == 1) ? 0.10F : 0.20F;
                     float chance = baseChance * (1.0F + 0.25F * adeptLevel);
                     if (ChanceHelper.roll(player, "riches", chance)) {
-                        EntityLivingBase target = event.getEntityLiving();
                         target.getEntityData().setBoolean("Divine_Riches_Proc", true);
                         target.getEntityData().setInteger("Divine_Riches_XpMultiplier", Math.min(50, 10 + adeptLevel * 2));
                         target.getEntityData().setInteger("Divine_Riches_LootMultiplier", 10);

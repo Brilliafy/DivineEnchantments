@@ -24,6 +24,7 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import net.minecraftforge.fml.relauncher.ReflectionHelper;
 
 @Mod.EventBusSubscriber(modid = "divineenchantments")
 public class ApertureEventHandler {
@@ -84,13 +85,24 @@ public class ApertureEventHandler {
     }
 
     private static ItemStack getApertureShield(EntityPlayer player) {
+        if (!player.isActiveItemStackBlocking()) {
+            return ItemStack.EMPTY;
+        }
+
+        ItemStack active = player.getActiveItemStack();
         ItemStack offhand = player.getHeldItemOffhand();
-        if (ItemCheckHelper.isShield(offhand) && ModEnchantments.getLevel(ModEnchantments.APERTURE, offhand) > 0) {
+        if (!active.isEmpty() && ItemCheckHelper.isShield(active)
+                && ItemCheckHelper.isShield(offhand)
+                && ItemStack.areItemStacksEqual(active, offhand)
+                && ModEnchantments.getLevel(ModEnchantments.APERTURE, offhand) > 0) {
             return offhand;
         }
 
         ItemStack mainhand = player.getHeldItemMainhand();
-        if (ItemCheckHelper.isShield(mainhand) && ModEnchantments.getLevel(ModEnchantments.APERTURE, mainhand) > 0) {
+        if (!active.isEmpty() && ItemCheckHelper.isShield(active)
+                && ItemCheckHelper.isShield(mainhand)
+                && ItemStack.areItemStacksEqual(active, mainhand)
+                && ModEnchantments.getLevel(ModEnchantments.APERTURE, mainhand) > 0) {
             return mainhand;
         }
 
@@ -155,6 +167,22 @@ public class ApertureEventHandler {
         }
 
         // Generic reflection support for modded projectiles (e.g. Cacodemon balls, Lycanites projectiles)
+        if (proj instanceof EntityThrowable) {
+            try {
+                Field throwerField = ReflectionHelper.findField(EntityThrowable.class, "thrower", "field_70192_c");
+                throwerField.setAccessible(true);
+                throwerField.set(proj, player);
+            } catch (Throwable ignored) {
+            }
+        }
+        if (proj instanceof EntityArrow) {
+            try {
+                Field shootingField = ReflectionHelper.findField(EntityArrow.class, "shootingEntity", "field_70250_c");
+                shootingField.setAccessible(true);
+                shootingField.set(proj, player);
+            } catch (Throwable ignored) {
+            }
+        }
         setFieldIfExists(proj, "shootingEntity", player);
         setFieldIfExists(proj, "owner", player);
         setFieldIfExists(proj, "caster", player);

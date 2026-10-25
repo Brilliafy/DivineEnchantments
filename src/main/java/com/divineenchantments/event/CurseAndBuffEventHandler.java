@@ -500,45 +500,17 @@ public class CurseAndBuffEventHandler {
             if (!prev.isEmpty() && ModEnchantments.getLevel(ModEnchantments.CURSE_OF_THE_TETHER, prev) > 0) {
                 ItemStack current = event.getTo();
                 if (current.isEmpty() || ModEnchantments.getLevel(ModEnchantments.CURSE_OF_THE_TETHER, current) == 0) {
-                    // Force the tethered chestplate back into the chest slot!
-                    player.setItemStackToSlot(EntityEquipmentSlot.CHEST, prev.copy());
-
-                    // Clean up from player's cursor first
-                    ItemStack cursor = player.inventory.getItemStack();
-                    if (cursor == prev || ItemStack.areItemStacksEqual(cursor, prev)) {
-                        player.inventory.setItemStack(ItemStack.EMPTY);
-                    } else {
-                        // Check open container slots (if in a chest/crafting table/etc.)
-                        boolean found = false;
-                        if (player.openContainer != null) {
-                            for (Slot slot : player.openContainer.inventorySlots) {
-                                if (slot != null && slot.getHasStack()) {
-                                    ItemStack s = slot.getStack();
-                                    if (s == prev || ItemStack.areItemStacksEqual(s, prev)) {
-                                        slot.putStack(ItemStack.EMPTY);
-                                        found = true;
-                                        break;
-                                    }
-                                }
-                            }
-                        }
-                        // Otherwise clean up duplicate from player's inventory
-                        if (!found) {
-                            for (int i = 0; i < player.inventory.getSizeInventory(); i++) {
-                                ItemStack s = player.inventory.getStackInSlot(i);
-                                if (s == prev || ItemStack.areItemStacksEqual(s, prev)) {
-                                    player.inventory.setInventorySlotContents(i, ItemStack.EMPTY);
-                                    break;
-                                }
-                            }
-                        }
-                    }
+                    // Force the tethered chestplate back into the chest slot and purge every duplicate.
+                    ItemStack restored = prev.copy();
+                    player.setItemStackToSlot(EntityEquipmentSlot.CHEST, restored);
+                    clearTetherDuplicates(player, restored);
 
                     player.inventoryContainer.detectAndSendChanges();
                     if (player.openContainer != null && player.openContainer != player.inventoryContainer) {
                         player.openContainer.detectAndSendChanges();
                     }
                     syncSlot(player, 6, player.getItemStackFromSlot(EntityEquipmentSlot.CHEST));
+                    syncCursor(player);
                 }
             }
         }
@@ -595,6 +567,46 @@ public class CurseAndBuffEventHandler {
         }
     }
 
+    private static boolean isTetherChest(ItemStack stack) {
+        return stack != null && !stack.isEmpty()
+                && ModEnchantments.getLevel(ModEnchantments.CURSE_OF_THE_TETHER, stack) > 0;
+    }
+
+    private static void clearTetherDuplicates(EntityPlayer player, ItemStack keep) {
+        ItemStack cursor = player.inventory.getItemStack();
+        if (isTetherChest(cursor) && !ItemStack.areItemStacksEqual(cursor, keep)) {
+            player.inventory.setItemStack(ItemStack.EMPTY);
+        }
+
+        if (player.openContainer != null) {
+            for (Slot slot : player.openContainer.inventorySlots) {
+                if (slot == null || !slot.getHasStack()) {
+                    continue;
+                }
+                if (slot.inventory == player.inventory && slot.getSlotIndex() >= 36 && slot.getSlotIndex() <= 39) {
+                    continue;
+                }
+                if (isTetherChest(slot.getStack())) {
+                    slot.putStack(ItemStack.EMPTY);
+                }
+            }
+        }
+
+        ItemStack equipped = player.getItemStackFromSlot(EntityEquipmentSlot.CHEST);
+        for (int i = 0; i < player.inventory.getSizeInventory(); i++) {
+            ItemStack stack = player.inventory.getStackInSlot(i);
+            if (isTetherChest(stack) && stack != equipped) {
+                player.inventory.setInventorySlotContents(i, ItemStack.EMPTY);
+            }
+        }
+    }
+
+    private static void syncCursor(EntityPlayer player) {
+        if (player instanceof EntityPlayerMP) {
+            ((EntityPlayerMP) player).connection.sendPacket(new SPacketSetSlot(-1, -1, player.inventory.getItemStack()));
+        }
+    }
+
     private static void syncSlot(EntityPlayer player, int slot, ItemStack stack) {
         if (player instanceof EntityPlayerMP) {
             ((EntityPlayerMP) player).connection.sendPacket(new SPacketSetSlot(0, slot, stack));
@@ -611,6 +623,28 @@ public class CurseAndBuffEventHandler {
         }
 
         EntityPlayer player = event.player;
+
+        // Curse of Berserker's Bloodlust: catch direct health increases that bypass LivingHealEvent.
+        boolean berserkActive = !player.world.isRemote
+                && (ModEnchantments.getLevel(ModEnchantments.BERSERKERS_BLOODLUST, player.getHeldItemMainhand()) > 0
+                || ModEnchantments.getLevel(ModEnchantments.BERSERKERS_BLOODLUST, player.getHeldItemOffhand()) > 0);
+        if (berserkActive) {
+            NBTTagCompound berserkData = player.getEntityData();
+            if (!berserkData.hasKey("DE_BerserkLastHealth")) {
+                berserkData.setFloat("DE_BerserkLastHealth", player.getHealth());
+            }
+            float lastHealth = berserkData.getFloat("DE_BerserkLastHealth");
+            float currentHealth = player.getHealth();
+            boolean handledByHealEvent = berserkData.getBoolean("DE_BerserkHealHandled");
+            berserkData.setBoolean("DE_BerserkHealHandled", false);
+            if (!handledByHealEvent && lastHealth > 0.0F && currentHealth > lastHealth + 0.001F) {
+                player.setHealth(lastHealth + (currentHealth - lastHealth) * 0.25F);
+            }
+            berserkData.setFloat("DE_BerserkLastHealth", player.getHealth());
+        } else {
+            player.getEntityData().removeTag("DE_BerserkLastHealth");
+            player.getEntityData().removeTag("DE_BerserkHealHandled");
+        }
 
         // Mudstrider END-tick correction: undo soul sand and cobweb motion damping
         ItemStack mudBoots = player.getItemStackFromSlot(EntityEquipmentSlot.FEET);
@@ -792,16 +826,15 @@ public class CurseAndBuffEventHandler {
             }
         }
 
-        // Desalination Mesh: 85% chance to cure/negate Parasites effect from drinking dirty/salt water
+        // Desalination Mesh: immediately suppresses Parasites and Thirst effects while worn.
         ItemStack helmMesh = player.getItemStackFromSlot(EntityEquipmentSlot.HEAD);
         if (!helmMesh.isEmpty() && ModEnchantments.getLevel(ModEnchantments.DESALINATION_MESH, helmMesh) > 0) {
-            for (PotionEffect pe : player.getActivePotionEffects()) {
+            for (PotionEffect pe : new java.util.ArrayList<>(player.getActivePotionEffects())) {
                 ResourceLocation reg = pe.getPotion().getRegistryName();
-                if (reg != null && reg.getPath().toLowerCase().contains("parasite")) {
-                    if (player.world.rand.nextFloat() < 0.85F) {
+                if (reg != null) {
+                    String path = reg.getPath().toLowerCase();
+                    if (path.contains("parasite") || path.contains("thirst")) {
                         player.removePotionEffect(pe.getPotion());
-                        player.world.playSound(null, player.posX, player.posY, player.posZ, SoundEvents.ENTITY_PLAYER_SPLASH, SoundCategory.PLAYERS, 0.6F, 1.6F);
-                        break;
                     }
                 }
             }
@@ -1021,6 +1054,36 @@ public class CurseAndBuffEventHandler {
                     || ModEnchantments.getLevel(ModEnchantments.BERSERKERS_BLOODLUST, player.getHeldItemOffhand()) > 0;
             if (hasBerserk) {
                 event.setAmount(event.getAmount() * 0.25F);
+                player.getEntityData().setBoolean("DE_BerserkHealHandled", true);
+            }
+        }
+    }
+
+    /**
+     * Desalination Mesh: remove Thirsty effects after drinking dirty or salt water.
+     */
+    @SubscribeEvent
+    public static void onDrinkFinished(LivingEntityUseItemEvent.Finish event) {
+        if (event.getEntityLiving().world.isRemote || !(event.getEntityLiving() instanceof EntityPlayer)) {
+            return;
+        }
+        EntityPlayer player = (EntityPlayer) event.getEntityLiving();
+        ItemStack helmet = player.getItemStackFromSlot(EntityEquipmentSlot.HEAD);
+        if (helmet.isEmpty() || ModEnchantments.getLevel(ModEnchantments.DESALINATION_MESH, helmet) <= 0) {
+            return;
+        }
+        String itemPath = event.getItem().getItem().getRegistryName() == null ? ""
+                : event.getItem().getItem().getRegistryName().getPath().toLowerCase();
+        if (!(itemPath.contains("water") || itemPath.contains("dirty") || itemPath.contains("salt"))) {
+            return;
+        }
+        for (PotionEffect effect : new java.util.ArrayList<>(player.getActivePotionEffects())) {
+            ResourceLocation name = effect.getPotion().getRegistryName();
+            if (name != null) {
+                String path = name.getPath().toLowerCase();
+                if (path.contains("parasite") || path.contains("thirst")) {
+                    player.removePotionEffect(effect.getPotion());
+                }
             }
         }
     }
