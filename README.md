@@ -56,7 +56,7 @@ Every enchantment has **JEI** information and **Enchantment Descriptions** suppo
 **Install**
 
 1. Install Minecraft Forge 1.12.2 or Cleanroom.
-2. Drop `DivineEnchantments-1.12.2-1.0.10.jar` into `mods/`.
+2. Drop `DivineEnchantments-1.12.2-1.0.11.jar` into `mods/`.
 3. Install the same jar on the server for multiplayer.
 4. Launch the game.
 
@@ -139,7 +139,7 @@ Every enchantment has **JEI** information and **Enchantment Descriptions** suppo
 | [Glimmer](docs/Enchantments.md#glimmer) | Bow / Crossbow | I | Table · Lv 1-30 | Fired arrows and bolts leave a shimmering trail of particles and mark struck targets with the Glowing status effect for 5 seconds without inflicting… |
 | [Feathered Draw](docs/Enchantments.md#feathered-draw) | Bow | IV | Table · Lv 8-30 | Removes 20/40/60/80% of draw slowdown while charging. No lingering speed modifier. Incompatible with Strafe. |
 | [Machine Bow](docs/Enchantments.md#machine-bow) | Bow | IV | Table · Lv 10-30 | Auto-fires at full draw; draw times 20 / 16 / 13 / 10 ticks at levels I-IV. |
-| [Bullseye](docs/Enchantments.md#bullseye) | Bow | IV | Table · Lv 10-30 | 25%/level chance to mark on hit. The arrow ray must pass through the marked area; the mark is consumed by the bonus hit. |
+| [Bullseye](docs/Enchantments.md#bullseye) | Bow | IV | Table · Lv 10-30 | 25%/level chance to mark on hit. The arrow ray must pass through the marked area; the mark is consumed and a fresh mark is rolled immediately. |
 | [Hunter](docs/Enchantments.md#hunter) | Bow | III | Table · Lv 5-30 | Arrows apply Glowing to the struck enemy for 20 * level * draw seconds, where draw is the bow's charge at release (0.0 to 1.0). A fully drawn Level… |
 
 </details>
@@ -296,7 +296,7 @@ config/divineenchantments.cfg
 The jar is written to:
 
 ```text
-build/libs/DivineEnchantments-1.12.2-1.0.10.jar
+build/libs/DivineEnchantments-1.12.2-1.0.11.jar
 ```
 
 See [docs/Development.md](docs/Development.md) for the project layout and development notes.
