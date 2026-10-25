@@ -422,7 +422,9 @@ public class BowEventHandler {
                     arrow.getEntityData().setBoolean("Divine_BullseyeHit", marked);
                     if (marked) {
                         BullseyeManager.clearAndSync(livingHit);
-                    } else if (arrow.shootingEntity instanceof EntityPlayer) {
+                    }
+                    // Consume the marker, then roll a fresh one. Level IV always places it again.
+                    if (arrow.shootingEntity instanceof EntityPlayer) {
                         EntityPlayer shooter = (EntityPlayer) arrow.shootingEntity;
                         if (ChanceHelper.roll(shooter, "bullseye_place", 0.25F * bullseyeLevel)) {
                             BullseyeManager.place(livingHit);

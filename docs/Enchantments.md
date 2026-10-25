@@ -374,7 +374,7 @@ Complete list of all 71 Divine Enchantments, grouped by equipment type. For a qu
 - **Type**: Bows
 - **Max Level**: IV
 - **Acquisition**: Enchanting Table (table level 10-30; tier unlocks: I at 10, II at 16, III at 22, IV at 28).
-- **Description**: Each arrow hit has a `25% * level` chance to place a bullseye on the enemy for 3 seconds. Level IV always places it. An arrow whose travel ray passes through the marked area deals an additional `20 * level%` damage. Hitting a different body part does not count. The marker is consumed by the qualifying hit, so it must be placed again before another bonus can trigger. The bullseye is rendered as a camera-facing pixel-art target attached to the enemy.
+- **Description**: Each arrow hit has a `25% * level` chance to place a bullseye on the enemy for 3 seconds. Level IV always places it. An arrow whose travel ray passes through the marked area deals an additional `20 * level%` damage. Hitting a different body part does not count. The qualifying hit consumes the marker and immediately rolls a fresh one, so level IV keeps a new target up after every bonus hit. The bullseye is rendered as a camera-facing pixel-art target attached to the enemy.
 
 <a id="hunter"></a>
 
