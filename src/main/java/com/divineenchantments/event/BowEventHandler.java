@@ -73,13 +73,12 @@ public class BowEventHandler {
         final int longdraw;
         final float longdrawCharge;
         final int glimmer;
-        final int scavengersHabit;
         final int bullseye;
         final int hunter;
         final float drawFraction;
 
         BowData(int gravitational, int pierceful, int ally, int autofire, int headhunter, int slipBore, int muzzle, int archery,
-                int ballisticOverdrive, int splinteringImpact, int longdraw, float longdrawCharge, int glimmer, int scavengersHabit,
+                int ballisticOverdrive, int splinteringImpact, int longdraw, float longdrawCharge, int glimmer,
                 int bullseye, int hunter, float drawFraction) {
             this.gravitational = gravitational;
             this.pierceful = pierceful;
@@ -94,7 +93,6 @@ public class BowEventHandler {
             this.longdraw = longdraw;
             this.longdrawCharge = longdrawCharge;
             this.glimmer = glimmer;
-            this.scavengersHabit = scavengersHabit;
             this.bullseye = bullseye;
             this.hunter = hunter;
             this.drawFraction = drawFraction;
@@ -130,7 +128,6 @@ public class BowEventHandler {
         int splintering = ModEnchantments.getLevel(ModEnchantments.SPLINTERING_IMPACT, bow);
         int longdraw = ModEnchantments.getLevel(ModEnchantments.LONGDRAW, bow);
         int glimmer = ModEnchantments.getLevel(ModEnchantments.GLIMMER, bow);
-        int scav = ModEnchantments.getLevel(ModEnchantments.SCAVENGERS_HABIT, bow);
         int bullseye = ModEnchantments.getLevel(ModEnchantments.BULLSEYE, bow);
         int hunter = ModEnchantments.getLevel(ModEnchantments.HUNTER, bow);
         float drawFraction = MathHelper.clamp((float) event.getCharge() / 20.0F, 0.0F, 1.0F);
@@ -183,9 +180,9 @@ public class BowEventHandler {
         }
 
         if (grav > 0 || pierce > 0 || ally > 0 || autofire > 0 || headhunter > 0 || slipBore > 0 || muzzle > 0 || archery > 0
-                || ballistic > 0 || splintering > 0 || longdraw > 0 || glimmer > 0 || scav > 0 || bullseye > 0 || hunter > 0) {
+                || ballistic > 0 || splintering > 0 || longdraw > 0 || glimmer > 0 || bullseye > 0 || hunter > 0) {
             PENDING_BOW_DATA.put(player.getUniqueID(), new BowData(grav, pierce, ally, autofire, headhunter, slipBore, muzzle, archery,
-                    ballistic, splintering, longdraw, longdrawCharge, glimmer, scav, bullseye, hunter, drawFraction));
+                    ballistic, splintering, longdraw, longdrawCharge, glimmer, bullseye, hunter, drawFraction));
         }
     }
 
@@ -236,11 +233,10 @@ public class BowEventHandler {
                     int splintering = ModEnchantments.getLevel(ModEnchantments.SPLINTERING_IMPACT, held);
                     int longdraw = ModEnchantments.getLevel(ModEnchantments.LONGDRAW, held);
                     int glimmer = ModEnchantments.getLevel(ModEnchantments.GLIMMER, held);
-                    int scav = ModEnchantments.getLevel(ModEnchantments.SCAVENGERS_HABIT, held);
                     int bullseye = ModEnchantments.getLevel(ModEnchantments.BULLSEYE, held);
                     int hunter = ModEnchantments.getLevel(ModEnchantments.HUNTER, held);
                     data = new BowData(grav, pierce, ally, autofire, headhunter, slipBore, muzzle, archery,
-                            ballistic, splintering, longdraw, 1.0F, glimmer, scav, bullseye, hunter, 1.0F);
+                            ballistic, splintering, longdraw, 1.0F, glimmer, bullseye, hunter, 1.0F);
                 }
             }
 
@@ -414,10 +410,12 @@ public class BowEventHandler {
             if (hit instanceof EntityLivingBase) {
                 EntityLivingBase livingHit = (EntityLivingBase) hit;
 
-                // Bullseye: any hit on the marked target counts, then roll to place or refresh the marker.
+                // Bullseye: use the arrow's travel ray and the moving marker position. Hitting another body part does not count.
                 int bullseyeLevel = arrow.getEntityData().getInteger("Divine_Bullseye");
                 if (bullseyeLevel > 0) {
-                    boolean marked = BullseyeManager.get(livingHit) != null;
+                    Vec3d rayStart = new Vec3d(arrow.posX, arrow.posY, arrow.posZ);
+                    Vec3d rayEnd = rayStart.add(new Vec3d(arrow.motionX, arrow.motionY, arrow.motionZ));
+                    boolean marked = BullseyeManager.matches(livingHit, rayStart, rayEnd);
                     arrow.getEntityData().setBoolean("Divine_BullseyeHit", marked);
                     if (arrow.shootingEntity instanceof EntityPlayer) {
                         EntityPlayer shooter = (EntityPlayer) arrow.shootingEntity;
@@ -477,6 +475,24 @@ public class BowEventHandler {
             // Glimmer: marks target with glowing for 5s (100 ticks)
             if (arrow.getEntityData().getBoolean("Divine_Glimmer") && hit instanceof EntityLivingBase) {
                 ((EntityLivingBase) hit).addPotionEffect(new PotionEffect(MobEffects.GLOWING, 100, 0, false, false));
+            }
+
+            // Autofire: deal the hit manually and stop the arrow, so vanilla cannot reflect it on a failed damage check.
+            if (arrow.getEntityData().getBoolean("Divine_Autofire")
+                    && hit instanceof EntityLivingBase
+                    && !arrow.getEntityData().hasKey("Divine_Pierceful")
+                    && !arrow.getEntityData().hasKey("Divine_LongdrawPierce")
+                    && !arrow.getEntityData().getBoolean("Divine_BallisticOverdrive")) {
+                if (!arrow.getEntityData().getBoolean("Divine_AutofireApplied")) {
+                    arrow.getEntityData().setBoolean("Divine_AutofireApplied", true);
+                    ((EntityLivingBase) hit).hurtResistantTime = 0;
+                    applyArrowDamage(arrow, hit);
+                    checkAllyProc(arrow, hit);
+                    ((EntityLivingBase) hit).hurtResistantTime = 0;
+                }
+                event.setCanceled(true);
+                arrow.setDead();
+                return;
             }
 
             // Ballistic Overdrive: travels in laser-straight line with infinite punch-through on non-boss entities

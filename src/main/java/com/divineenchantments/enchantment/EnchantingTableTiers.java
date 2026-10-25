@@ -34,7 +34,6 @@ public final class EnchantingTableTiers {
         min("gourmands_vitality", 5);
         min("heavyplated", 5);
         min("hunter", 5);
-        min("low_sweep", 5);
         min("slowsink", 5);
         min("archery", 8);
         min("cushioned_heel", 8);
@@ -45,7 +44,6 @@ public final class EnchantingTableTiers {
         min("necrotic_stasis", 8);
         min("puncture", 8);
         min("quiet_chipping", 8);
-        min("scavengers_habit", 8);
         min("sober_chisel", 8);
         min("thermal_foil", 8);
 
