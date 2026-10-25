@@ -56,7 +56,7 @@ Every enchantment has **JEI** information and **Enchantment Descriptions** suppo
 **Install**
 
 1. Install Minecraft Forge 1.12.2 or Cleanroom.
-2. Drop `DivineEnchantments-1.12.2-1.0.12.jar` into `mods/`.
+2. Drop `DivineEnchantments-1.12.2-1.0.13.jar` into `mods/`.
 3. Install the same jar on the server for multiplayer.
 4. Launch the game.
 
@@ -71,7 +71,7 @@ Every enchantment has **JEI** information and **Enchantment Descriptions** suppo
 
 | Enchantment | Type | Max | What it does |
 | :-- | :-- | :-- | :-- |
-| **[Rune: Carnage](docs/Enchantments.md#rune-carnage)** | Nunchaku / Saber / Rapier | III | Full-charge hits add +10% attack speed per level plus +2.74% per stack, reaching 1.875x at III; enemy i-frames end exactly when your weapon recharges. |
+| **[Rune: Carnage](docs/Enchantments.md#rune-carnage)** | Nunchaku / Saber / Rapier | III | Full-charge hits add +5.5% attack speed per level plus +1% per stack, reaching 1.375x at III; enemy i-frames end exactly when your weapon recharges. |
 | **[Enlargement](docs/Enchantments.md#enlargement)** | Melee | II | 2% × level chance to grow the target by 10% × level for 20 seconds, capped at 30%; bosses/HP>150 get half duration. |
 | **[Bullseye](docs/Enchantments.md#bullseye)** | Bow | IV | Marks a 3-second bullseye; arrows through it deal +20% × level damage. |
 | **[Hunter](docs/Enchantments.md#hunter)** | Bow | III | Glowing for 20 × level × draw seconds after an arrow hit. |
@@ -114,7 +114,7 @@ Every enchantment has **JEI** information and **Enchantment Descriptions** suppo
 | [Dulled Impact](docs/Enchantments.md#dulled-impact) | Melee | III | Table · Lv 5-30 | Reduces outgoing attack damage by 10% / 20% / 30% for 5 seconds. |
 | [Stagger](docs/Enchantments.md#stagger) | Melee | I | Table · Lv 10-30 | Full-charge hits have a 65% chance to interrupt windup and apply Lycanites Paralysis for 3s, or 1s with a helmet. |
 | [Puncture](docs/Enchantments.md#puncture) | Melee | I | Table · Lv 8-30 | Bypasses 10% of natural mob armor. |
-| [Rune: Carnage](docs/Enchantments.md#rune-carnage) | Melee | III | Table · Lv 24-30 | Full-charge hits add +10% attack speed per level plus +2.74% per stack, reaching 1.875x at III. |
+| [Rune: Carnage](docs/Enchantments.md#rune-carnage) | Melee | III | Table · Lv 24-30 | Full-charge hits add +5.5% attack speed per level plus +1% per stack, reaching 1.375x at III. |
 | [Enlargement](docs/Enchantments.md#enlargement) | Melee | II | Table · Lv 10-30 | 2%/level chance to grow a target by 10%/level for 20s, capped at 30%. Bosses/HP>150 get half duration. |
 | [Voodoo](docs/Enchantments.md#voodoo) | Sword / Axe / Polearm | VI | Treasure | Kills can raise a scaling zombie ally for 30s/level; max 6 per player, visible enemies near you only. Incompatible with Ally. |
 | [Ancient: Kratos Blades](docs/Enchantments.md#ancient-kratos-blades) | Melee | I | Treasure | While the original blade is held, the other hand immediately drops whatever it is holding and receives a functional duplicate of the blade.… |
@@ -135,7 +135,7 @@ Every enchantment has **JEI** information and **Enchantment Descriptions** suppo
 | [Archery](docs/Enchantments.md#archery) | Bow / Crossbow | III | Table · Lv 8-30 | Bow and crossbow kills grant Trueshot I for 10 seconds. |
 | [Ballistic Overdrive](docs/Enchantments.md#ballistic-overdrive) | Crossbow | I | Table · Lv 25-30 | Bolts travel laser-straight with no gravity and pierce non-boss enemies. Works with Spartan bolts. |
 | [Splintering Impact](docs/Enchantments.md#splintering-impact) | Crossbow | III | Table · Lv 10-30 | Block hits burst once into 4 / 9 / 13 shrapnel arrows using the bolt's base damage. Works with Spartan bolts. Incompatible with Multishot/Splitshot. |
-| [Longdraw](docs/Enchantments.md#longdraw) | Bow | I | Treasure | Allows bows to be drawn past 100% up to 250% overdraw power (requiring 50 ticks of full hold). Releasing at 250% triggers a concussive muzzle blast… |
+| [Longdraw](docs/Enchantments.md#longdraw) | Bow | I | Treasure | Full draw takes 30 ticks instead of 20, and the pull animation stretches to match. Early release fires weaker. Overdraw to 250% at 50 ticks. |
 | [Glimmer](docs/Enchantments.md#glimmer) | Bow / Crossbow | I | Table · Lv 1-30 | Fired arrows and bolts leave a shimmering trail of particles and mark struck targets with the Glowing status effect for 5 seconds without inflicting… |
 | [Feathered Draw](docs/Enchantments.md#feathered-draw) | Bow | IV | Table · Lv 8-30 | Removes 20/40/60/80% of draw slowdown while charging. No lingering speed modifier. Incompatible with Strafe. |
 | [Machine Bow](docs/Enchantments.md#machine-bow) | Bow | IV | Table · Lv 10-30 | Auto-fires at full draw; draw times 20 / 16 / 13 / 10 ticks at levels I-IV. |
@@ -296,7 +296,7 @@ config/divineenchantments.cfg
 The jar is written to:
 
 ```text
-build/libs/DivineEnchantments-1.12.2-1.0.12.jar
+build/libs/DivineEnchantments-1.12.2-1.0.13.jar
 ```
 
 See [docs/Development.md](docs/Development.md) for the project layout and development notes.

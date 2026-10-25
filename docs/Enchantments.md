@@ -177,7 +177,7 @@ Complete list of all 71 Divine Enchantments, grouped by equipment type. For a qu
 - **Max Level**: III
 - **Acquisition**: Enchanting Table (table level 24-30; tier unlocks: I at 24, II at 27, III at 30).
 - **Incompatible With**: `somanyenchantments:swifterslashes` (Swifter Slashes).
-- **Description**: Fully charged hits grant immediate **multiplicative** attack speed (`+10%` per enchantment level) plus `+2.74%` per stack, stacking up to `7 * level` times. At level III with 21 stacks this reaches roughly `1.875x` the weapon's base attack speed, the same speed as Swifter Slashes VII on a sword. There is no permanent attack speed penalty. Enemy invulnerability frames are set to exactly your weapon's recharge time, so they expire when the attack indicator is full again. Going 5 seconds without a hit removes 5 stacks. The enchantment name is displayed in green.
+- **Description**: Fully charged hits grant immediate **multiplicative** attack speed (`+5.5%` per enchantment level) plus `+1%` per stack, stacking up to `7 * level` times. At max stacks the levels reach `1.125x` / `1.25x` / `1.375x` base attack speed, identical to Swifter Slashes I / II / III on a sword (level III with 21 stacks shown). There is no permanent attack speed penalty. Enemy invulnerability frames are set to exactly your weapon's recharge time, so they expire when the attack indicator is full again. Going 5 seconds without a hit removes 5 stacks. The enchantment name is displayed in green.
 
 <a id="enlargement"></a>
 
@@ -336,7 +336,7 @@ Complete list of all 71 Divine Enchantments, grouped by equipment type. For a qu
 - **Max Level**: I
 - **Acquisition**: Treasure only (not available from Enchanting Table).
 - **Incompatible With**: Mending, Strafe, Multishot, Splitshot, Rapid Fire, Range, Pierceful.
-- **Description**: Allows bows to be drawn past 100% up to 250% overdraw power (requiring 50 ticks of full hold). Releasing at 250% triggers a concussive muzzle blast that pierces up to 5 targets with scaled damage and recoils the archer backward 6 blocks.
+- **Description**: Stretches the draw itself: full power now needs **30 ticks** instead of 20, and the bow pull animation follows that longer timeline. Releasing before 30 ticks fires a proportionally weaker arrow. Holding past full draw overdraws up to 250% power at 50 ticks. Releasing at 250% triggers a concussive muzzle blast that pierces up to 5 targets with scaled damage and recoils the archer backward 6 blocks.
 
 <a id="glimmer"></a>
 
