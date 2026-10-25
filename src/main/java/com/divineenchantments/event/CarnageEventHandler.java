@@ -126,7 +126,7 @@ public class CarnageEventHandler {
                 removeModifier(player, PENALTY_UUID);
             }
             if (syncedBonus > 0.0D) {
-                applyModifier(player, STACKS_UUID, "Rune Carnage Stacks", syncedBonus, 1);
+                applyModifier(player, STACKS_UUID, "Rune Carnage Stacks", syncedBonus, 2);
             } else {
                 removeModifier(player, STACKS_UUID);
             }
@@ -184,7 +184,7 @@ public class CarnageEventHandler {
                     : (level == 2 ? (float) DivineConfig.carnageBonusLevel2 : (float) DivineConfig.carnageBonusLevel3);
         double bonus = DivineConfig.carnageBaseBonusPerLevel * level + perStack * stacks;
         if (bonus > 0.0D) {
-            applyModifier(player, STACKS_UUID, "Rune Carnage Stacks", bonus, 1);
+            applyModifier(player, STACKS_UUID, "Rune Carnage Stacks", bonus, 2);
         } else {
             removeModifier(player, STACKS_UUID);
         }

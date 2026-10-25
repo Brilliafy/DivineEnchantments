@@ -42,8 +42,11 @@ import net.minecraftforge.event.entity.living.LivingEquipmentChangeEvent;
 import net.minecraftforge.event.entity.living.LivingEvent;
 import net.minecraftforge.event.entity.living.LivingHealEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
+import net.minecraftforge.event.entity.living.PotionEvent;
+import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.common.eventhandler.Event;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
@@ -826,19 +829,7 @@ public class CurseAndBuffEventHandler {
             }
         }
 
-        // Desalination Mesh: immediately suppresses Parasites and Thirst effects while worn.
-        ItemStack helmMesh = player.getItemStackFromSlot(EntityEquipmentSlot.HEAD);
-        if (!helmMesh.isEmpty() && ModEnchantments.getLevel(ModEnchantments.DESALINATION_MESH, helmMesh) > 0) {
-            for (PotionEffect pe : new java.util.ArrayList<>(player.getActivePotionEffects())) {
-                ResourceLocation reg = pe.getPotion().getRegistryName();
-                if (reg != null) {
-                    String path = reg.getPath().toLowerCase();
-                    if (path.contains("parasite") || path.contains("thirst")) {
-                        player.removePotionEffect(pe.getPotion());
-                    }
-                }
-            }
-        }
+
 
         // Thermal Foil: Slows body temperature change in Simple Difficulty / Tough As Nails by 20% per piece
         if (!player.world.isRemote && player.world.getTotalWorldTime() % 10 == 0) {
@@ -1043,6 +1034,62 @@ public class CurseAndBuffEventHandler {
         }
     }
 
+    @SubscribeEvent(priority = EventPriority.HIGHEST)
+    public static void onPotionApplicable(PotionEvent.PotionApplicableEvent event) {
+        if (!(event.getEntityLiving() instanceof EntityPlayer) || event.getEntityLiving().world.isRemote) {
+            return;
+        }
+        EntityPlayer player = (EntityPlayer) event.getEntityLiving();
+        ItemStack helmet = player.getItemStackFromSlot(EntityEquipmentSlot.HEAD);
+        if (helmet.isEmpty() || ModEnchantments.getLevel(ModEnchantments.DESALINATION_MESH, helmet) <= 0) {
+            return;
+        }
+        long until = player.getEntityData().getLong("DE_DesalinationDrinkingUntil");
+        if (until <= 0L || player.world.getTotalWorldTime() > until) {
+            return;
+        }
+        ResourceLocation name = event.getPotionEffect().getPotion().getRegistryName();
+        if (name == null) {
+            return;
+        }
+        String path = name.getPath().toLowerCase();
+        if ((path.contains("thirst") || path.contains("parasite")) && player.world.rand.nextFloat() < 0.85F) {
+            event.setResult(Event.Result.DENY);
+        }
+    }
+
+    @SubscribeEvent
+    public static void onDrinkStart(LivingEntityUseItemEvent.Start event) {
+        if (event.getEntityLiving().world.isRemote || !(event.getEntityLiving() instanceof EntityPlayer)) {
+            return;
+        }
+        EntityPlayer player = (EntityPlayer) event.getEntityLiving();
+        ItemStack helmet = player.getItemStackFromSlot(EntityEquipmentSlot.HEAD);
+        if (helmet.isEmpty() || ModEnchantments.getLevel(ModEnchantments.DESALINATION_MESH, helmet) <= 0) {
+            return;
+        }
+        ResourceLocation itemName = event.getItem().getItem().getRegistryName();
+        String path = itemName == null ? "" : itemName.getPath().toLowerCase();
+        if (path.contains("water") || path.contains("dirty") || path.contains("salt") || path.contains("canteen")) {
+            player.getEntityData().setLong("DE_DesalinationDrinkingUntil", player.world.getTotalWorldTime() + 120L);
+        }
+    }
+
+    @SubscribeEvent
+    public static void onRightClickWater(PlayerInteractEvent.RightClickBlock event) {
+        if (event.getWorld().isRemote || !(event.getEntityPlayer() instanceof EntityPlayer)) {
+            return;
+        }
+        EntityPlayer player = event.getEntityPlayer();
+        ItemStack helmet = player.getItemStackFromSlot(EntityEquipmentSlot.HEAD);
+        if (helmet.isEmpty() || ModEnchantments.getLevel(ModEnchantments.DESALINATION_MESH, helmet) <= 0) {
+            return;
+        }
+        if (event.getWorld().getBlockState(event.getPos()).getMaterial() == net.minecraft.block.material.Material.WATER) {
+            player.getEntityData().setLong("DE_DesalinationDrinkingUntil", player.world.getTotalWorldTime() + 40L);
+        }
+    }
+
     /**
      * Berserker's Bloodlust: Healing from natural regen, potions, and lifesteal reduced by 75%.
      */
@@ -1055,35 +1102,6 @@ public class CurseAndBuffEventHandler {
             if (hasBerserk) {
                 event.setAmount(event.getAmount() * 0.25F);
                 player.getEntityData().setBoolean("DE_BerserkHealHandled", true);
-            }
-        }
-    }
-
-    /**
-     * Desalination Mesh: remove Thirsty effects after drinking dirty or salt water.
-     */
-    @SubscribeEvent
-    public static void onDrinkFinished(LivingEntityUseItemEvent.Finish event) {
-        if (event.getEntityLiving().world.isRemote || !(event.getEntityLiving() instanceof EntityPlayer)) {
-            return;
-        }
-        EntityPlayer player = (EntityPlayer) event.getEntityLiving();
-        ItemStack helmet = player.getItemStackFromSlot(EntityEquipmentSlot.HEAD);
-        if (helmet.isEmpty() || ModEnchantments.getLevel(ModEnchantments.DESALINATION_MESH, helmet) <= 0) {
-            return;
-        }
-        String itemPath = event.getItem().getItem().getRegistryName() == null ? ""
-                : event.getItem().getItem().getRegistryName().getPath().toLowerCase();
-        if (!(itemPath.contains("water") || itemPath.contains("dirty") || itemPath.contains("salt"))) {
-            return;
-        }
-        for (PotionEffect effect : new java.util.ArrayList<>(player.getActivePotionEffects())) {
-            ResourceLocation name = effect.getPotion().getRegistryName();
-            if (name != null) {
-                String path = name.getPath().toLowerCase();
-                if (path.contains("parasite") || path.contains("thirst")) {
-                    player.removePotionEffect(effect.getPotion());
-                }
             }
         }
     }

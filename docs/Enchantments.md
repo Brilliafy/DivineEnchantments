@@ -177,7 +177,7 @@ Complete list of all 71 Divine Enchantments, grouped by equipment type. For a qu
 - **Max Level**: III
 - **Acquisition**: Enchanting Table (table level 24-30; tier unlocks: I at 24, II at 27, III at 30).
 - **Incompatible With**: `somanyenchantments:swifterslashes` (Swifter Slashes).
-- **Description**: Fully charged hits grant immediate additive attack speed (`+0.10` per enchantment level) plus `+0.0524` per stack, stacking up to `7 * level` times. At level III with 21 stacks this totals `+1.4` attack speed, matching SoManyEnchantments Swifter Slashes VII. There is no permanent attack speed penalty. Enemy invulnerability frames are set to exactly your weapon's recharge time, so they expire when the attack indicator is full again. Going 5 seconds without a hit removes 5 stacks. The enchantment name is displayed in green.
+- **Description**: Fully charged hits grant immediate **multiplicative** attack speed (`+10%` per enchantment level) plus `+4.29%` per stack, stacking up to `7 * level` times. At level III with 21 stacks this reaches roughly `2.2x` the weapon's base attack speed. There is no permanent attack speed penalty. Enemy invulnerability frames are set to exactly your weapon's recharge time, so they expire when the attack indicator is full again. Going 5 seconds without a hit removes 5 stacks. The enchantment name is displayed in green.
 
 <a id="enlargement"></a>
 
@@ -355,7 +355,7 @@ Complete list of all 71 Divine Enchantments, grouped by equipment type. For a qu
 - **Max Level**: IV
 - **Acquisition**: Enchanting Table (table level 8-30; tier unlocks: I at 8, II at 15, III at 22, IV at 29).
 - **Incompatible With**: Strafe (SoManyEnchantments).
-- **Description**: Removes 20% / 40% / 60% / 80% of the vanilla bow draw slowdown at levels I-IV, leaving -64% / -48% / -32% / -16% movement speed while aiming. The speed modifier is removed immediately when you stop charging or swap items. Incompatible with Strafe.
+- **Description**: Removes 20% / 40% / 60% / 80% of the vanilla bow draw slowdown at levels I-IV, leaving -64% / -48% / -32% / -16% movement speed while aiming. The movement input is adjusted only while the bow is actively charging, so there is no persistent speed attribute and no leak on disconnect or item swap. Incompatible with Strafe.
 
 
 <a id="machine-bow"></a>
@@ -543,7 +543,7 @@ Complete list of all 71 Divine Enchantments, grouped by equipment type. For a qu
 - **Type**: Helmets
 - **Max Level**: I
 - **Acquisition**: Enchanting Table (table level 8-30).
-- **Description**: Immediately suppresses Parasites and Thirsty effects from dirty or salt water (Tough As Nails or Simple Difficulty) while the helmet is worn.
+- **Description**: Gives an 85% chance to prevent Parasites and Thirsty effects when drinking dirty or salt water (Tough As Nails or Simple Difficulty). Existing effects are not removed.
 
 <a id="metabolic-slumber"></a>
 
