@@ -579,7 +579,7 @@ Complete list of all 71 Divine Enchantments, grouped by equipment type. For a qu
 - **Type**: Boots
 - **Max Level**: I
 - **Acquisition**: Super rare treasure only (not available from Enchanting Table).
-- **Description**: Restores automatic walk-over item pickup, collecting items you walk over without right-clicking or aiming. Items are only collected after their vanilla 2 second (40 tick) drop delay, and the enchantment is disabled in creative mode so dropped items are never voided by a full creative inventory.
+- **Description**: Restores automatic walk-over item pickup, collecting items you walk over without right-clicking or aiming. Items are only collected after their vanilla 2 second (40 tick) drop delay, and the enchantment is disabled in creative mode so dropped items are never voided by a full creative inventory. Works with ItemPhysic custom pickup, which normally cancels vanilla collision pickup.
 
 <a id="shadow-stalker"></a>
 

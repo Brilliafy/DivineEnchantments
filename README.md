@@ -56,7 +56,7 @@ Every enchantment has **JEI** information and **Enchantment Descriptions** suppo
 **Install**
 
 1. Install Minecraft Forge 1.12.2 or Cleanroom.
-2. Drop `DivineEnchantments-1.12.2-1.0.14.jar` into `mods/`.
+2. Drop `DivineEnchantments-1.12.2-1.0.15.jar` into `mods/`.
 3. Install the same jar on the server for multiplayer.
 4. Launch the game.
 
@@ -296,7 +296,7 @@ config/divineenchantments.cfg
 The jar is written to:
 
 ```text
-build/libs/DivineEnchantments-1.12.2-1.0.14.jar
+build/libs/DivineEnchantments-1.12.2-1.0.15.jar
 ```
 
 See [docs/Development.md](docs/Development.md) for the project layout and development notes.
