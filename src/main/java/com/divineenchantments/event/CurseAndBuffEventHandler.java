@@ -710,7 +710,8 @@ public class CurseAndBuffEventHandler {
 
         // Ground Sweep: Restores vanilla collision pickup without requiring right-clicks
         ItemStack bootsSweep = player.getItemStackFromSlot(EntityEquipmentSlot.FEET);
-        if (!bootsSweep.isEmpty() && ModEnchantments.getLevel(ModEnchantments.GROUND_SWEEP, bootsSweep) > 0) {
+        if (!player.capabilities.isCreativeMode && !bootsSweep.isEmpty()
+                && ModEnchantments.getLevel(ModEnchantments.GROUND_SWEEP, bootsSweep) > 0) {
             net.minecraft.util.math.AxisAlignedBB sweepBox = new net.minecraft.util.math.AxisAlignedBB(
                     player.posX - 1.25D, player.posY - 0.2D, player.posZ - 1.25D,
                     player.posX + 1.25D, player.posY + 1.6D, player.posZ + 1.25D);
@@ -719,19 +720,11 @@ public class CurseAndBuffEventHandler {
                 if (groundItem == null || groundItem.isDead || groundItem.cannotPickup()) {
                     continue;
                 }
-                groundItem.onCollideWithPlayer(player);
-                if (!groundItem.isDead && groundItem.getAge() > 10 && !groundItem.getItem().isEmpty()) {
-                    ItemStack stack = groundItem.getItem().copy();
-                    if (player.inventory.addItemStackToInventory(stack)) {
-                        groundItem.setItem(ItemStack.EMPTY);
-                        groundItem.setDead();
-                        player.world.playSound(null, player.posX, player.posY, player.posZ,
-                                SoundEvents.ENTITY_ITEM_PICKUP, SoundCategory.PLAYERS, 0.2F,
-                                ((player.world.rand.nextFloat() - player.world.rand.nextFloat()) * 0.7F + 1.0F) * 2.0F);
-                    } else if (stack.getCount() != groundItem.getItem().getCount()) {
-                        groundItem.setItem(stack);
-                    }
+                // Match vanilla item-drop timing: never collect an item before its 2 second grace period.
+                if (groundItem.getAge() < 40) {
+                    continue;
                 }
+                groundItem.onCollideWithPlayer(player);
             }
         }
 
@@ -744,7 +737,7 @@ public class CurseAndBuffEventHandler {
         if (!bootsSweep.isEmpty() && ModEnchantments.getLevel(ModEnchantments.MAGNETIC_CLASP, bootsSweep) > 0) {
             claspPieces++;
         }
-        if (claspPieces > 0) {
+        if (claspPieces > 0 && !player.capabilities.isCreativeMode) {
             double magnetRadius = (claspPieces >= 2) ? 6.0D : 3.0D;
             net.minecraft.util.math.AxisAlignedBB magnetBox = new net.minecraft.util.math.AxisAlignedBB(
                     player.posX - magnetRadius, player.posY - magnetRadius, player.posZ - magnetRadius,

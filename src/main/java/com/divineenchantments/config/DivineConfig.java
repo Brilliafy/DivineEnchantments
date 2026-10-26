@@ -26,7 +26,10 @@ public final class DivineConfig {
     public static double carnageBaseBonusPerLevel = 0.055D;
     public static double carnageBonusLevel1 = 0.01D;
     public static double carnageBonusLevel2 = 0.01D;
-    public static double carnageBonusLevel3 = 0.01D;
+    public static double carnageBonusLevel3 = 0.0219048D;
+    public static double carnageSpeedLevel1 = 1.125D;
+    public static double carnageSpeedLevel2 = 1.25D;
+    public static double carnageSpeedLevel3 = 1.625D;
     public static int carnageMaxStacksPerLevel = 7;
     public static int carnageDecayTicks = 100;
     public static int carnageDecayStacks = 5;
@@ -156,30 +159,24 @@ public final class DivineConfig {
                     "Rune: Carnage attack speed penalty per enchantment level (0.0 = no penalty).");
             carnageBaseBonusPerLevel = config.getFloat("carnageBaseBonusPerLevel", "balance", 0.055F, 0.0F, 10.0F,
                     "Rune: Carnage immediate multiplicative attack speed per enchantment level (0.055 = 5.5 percent per level).");
-            carnageBonusLevel1 = config.getFloat("carnageBonusLevel1", "balance", 0.01F, 0.0F, 10.0F,
-                    "Rune: Carnage multiplicative attack speed per stack at level I (0.01 = 1%).");
-            carnageBonusLevel2 = config.getFloat("carnageBonusLevel2", "balance", 0.01F, 0.0F, 10.0F,
-                    "Rune: Carnage multiplicative attack speed per stack at level II.");
-            carnageBonusLevel3 = config.getFloat("carnageBonusLevel3", "balance", 0.01F, 0.0F, 10.0F,
-                    "Rune: Carnage multiplicative attack speed per stack at level III (1.375x at 21 stacks, matching Swifter Slashes III on a sword).");
-            // Migrate older default values to the current doubled Rune: Carnage balance.
+            carnageSpeedLevel1 = config.getFloat("carnageSpeedLevel1", "balance", 1.125F, 1.0F, 100.0F,
+                    "Rune: Carnage total attack speed multiplier at max stacks, level I (1.125 = 12.5 percent faster).");
+            carnageSpeedLevel2 = config.getFloat("carnageSpeedLevel2", "balance", 1.25F, 1.0F, 100.0F,
+                    "Rune: Carnage total attack speed multiplier at max stacks, level II (1.25 = 25 percent faster).");
+            carnageSpeedLevel3 = config.getFloat("carnageSpeedLevel3", "balance", 1.625F, 1.0F, 100.0F,
+                    "Rune: Carnage total attack speed multiplier at max stacks, level III (1.625 = 62.5 percent faster, Swifter Slashes V on a sword).");
+            // Migrate older default values to the current Rune: Carnage balance.
             if (carnagePenaltyPerLevel == 0.10D) {
                 carnagePenaltyPerLevel = 0.0D;
             }
             if (carnageBaseBonusPerLevel == 0.10D || carnageBaseBonusPerLevel == 0.20D) {
                 carnageBaseBonusPerLevel = 0.055D;
             }
-            if (carnageBonusLevel1 == 0.05D || carnageBonusLevel1 == 0.0667D || carnageBonusLevel1 == 0.0524D || carnageBonusLevel1 == 0.042857D || carnageBonusLevel1 == 0.045238D || carnageBonusLevel1 == 0.090476D || carnageBonusLevel1 == 0.1334D || carnageBonusLevel1 == 0.0274D) {
-                carnageBonusLevel1 = 0.01D;
-            }
-            if (carnageBonusLevel2 == 0.0572D || carnageBonusLevel2 == 0.0667D || carnageBonusLevel2 == 0.0524D || carnageBonusLevel2 == 0.042857D || carnageBonusLevel2 == 0.045238D || carnageBonusLevel2 == 0.090476D || carnageBonusLevel2 == 0.1334D || carnageBonusLevel2 == 0.0274D) {
-                carnageBonusLevel2 = 0.01D;
-            }
-            if (carnageBonusLevel3 == 0.0715D || carnageBonusLevel3 == 0.0667D || carnageBonusLevel3 == 0.0524D || carnageBonusLevel3 == 0.042857D || carnageBonusLevel3 == 0.045238D || carnageBonusLevel3 == 0.090476D || carnageBonusLevel3 == 0.1334D || carnageBonusLevel3 == 0.0274D) {
-                carnageBonusLevel3 = 0.01D;
-            }
             carnageMaxStacksPerLevel = config.getInt("carnageMaxStacksPerLevel", "balance", 7, 0, 100,
                     "Maximum Rune: Carnage stacks per enchantment level (7 means 7/14/21).");
+            carnageBonusLevel1 = carnagePerStack(carnageSpeedLevel1, carnageBaseBonusPerLevel, 1);
+            carnageBonusLevel2 = carnagePerStack(carnageSpeedLevel2, carnageBaseBonusPerLevel, 2);
+            carnageBonusLevel3 = carnagePerStack(carnageSpeedLevel3, carnageBaseBonusPerLevel, 3);
             carnageDecayTicks = config.getInt("carnageDecayTicks", "balance", 100, 1, 72000,
                     "Ticks without a hit before Rune: Carnage stacks decay.");
             carnageDecayStacks = config.getInt("carnageDecayStacks", "balance", 5, 0, 100,
@@ -435,6 +432,11 @@ public final class DivineConfig {
         }
         ResourceLocation name = enchantment.getRegistryName();
         return name != null && "divineenchantments".equals(name.getNamespace()) && !isEnabled(enchantment);
+    }
+
+    private static double carnagePerStack(double maxSpeed, double basePerLevel, int level) {
+        int maxStacks = Math.max(1, carnageMaxStacksPerLevel) * level;
+        return Math.max(0.0D, (maxSpeed - 1.0D - basePerLevel * level) / (double) maxStacks);
     }
 
     public static boolean isEnabled(Enchantment enchantment) {
