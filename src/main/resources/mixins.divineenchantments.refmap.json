@@ -1,0 +1,14 @@
+{
+  "mappings": {
+    "com/divineenchantments/mixin/MixinEntityMudstrider": {
+      "doBlockCollisions": "Lnet/minecraft/entity/Entity;func_145775_I()V"
+    }
+  },
+  "data": {
+    "searge": {
+      "com/divineenchantments/mixin/MixinEntityMudstrider": {
+        "doBlockCollisions": "Lnet/minecraft/entity/Entity;func_145775_I()V"
+      }
+    }
+  }
+}

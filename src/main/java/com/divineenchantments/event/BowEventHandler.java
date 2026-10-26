@@ -287,11 +287,15 @@ public class BowEventHandler {
                         arrow.motionY *= data.longdrawCharge;
                         arrow.motionZ *= data.longdrawCharge;
                     } else {
+                        // More overdraw gives a faster, farther arrow. Compensate the damage
+                        // field by the acceleration factor so range does not multiply damage.
+                        double overdrawT = Math.min(1.0D, (data.longdrawCharge - 1.0D) / 1.5D);
+                        double motionScale = 1.35D + 0.65D * overdrawT;
                         arrow.getEntityData().setInteger("Divine_LongdrawPierce", 5);
-                        arrow.setDamage(arrow.getDamage() * data.longdrawCharge);
-                        arrow.motionX *= 1.35D;
-                        arrow.motionY *= 1.35D;
-                        arrow.motionZ *= 1.35D;
+                        arrow.setDamage(arrow.getDamage() * data.longdrawCharge / motionScale);
+                        arrow.motionX *= motionScale;
+                        arrow.motionY *= motionScale;
+                        arrow.motionZ *= motionScale;
                     }
                 }
                 if (data.glimmer > 0) {

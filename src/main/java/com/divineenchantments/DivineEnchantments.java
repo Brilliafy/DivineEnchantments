@@ -24,7 +24,7 @@ public class DivineEnchantments {
 
     public static final String MODID = "divineenchantments";
     public static final String NAME = "Divine Enchantments";
-    public static final String VERSION = "1.0.13";
+    public static final String VERSION = "1.0.14";
 
     @Mod.Instance(MODID)
     public static DivineEnchantments instance;

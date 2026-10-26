@@ -10,10 +10,11 @@ public class DivineLateMixinLoader implements ILateMixinLoader {
     private static final String RANGE_FIX_CONFIG = "mixins.divineenchantments.bettersurvival.json";
     private static final String SIMPLEDIFFICULTY_CONFIG = "mixins.divineenchantments.simpledifficulty.json";
     private static final String LONGDRAW_CONFIG = "mixins.divineenchantments.longdraw.json";
+    private static final String MUDSTRIDER_CONFIG = "mixins.divineenchantments.mudstrider.json";
 
     @Override
     public List<String> getMixinConfigs() {
-        return java.util.Arrays.asList(RANGE_FIX_CONFIG, SIMPLEDIFFICULTY_CONFIG, LONGDRAW_CONFIG);
+        return java.util.Arrays.asList(RANGE_FIX_CONFIG, SIMPLEDIFFICULTY_CONFIG, LONGDRAW_CONFIG, MUDSTRIDER_CONFIG);
     }
 
     @Override

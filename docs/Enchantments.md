@@ -177,7 +177,7 @@ Complete list of all 71 Divine Enchantments, grouped by equipment type. For a qu
 - **Max Level**: III
 - **Acquisition**: Enchanting Table (table level 24-30; tier unlocks: I at 24, II at 27, III at 30).
 - **Incompatible With**: `somanyenchantments:swifterslashes` (Swifter Slashes).
-- **Description**: Fully charged hits grant immediate **multiplicative** attack speed (`+5.5%` per enchantment level) plus `+1%` per stack, stacking up to `7 * level` times. At max stacks the levels reach `1.125x` / `1.25x` / `1.375x` base attack speed, identical to Swifter Slashes I / II / III on a sword (level III with 21 stacks shown). There is no permanent attack speed penalty. Enemy invulnerability frames are set to exactly your weapon's recharge time, so they expire when the attack indicator is full again. Going 5 seconds without a hit removes 5 stacks. The enchantment name is displayed in green.
+- **Description**: Fully charged hits grant immediate **multiplicative** attack speed (`+5.5%` per enchantment level) plus a per-stack share, stacking up to `7 * level` times. The total multiplier at max stacks is configurable per level with `carnageSpeedLevel1/2/3`. Defaults are `1.125x` / `1.25x` / `1.625x`, so level III matches Swifter Slashes V on a sword. The default per-stack values are 1% at levels I and II and about 2.19% at level III. There is no permanent attack speed penalty. Enemy invulnerability frames are set to exactly your weapon's recharge time, so they expire when the attack indicator is full again. Going 5 seconds without a hit removes 5 stacks. The enchantment name is displayed in green.
 
 <a id="enlargement"></a>
 
@@ -336,7 +336,7 @@ Complete list of all 71 Divine Enchantments, grouped by equipment type. For a qu
 - **Max Level**: I
 - **Acquisition**: Treasure only (not available from Enchanting Table).
 - **Incompatible With**: Mending, Strafe, Multishot, Splitshot, Rapid Fire, Range, Pierceful.
-- **Description**: Stretches the draw itself: full power now needs **30 ticks** instead of 20, and the bow pull animation follows that longer timeline. Releasing before 30 ticks fires a proportionally weaker arrow. Holding past full draw overdraws up to 250% power at 50 ticks. Releasing at 250% triggers a concussive muzzle blast that pierces up to 5 targets with scaled damage and recoils the archer backward 6 blocks.
+- **Description**: Stretches the draw itself: full power now needs **30 ticks** instead of 20, and the bow pull animation follows that longer timeline. Releasing before 30 ticks fires a proportionally weaker arrow. Holding past full draw overdraws up to 250% power at 50 ticks and accelerates the arrow up to 2x speed for extra range. Damage is calculated before the acceleration, so the longer range does not multiply damage. Releasing at 250% triggers a concussive muzzle blast that pierces up to 5 targets with scaled damage and recoils the archer backward 6 blocks.
 
 <a id="glimmer"></a>
 
@@ -516,7 +516,7 @@ Complete list of all 71 Divine Enchantments, grouped by equipment type. For a qu
 - **Type**: Boots
 - **Max Level**: III
 - **Acquisition**: Enchanting Table (table level 10-30; tier unlocks: I at 10, II at 20, III at 30).
-- **Description**: Removes the movement speed penalties and drag of Soul Sand, modded mud/silt blocks, Cobwebs, and shallow water. The END-tick correction restores horizontal momentum and keeps the client and server movement in sync.
+- **Description**: Removes the movement speed penalties and drag of Soul Sand, modded mud/silt blocks, Cobwebs, and shallow water. Soul sand and mud/silt slowdown is cancelled by restoring the horizontal motion that the block collision removed, so any slowdown factor is negated rather than partially offset.
 
 <a id="braced-pivot"></a>
 
@@ -579,7 +579,7 @@ Complete list of all 71 Divine Enchantments, grouped by equipment type. For a qu
 - **Type**: Boots
 - **Max Level**: I
 - **Acquisition**: Super rare treasure only (not available from Enchanting Table).
-- **Description**: Restores automatic walk-over item pickup, collecting items you walk over without right-clicking or aiming. Includes a direct inventory fallback that works even when ItemPhysic or another mod blocks vanilla collision pickup.
+- **Description**: Restores automatic walk-over item pickup, collecting items you walk over without right-clicking or aiming. Items are only collected after their vanilla 2 second (40 tick) drop delay, and the enchantment is disabled in creative mode so dropped items are never voided by a full creative inventory.
 
 <a id="shadow-stalker"></a>
 
