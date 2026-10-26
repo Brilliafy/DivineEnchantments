@@ -60,8 +60,6 @@ Every enchantment has **JEI** information and **Enchantment Descriptions** suppo
 3. Install the same jar on the server for multiplayer.
 4. Launch the game.
 
-> **1.12.2 weapon note:** Maces, sabers, rapiers, spears, pikes, lances, glaives, halberds, nunchaku, and crossbows come from 1.12.2 weapon mods such as **Spartan Weaponry**, **Better Survival**, and **Crossbows Backport**. They are not vanilla 1.12.2 items.
-
 ---
 
 ## Featured Enchantments
