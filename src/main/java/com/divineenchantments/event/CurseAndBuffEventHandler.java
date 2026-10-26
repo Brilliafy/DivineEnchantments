@@ -180,18 +180,16 @@ public class CurseAndBuffEventHandler {
             if (mudLevel > 0) {
                 BlockPos pos = new BlockPos(player.posX, player.posY, player.posZ);
                 Block blockHere = player.world.getBlockState(pos).getBlock();
-                Block blockDown = player.world.getBlockState(pos.down()).getBlock();
-                boolean onSoulSand = blockHere == Blocks.SOUL_SAND || blockDown == Blocks.SOUL_SAND;
                 boolean inWeb = getIsInWeb(player) || blockHere == Blocks.WEB;
                 boolean inWater = player.isInWater();
-                boolean onMud = (blockHere.getRegistryName() != null && blockHere.getRegistryName().getPath().contains("mud"))
-                        || (blockDown.getRegistryName() != null && blockDown.getRegistryName().getPath().contains("mud"));
 
                 if (inWeb) {
                     setIsInWeb(player, false);
                 }
 
-                if (onSoulSand || onMud || (inWater && !player.isSneaking())) {
+                // Soul sand and mud/silt are handled by MixinEntityMudstrider, which
+                // restores the pre-collision motion exactly instead of boosting speed.
+                if (inWater && !player.isSneaking()) {
                     double boost = mudLevel == 1 ? 0.06D : (mudLevel == 2 ? 0.12D : 0.18D);
                     applySpeedModifier(player, MUDSTRIDER_SPEED_UUID, "Mudstrider Speed", boost);
                 } else {
@@ -649,15 +647,14 @@ public class CurseAndBuffEventHandler {
             player.getEntityData().removeTag("DE_BerserkHealHandled");
         }
 
-        // Mudstrider END-tick correction: undo soul sand and cobweb motion damping
+        // Mudstrider END-tick cobweb correction: soul sand and mud are handled
+        // exactly by MixinEntityMudstrider; cobwebs still need the flag and motion reset.
         ItemStack mudBoots = player.getItemStackFromSlot(EntityEquipmentSlot.FEET);
         if (!player.world.isRemote && !mudBoots.isEmpty() && ModEnchantments.getLevel(ModEnchantments.MUDSTRIDER, mudBoots) > 0) {
             BlockPos mudPos = new BlockPos(player.posX, player.posY, player.posZ);
             Block mudHere = player.world.getBlockState(mudPos).getBlock();
-            Block mudDown = player.world.getBlockState(mudPos.down()).getBlock();
-            boolean onSoul = mudHere == Blocks.SOUL_SAND || mudDown == Blocks.SOUL_SAND;
             boolean inWeb = getIsInWeb(player) || mudHere == Blocks.WEB;
-            if (onSoul || inWeb) {
+            if (inWeb) {
                 player.motionX *= 2.5D;
                 player.motionZ *= 2.5D;
                 double horizontal = Math.sqrt(player.motionX * player.motionX + player.motionZ * player.motionZ);
@@ -708,6 +705,8 @@ public class CurseAndBuffEventHandler {
             }
         }
 
+        // Ground Sweep: vanilla-timed pickup. ItemPhysic's customPickup mode cancels
+        // EntityItem.onCollideWithPlayer, so add the stack directly after the delay.
         // Ground Sweep: Restores vanilla collision pickup without requiring right-clicks
         ItemStack bootsSweep = player.getItemStackFromSlot(EntityEquipmentSlot.FEET);
         if (!player.capabilities.isCreativeMode && !bootsSweep.isEmpty()
@@ -717,14 +716,14 @@ public class CurseAndBuffEventHandler {
                     player.posX + 1.25D, player.posY + 1.6D, player.posZ + 1.25D);
             List<net.minecraft.entity.item.EntityItem> nearbyItems = player.world.getEntitiesWithinAABB(net.minecraft.entity.item.EntityItem.class, sweepBox);
             for (net.minecraft.entity.item.EntityItem groundItem : nearbyItems) {
-                if (groundItem == null || groundItem.isDead || groundItem.cannotPickup()) {
+                if (groundItem == null || groundItem.isDead) {
                     continue;
                 }
                 // Match vanilla item-drop timing: never collect an item before its 2 second grace period.
-                if (groundItem.getAge() < 40) {
+                if (groundItem.getAge() < 40 || groundItem.cannotPickup()) {
                     continue;
                 }
-                groundItem.onCollideWithPlayer(player);
+                pickupGroundItem(player, groundItem);
             }
         }
 
@@ -996,6 +995,47 @@ public class CurseAndBuffEventHandler {
                     }
                 }
             }
+        }
+    }
+
+
+    private static void pickupGroundItem(EntityPlayer player, net.minecraft.entity.item.EntityItem item) {
+        if (player == null || item == null || player.world.isRemote || item.isDead) {
+            return;
+        }
+        if (item.cannotPickup() || item.getAge() < 40) {
+            return;
+        }
+        if (item.getOwner() != null && item.lifespan - item.getAge() > 200
+                && !item.getOwner().equals(player.getName())) {
+            return;
+        }
+        ItemStack original = item.getItem();
+        if (original.isEmpty()) {
+            return;
+        }
+        int start = original.getCount();
+        int hook = net.minecraftforge.event.ForgeEventFactory.onItemPickup(item, player);
+        if (hook < 0) {
+            return;
+        }
+        ItemStack working = original.copy();
+        player.inventory.addItemStackToInventory(working);
+        int left = working.getCount();
+        int picked = start - left;
+        if (picked <= 0) {
+            return;
+        }
+        ItemStack eventStack = original.copy();
+        eventStack.setCount(picked);
+        net.minecraftforge.fml.common.FMLCommonHandler.instance().firePlayerItemPickupEvent(player, item, eventStack);
+        player.onItemPickup(item, picked);
+        player.addStat(net.minecraft.stats.StatList.getObjectsPickedUpStats(original.getItem()), picked);
+        if (left <= 0) {
+            item.setDead();
+        } else {
+            original.setCount(left);
+            item.setItem(original);
         }
     }
 
