@@ -178,6 +178,21 @@ public class CurseAndBuffEventHandler {
             ItemStack boots = player.getItemStackFromSlot(EntityEquipmentSlot.FEET);
             int mudLevel = (!boots.isEmpty()) ? ModEnchantments.getLevel(ModEnchantments.MUDSTRIDER, boots) : 0;
             if (mudLevel > 0) {
+                // Pre-compensate before doBlockCollisions so soul sand / mud
+                // multiply the motion right back to normal in the same tick.
+                double slowFactor = com.divineenchantments.util.MudstriderHelper.slowFactorAtFeet(player);
+                if (slowFactor < 0.999D) {
+                    double inverse = 1.0D / slowFactor;
+                    player.motionX *= inverse;
+                    player.motionZ *= inverse;
+                    double horizontal = Math.sqrt(player.motionX * player.motionX + player.motionZ * player.motionZ);
+                    if (horizontal > 0.6D) {
+                        double scale = 0.6D / horizontal;
+                        player.motionX *= scale;
+                        player.motionZ *= scale;
+                    }
+                }
+
                 BlockPos pos = new BlockPos(player.posX, player.posY, player.posZ);
                 Block blockHere = player.world.getBlockState(pos).getBlock();
                 boolean inWeb = getIsInWeb(player) || blockHere == Blocks.WEB;
